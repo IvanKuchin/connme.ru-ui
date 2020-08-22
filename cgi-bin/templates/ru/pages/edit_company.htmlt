@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+		<<template:templates/ru/pages/header.htmlt>>
+
+		 <!-- Image uploader -->
+		<script src="/js/imageuploader/js/vendor/jquery.ui.widget.js"></script>
+		<script src="/js/imageuploader/js/load-image.all.min.js"></script>
+		<script src="/js/imageuploader/js/jquery.iframe-transport.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload-process.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload-image.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload-validate.js"></script>
+
+		
+		<link href="/css/pages/switcher.css" rel="stylesheet">
+
+		<script src="/js/pages/edit_company.js"></script>
+		<link href="/css/pages/edit_company.css" rel="stylesheet">
+		
+		<script src="/js/pages/tooltip.js"></script>
+		<link href="/css/pages/animate.min.css" rel="stylesheet">
+
+		<title><<vars:title_head>></title>
+
+		<script>
+			$(document).ready(function() {
+				edit_company.Init();
+			});
+		</script>
+
+	</head>
+
+	<body>
+	<<template:templates/ru/pages/<<vars:user_type>>_navigation_menu.htmlt>>
+
+		<div class="container single_block box-shadow--6dp" id="companyInfo" data-id="<<vars:companyid>>">
+		<div class="row">
+			
+			<div class="col-md-6 col-md-offset-3 col-xs-12">
+				<p>
+					<span id="companyType" data-action="AJAX_updateCompanyType" class="editableSelectCompanyType"></span> <span id="companyTitle" data-action="AJAX_updateCompanyTitle" class="h2"></span>
+				</p>
+			</div>
+			<div class="col-md-3 col-xs-12 form-group">
+				<button class="btn form-control btn-default" id="companyDropPosession" data-loading-text="<span class='fa fa-refresh fa-spin fa-fw animateClass'></span> Ждите ..." data-action="AJAX_dropCompanyPosession">Не моя компания</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"> <!-- columns photo block + First Name-->
+				<!-- Place for big avatar	-->
+				<canvas id="canvasForCompanyLogo" width="230" height="230" class="canvas-big-logo">
+					Your browser does not support the HTML5 canvas tag.
+				</canvas>
+
+				<span id="spanForFileUploadButton" class="btn btn-default fileinput-button">
+						<i class="glyphicon glyphicon-briefcase"></i>
+						<span>Загрузить логотип...</span>
+						<!-- The file input field used as target for the file upload widget -->
+						<input id="fileupload" type="file" name="files[]" accept="image/*">
+				<!-- The global progress bar -->
+				</span> 
+		 
+				<div id="progress" class="progress divProgressUploadThin" width="80%">
+						<div class="progress-bar progress-bar-primary"></div>
+				</div>
+		 
+				<!-- The container for the uploaded files -->
+				<div id="files" class="files"></div> 
+
+			 </div> <!-- columns photo block + First Name-->
+
+			<div class="col-sm-9 col-xs-12"> <!-- columns for company information -->
+
+				<div class="container-fluid" id="companyCommonInformation">
+					<div class="row">
+						<div class="col-sm-3 col-xs-4">
+							Веб-сайт:
+						</div>
+						<div class="col-sm-9 col-xs-8">
+							<span id="companyWebSite" data-action="AJAX_updateCompanyWebSite" class="editableSpan"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 col-xs-4">
+							Дата основания:
+						</div>
+						<div class="col-sm-9 col-xs-8">
+							<span id="companyFoundationDate"	data-action="AJAX_updateCompanyFoundationDate" class="editableSpan"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 col-xs-4">
+							Штат сотрудников:
+						</div>
+						<div class="col-sm-9 col-xs-8">
+							<span id="companyNumberOfEmployee" data-action="AJAX_updateCompanyEmployeeNumber" class="editableSpan"></span>
+						</div> <!-- company info col -->
+					</div> <!-- company info row -->
+					<div class="row form-group">
+						<div class="col-sm-3 col-xs-4">
+							ID компании: <span class="glyphicon glyphicon-question-sign cursor_pointer" id="companyURLID" data-original-title="" title=""></span>
+						</div>
+						<div class="col-sm-9 col-xs-8">
+							<span id="companyLink" data-action="AJAX_updateCompanyLink" class="editableSpan"></span>
+						</div>
+					</div>
+				</div> <!-- company info container -->
+			</div> <!-- columns for company information -->
+
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p id="companyDescription" class="editableParagraph" data-action="updateCompanyDescription" data-id=""></p>
+			</div>
+		</div> <!-- /row -->
+		</div> <!-- /container -->
+
+		<p></p>
+
+		<div class="container single_block box-shadow--6dp">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-10 col-xs-12 form-group">
+						<span class="h3">Основатели компании</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10 col-xs-12 form-group">
+						<input type="input" class="form-control" id="companyFounderItem" placeholder="Основатель компании" data-action="AJAX_addEditCompanyAddCompanyFounder">
+					</div>
+					<div class="col-md-2 col-xs-12 form-group">
+						<button type="button" id="ButtonAddFounderToCompany" class="btn btn-primary form-control">Добавить</button>
+					<p></p>
+					</div>
+				</div>
+				<div class="row">
+						<div class="col-xs-12" id="companyFounderList">
+						</div>
+				</div>
+
+		</div> <!-- /container -->
+
+		<div class="container single_block box-shadow--6dp">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-10 col-xs-12 form-group">
+						<span class="h3">Владельцы компании</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10 col-xs-12 form-group">
+						<input type="input" class="form-control" id="companyOwnerItem" placeholder="Владелец компании" data-action="AJAX_addEditCompanyAddCompanyOwner">
+					</div>
+					<div class="col-md-2 col-xs-12 form-group">
+						<button type="button" id="ButtonAddOwnerToCompany" class="btn btn-primary form-control">Добавить</button>
+					</div>
+				</div>
+				<div class="row">
+						<div class="col-xs-12" id="companyOwnerList">
+						</div>
+				</div>
+		</div> <!-- /container -->
+
+		<div class="container single_block box-shadow--6dp">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-10 col-xs-12 form-group">
+						<span class="h3">Отрасли</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10 col-xs-12 form-group">
+						<input type="input" class="form-control" id="companyIndustryItem" placeholder="Отрасль компании" data-action="AJAX_addEditCompanyAddCompanyIndustry">
+					</div>
+					<div class="col-md-2 col-xs-12 form-group">
+						<button type="button" id="ButtonAddIndustryToCompany" class="btn btn-primary form-control">Добавить</button>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12" id="companyIndustryList">
+					</div>
+				</div>
+		</div> <!-- /container -->
+
+		<div class="container single_block box-shadow--6dp">
+				<div class="row">
+					<div class="col-md-offset-2 col-md-8 col-xs-12 form-group">
+						<span class="h3">Открытые вакансии</span>
+					</div>
+					<div class="col-md-2 col-xs-12 form-group">
+						<button type="button" id="ButtonAddOpenVacancyToCompany" class="btn btn-primary form-control">Добавить</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p></p>
+					</div>
+				</div>
+
+				<div id="AddOpenVacancy" class="collapse">
+					<div class="row">
+						<div class="col-xs-12 collapse-top-shadow form-group"><p></p></div>
+						<div class="col-xs-12 col-xs-offset-1">
+							<h4>Вакансия</h4>
+						</div>
+					</div>
+					<div class="row">
+<!-- 						<div class="col-xs-10">
+							<label for="title">Должность</label>
+						</div>
+ -->
+ 						<div class="col-xs-12 col-md-5 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyTitle" placeholder="Должность">
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-10">
+							<label for="title">Город</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-5 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyCity" placeholder="Город">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-10">
+							<label for="title">Компенсация</label>
+						</div>
+ -->
+						 <div class="col-xs-6 col-md-5 form-group">
+							<input type="number" class="form-control" id="CreateOpenVacancyMinSalary" step="10000" min="0" placeholder="Минимум з/п">
+						</div>
+						<div class="col-xs-6 col-md-5 form-group">
+							<input type="number" class="form-control" id="CreateOpenVacancyMaxSalary" step="10000" min="0" placeholder="Максимум з/п">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-10">
+							<label for="title">Месяц выхода на работу:</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-5 form-group">
+							<select class="form-control" id="CreateOpenVacancyClosureDate">
+								<option value="1">Выход на работу в январе</option>
+								<option value="2">Выход на работу в феврале</option>
+								<option value="3">Выход на работу в марте</option>
+								<option value="4">Выход на работу в апреле</option>
+								<option value="5">Выход на работу в мае</option>
+								<option value="6">Выход на работу в июне</option>
+								<option value="7">Выход на работу в июле</option>
+								<option value="8">Выход на работу в августе</option>
+								<option value="9">Выход на работу в сентябре</option>
+								<option value="10">Выход на работу в октябре</option>
+								<option value="11">Выход на работу в ноябре</option>
+								<option value="12">Выход на работу в декабре</option>
+							</select>
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-10">
+							<label for="title">Формат трудоустройства:</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-5 form-group">
+							<select class="form-control" id="CreateOpenVacancyEmploymentType">
+								<option value="fte">Полный рабочий день</option>
+								<option value="pte">Частичная занятость</option>
+								<option value="remote">Удаленная работа</option>
+								<option value="entrepreneur">Контрактный сотрудник</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-10">
+							<label for="title">Квалификационный вопрос 1:</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-10 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion1" placeholder="Квалификационный вопрос 1" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Первый вариант ответа на первый вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion1Answers" value="1">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion1Answer1" placeholder="Ответ 1" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Второй вариант ответа на первый вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion1Answers" value="2">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion1Answer2" placeholder="Ответ 2" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Третий вариант ответа на первый вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion1Answers" value="3">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion1Answer3" placeholder="Ответ 3" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-10">
+							<label for="title">Квалификационный вопрос 2:</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-10 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion2" placeholder="Квалификационный вопрос 2" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Первый вариант ответа на второй вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion2Answers" value="1">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion2Answer1" placeholder="Ответ 1" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Второй вариант ответа на второй вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion2Answers" value="2">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion2Answer2" placeholder="Ответ 2" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Третий вариант ответа на второй вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion2Answers" value="3">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion2Answer3" placeholder="Ответ 3" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-10">
+							<label for="title">Квалификационный вопрос 3:</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-10 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion3" placeholder="Квалификационный вопрос 3" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Первый вариант ответа на третий вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion3Answers" value="1">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion3Answer1" placeholder="Ответ 1" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Второй вариант ответа на третий вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion3Answers" value="2">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion3Answer2" placeholder="Ответ 2" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Третий вариант ответа на третий вопрос:</label>
+						</div>
+ -->
+						 <div class="col-xs-2 col-md-1">
+							<input type="radio" name="CreateOpenVacancyQuestion3Answers" value="3">
+						</div>
+						<div class="col-xs-10 col-md-9 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyQuestion3Answer3" placeholder="Ответ 3" maxlength="256">
+						</div>
+					</div>
+					<div class="row">
+<!--
+						 <div class="col-xs-12">
+							<label for="title">Знание языка (не обязательно):</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-4 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyLanguage1" placeholder="Иностранный язык 1 (не обязательно)">
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-10">
+							<label for="title">Обязательное знание доп. ин. языка (не обязательно):</label>
+						</div>
+ --> 
+						<div class="col-xs-12 col-md-4 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyLanguage2" placeholder=" Иностранный язык 2 (не обязательно)">
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-10">
+							<label for="title">Обязательное знание доп. ин. языка (не обязательно):</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-4 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancyLanguage3" placeholder="Иностранный язык 3 (не обязательно)">
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-12">
+							<label for="title">Требования к кандидату (не обязательно):</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-4 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancySkill1" placeholder="Требования к кандидату 1 (не обязательно)">
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-10">
+							<label for="title">Обязательное знание доп. ин. языка (не обязательно):</label>
+						</div>
+ --> 
+						<div class="col-xs-12 col-md-4 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancySkill2" placeholder="Требования к кандидату 2 (не обязательно)">
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-10">
+							<label for="title">Обязательное знание доп. ин. языка (не обязательно):</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-4 form-group">
+							<input type="input" class="form-control" id="CreateOpenVacancySkill3" placeholder="Требования к кандидату 3 (не обязательно)">
+						</div>
+<!--
+					</div>
+					<div class="row">
+						 <div class="col-xs-12">
+							<label for="title">Описание вакансии (не обязательно):</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-10 form-group">
+							<textarea class="form-control" id="CreateOpenVacancyDescription" placeholder="Описание вакансии (не обязательно)" rows="4" maxlength="16384"></textarea>
+						</div>
+					</div>
+					<div class="row">
+<!--						 <div class="col-xs-10">
+							<label for="title">Публикация:</label>
+						</div>
+ -->
+						 <div class="col-xs-12 col-md-10 form-group">
+							<select class="form-control" id="CreateOpenVacancyPublish">
+								<option value="week">Опубликовать на неделю</option>
+								<option value="month">Опубликовать на месяц</option>
+								<option value="suspend">Не публиковать</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-md-5">
+							<button type="button" id="AddNewOpenVacancySubmitButton" class="btn btn-primary form-control" data-loading-text="<span class='fa fa-refresh fa-spin fa-fw animateClass'></span> Загрузка...">Сохранить</button>
+						</div>
+						<div class="col-xs-6 col-md-5">
+							<button type="button" id="AddNewOpenVacancyCancelButton" class="btn btn-default form-control" data-dismiss="modal">Отмена</button>
+							<p>&nbsp;</p>
+						</div>
+						<div class="col-xs-12 collapse-bottom-shadow"><p></p></div>
+					</div>
+				</div>
+
+				<div id="OpenVacanciesList">
+				</div>
+		</div> <!-- /container -->
+
+
+<!-- Dialog modal for error alerting in avatar uploading (powered by bootstrap) -->
+<div class="modal fade" id="UploadAvatarErrorBS" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Некорректное изображение</h4>
+			</div>
+			<div class="modal-body">
+					Некорректное изображение <span id="UploadAvatarErrorBS_ImageName"></span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- "Are you sure ?" modal -->
+<div class="modal fade" id="AreYouSure" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Вы уверены ?</h4>
+			</div>
+			<div class="description margin_left_20">
+			</div>
+			<div class="modal-footer">
+				<button type="button" id="Remove" class="btn btn-danger">Уверен !</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- "Are you sure ?" modal	-->
+<div class="modal fade" id="NotMyCompany" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><i class="fa fa-exclamation-triangle color_red" aria-hidden="true"></i> Вы не администратор компании</h4>
+			</div>
+			<div class="modal-body">
+					Вы не можете редактировать данные компании, поскольку не являетесь администратором.<br>Если вам необходимо исправить какие-либо данные, вы можете:
+					<ol>
+						<li>Пожаловаться на компанию, если вы в ней работали, нажав на логотип в <a href="/edit_profile?rand=<<vars:rand>>">своем профиле</a></li>
+						<li><a href="/companies_i_own_list?rand=<<vars:rand>>">Стать администратором компании.</a></li>
+						<li><a href="#" class="mailme">Написать письмо</a> администрации сайта с подробным описанием запроса.</li>
+					</ol>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<<template:templates/ru/pages/footer.htmlt>>
+
+	</body>
+</html>

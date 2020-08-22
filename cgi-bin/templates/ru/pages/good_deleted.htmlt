@@ -1,0 +1,6 @@
+<<template:templates/ru/pages/header.htmlt>><center>
+
+Товар удален из корзины покупок. <br>
+<a href="/cgi-bin/index.cgi?action=show_bucket&rand=<<vars:rand>>" 
+> <b>Перейти в корзину покупок </b><img src=/images/korzina.jpg border=0 align=absmiddle></a>
+<<template:templates/ru/pages/footer.htmlt>>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+		<<template:templates/ru/pages/header.htmlt>>
+		
+		 <!-- Image uploader -->
+		<script src="/js/imageuploader/js/vendor/jquery.ui.widget.js"></script>
+		<script src="/js/imageuploader/js/load-image.all.min.js"></script>
+		<script src="/js/imageuploader/js/jquery.iframe-transport.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload-process.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload-image.js"></script>
+		<script src="/js/imageuploader/js/jquery.fileupload-validate.js"></script>
+
+		<title><<vars:title_head>></title>
+
+		<!-- tool tip bouncing -->
+		<script src="/js/pages/tooltip.js"></script>
+		<link href="/css/pages/animate.min.css" rel="stylesheet">
+
+		<!-- Custom styles for this template -->
+		<link href="/css/pages/view_company_profile.css" rel="stylesheet">
+		<script src="/js/pages/view_company_profile.js"></script>
+
+		<script src="/js/pages/news_feed.js"></script>
+		<script src="/js/pages/pi/NoSleep.js"></script>
+		
+		<link href="/css/pages/news_feed.css" rel="stylesheet">
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+				view_company_profile.Init();
+				news_feed.Init();
+			});
+		</script>
+
+	</head>
+
+	<body>
+		<<template:templates/ru/pages/<<vars:user_type>>_navigation_menu.htmlt>>
+
+		<div class="container single_block box-shadow--6dp">
+		<div class="row">
+			<div class="col-xs-12 col-sm-7 col-sm-offset-3 form-group">
+				<span>
+					<span id="companyName" class="h2" data-companyid="<<vars:id>>" data-grouplink="<<vars:link>>"></span>
+				</span>
+			</div>
+			<div class="col-md-2 col-xs-12 form-group">
+				<span id="companyFollowButton">
+				</span>
+			</div>
+			<div class="col-md-3 col-sm-4 col-xs-12">
+				<p>
+					<canvas id="canvasForAvatar" width="80" height="80" class="canvas-big-avatar-corners">
+						Your browser does not support the HTML5 canvas tag.
+					</canvas>
+				</p>
+			</div>
+
+			<div class="col-md-9 col-sm-8 col-xs-12">
+				<span class="display_inline">Дата основания:</span>
+				<span id="companyFoundationDate"></span>
+			</div>
+			<div class="col-md-9 col-sm-8 col-xs-12">
+				<span>Кол-во сотрудников: </span>
+				<span id="numberOfEmployee"></span>
+			</div>
+			<div class="col-md-9 col-sm-8 col-xs-12">
+				<span>Основатели: </span>
+				<span id="companyFounders"></span>
+			</div>
+			<div class="col-md-9 col-sm-8 col-xs-12">
+				<span>Владельцы: </span>
+				<span id="companyOwners"></span>
+			</div>
+			<div class="col-md-9 col-sm-8 col-xs-12">
+				<span>Индустрия: </span>
+				<span id="companyIndustries"></span>
+			</div>
+			<div class="col-md-9 col-sm-8 col-xs-12">
+				<p></p>
+				<p id="companyDescription"></p>
+			</div>
+
+
+			<div class="col-md-3" label="for future usage">
+			</div>
+
+		</div> <!-- /row -->
+		</div> <!-- /container -->
+
+		<p></p>
+
+		<div class="container single_block box-shadow--6dp">
+			<div class="row">
+				<div class="col-xs-8 col-md-8 col-xs-offset-1 col-md-offset-2">
+					<span class="h3">Вакансии</span>
+				</div>
+				<div class="col-xs-3 col-md-1">
+					<button type="button" class="btn btn-primary form-control" data-toggle="collapse" data-target="#companyVacanciesCollapsible"><i class="fa fa-folder-open-o"></i></button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p></p>
+				</div>
+			</div>
+
+			<div id="companyVacanciesCollapsible" class="collapse">
+				<div class="row">
+					<div class="col-xs-12 collapse-top-shadow form-group"><p></p></div>
+				</div>
+				<div id="companyVacancies">
+				</div>
+				<div class="row">
+					<div class="col-xs-12 form-group"><p></p></div>
+					<div class="col-xs-12 collapse-bottom-shadow"><p></p></div>
+				</div>
+			</div>
+		</div> <!-- /container -->
+
+		<div class="container hidden" id="NewsFeedNewMessageContainer">
+			<div class="row">
+				<div class="col-xs-12 col-md-offset-2 col-md-4">
+					<button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#NewsFeedNewMessage">Написать в ленту компании</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="news_feed" data-action="<<vars:action>>" data-id="<<vars:id>>" data-link="<<vars:link>>">
+		</div>
+		<div id="scrollerToShow"></div>
+
+		<<template:templates/ru/pages/news_feed_modals.htmlt>>
+		
+		<!-- "Are you sure ?" modal	-->
+		<div class="modal fade" id="AreYouSure" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-sm" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Вы уверены ?</h4>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="Remove" class="btn btn-primary">Удалить</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<<template:templates/ru/pages/footer.htmlt>>
+
+	</body>
+</html>

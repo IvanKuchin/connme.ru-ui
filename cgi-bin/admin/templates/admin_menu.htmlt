@@ -1,0 +1,119 @@
+    <td width="20%" color="#boza">
+
+<ul class="list-group">
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_user_list&rand=<<vars:rand>>">Пользователи</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_chat_get_cnx_list&rand=<<vars:rand>>">Подключенные пользователи в чат</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_chat_get_presence_cache&rand=<<vars:rand>>">Presence cache</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_pictures_lostindb&rand=<<vars:rand>>">&quot;Потерянные&quot; картинки в БД</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_recommendation_adverse&rand=<<vars:rand>>">Потенциально &quot;вредные&quot; рекомендации</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_companies_list&rand=<<vars:rand>>">Companies</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_companies_duplicates&rand=<<vars:rand>>">Companies duplicates</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_occupations_list&rand=<<vars:rand>>">Occupations</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_certificates_list&rand=<<vars:rand>>">Certificates</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_courses_list&rand=<<vars:rand>>">Courses</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_universities_list&rand=<<vars:rand>>">Universities</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_schools_list&rand=<<vars:rand>>">Schools</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_languages_list&rand=<<vars:rand>>">Languages</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_book_list&rand=<<vars:rand>>">Books</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_book_complains_list&rand=<<vars:rand>>">Book complains</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_complains_list&rand=<<vars:rand>>">Complains</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_regions_list&rand=<<vars:rand>>">Geo Region</a></li>
+<li class="list-group-item"><a href="/cgi-bin/admin/admin.cgi?act=admin_get_localities_list&rand=<<vars:rand>>">Geo Locality</a></li>
+
+</ul>
+
+<!-- 
+     <table width=100% cellspacing=10 cellpadding=5>
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=add_manufacture&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=list_catalog&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Основные разделы</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=addnews&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=listnews&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Новости</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=add_work&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=list_work&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Работы</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+&nbsp;&nbsp;&nbsp;
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=client_add&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=client_list&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Заказчики</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+&nbsp;&nbsp;&nbsp;
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=type_add&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=type_list&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Тип продукта</a></font>
+    </td>
+    </tr>
+
+
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+<a href="/cgi-bin/admin/admin.cgi?act=listforum&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Форум</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=add_admin_main&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=list_admin_main&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Доп разделы</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=add_user&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=list_users&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Пользователи</a></font>
+    </td>
+    </tr>
+
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=addbook&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=listbooks&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Книги</a></font>
+    </td>
+    </tr>
+
+
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+<a href="#"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Блог</a></font>
+    </td>
+    </tr>
+    <tr>
+    <td bgcolor=white class=header3>
+&nbsp;&nbsp;&nbsp;
+    <font size="2"><a href="/cgi-bin/admin/admin.cgi?act=blog_keyword_add&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/admin.cgi?act=blog_keyword_list&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Ключевые слова</a></font>
+    </td>
+    </tr>
+
+
+
+    <tr>
+    <td bgcolor=white class=header3>
+    <font size="2"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+<a href="/cgi-bin/admin/admin.cgi?act=list_admin_reserved&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Редактируемые блоки</a></font>
+    </td>
+    </tr>
+
+     <tr><td bgcolor=white class=header3>
+    
+    <font size="2"><a href="/cgi-bin/admin/resource.cgi?act=addpics&rand=<<vars:rand>>"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+<a href="/cgi-bin/admin/resource.cgi?act=list&path=images/&rand=<<vars:rand>>"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Картинки</a></font>
+    </td></tr>
+	</table>
+
+ -->
+    </td>

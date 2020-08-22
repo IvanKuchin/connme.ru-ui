@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <<template:templates/admin_header.htmlt>>
+</head>
+ 
+<body>
+<table width="100%" height="255" border="0" cellspacing="5">
+  <tr> 
+    <td colspan="2" bgcolor="#FE8738"><div align="center"><strong><font color=white>Domain administration <<template:templates/domain.htmlt>><br>(Список всех книг)</font></strong></div></td>
+  </tr>
+  <tr valign=top  bgcolor="EFF8FF"> 
+    <<template:templates/admin_menu.htmlt>>
+    <td width="76%">
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-2">
+    </div>
+    <div class="col-xs-8">
+      <div id="book_list_count">Number of books: </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-1"> cover</div>
+    <div class="col-xs-1"> remove cover</div>
+    <div class="col-xs-8"> </div>
+    <div class="col-xs-1"> # of readers</div>
+    <div class="col-xs-1"> remove book</div>
+  </div>
+</div>
+<div class="container-fluid" id="book_list">
+</div>
+
+<script type="text/javascript">
+  var RenderBookList = function()
+  {
+      $.getJSON('/cgi-bin/admin/admin.cgi?act=AJAX_getBookList', {rand: Math.round(Math.random() * 100000000)})
+      .done(function(data) {
+        $("#book_list_count").append(data.length);
+        data.forEach(function(item, i, arr)
+          {
+            var   buttonRemoveBookCover = $("<button>").addClass("btn btn-danger")
+                                                        .append($("<span>").addClass("fa fa-trash"))
+                                                        .data("bookID", item.bookID)
+                                                        .on("click", function(e)
+                                                          {
+                                                              var   bookID = $(this).data("bookID");
+                                                              // $(this).parent().parent().remove();
+                                                              $("img#coverBookID" + bookID).attr("src", "/images/pages/common/empty.png");
+
+                                                                $.getJSON('/cgi-bin/admin/admin.cgi?act=AJAX_removeSpecifiedCover', {type: "book", id: bookID})
+                                                          });
+            var   buttonRemoveBook = $("<button>").addClass("btn btn-danger")
+                                                        .append($("<span>").addClass("fa fa-trash"))
+                                                        .data("bookID", item.bookID)
+                                                        // .attr("disabled", "")
+                                                        .on("click", function(e)
+                                                          {
+                                                              var   currButton = $(this);
+                                                              var   bookID = $(this).data("bookID");
+                                                              // $(this).parent().parent().remove();
+
+                                                              $.getJSON('/cgi-bin/admin/admin.cgi?act=AJAX_removeBook', {bookID: bookID})
+                                                              .done(function(data){
+                                                                if(data.result == "success")
+                                                                {
+                                                                  $("div#bookID" + bookID).empty();
+                                                                }
+                                                                else
+                                                                {
+                                                                  currButton.popover({content: data.description, placement:'top'}).popover("show");
+                                                                  setTimeout(function () 
+                                                                        {
+                                                                          currButton.popover("destroy")
+                                                                        }, 3000);
+                                                                }
+
+                                                              });
+                                                          });
+            var   divRow = $("<div>").addClass("row").attr("id", "bookID" + item.bookID);
+            var   divColCover = $("<div>").addClass("col-xs-1")
+            var   divColCoverRemover = $("<div>").addClass("col-xs-1")
+            var   divColMain = $("<div>").addClass("col-xs-8")
+            var   divColBookReaders = $("<div>").addClass("col-xs-1")
+            var   divColBookRemover = $("<div>").addClass("col-xs-1")
+            var   cover = $("<img>").attr("src", (item.bookPhotoCoverFilename == "" ? "/images/pages/common/empty.png" : "/images/books/" + item.bookPhotoCoverFolder + "/" + item.bookPhotoCoverFilename))
+                                    .width("40px")
+                                    .attr("id", "coverBookID" + item.bookID);
+
+              divRow.append(divColCover)
+                    .append(divColCoverRemover)
+                    .append(divColMain)
+                    .append(divColBookReaders)
+                    .append(divColBookRemover)
+                    .appendTo($("#book_list"));
+
+              divColCover.append(cover)
+              divColMain.append(item.bookID + " - " + item.bookTitle + " (" + item.bookAuthorName + ") " + "<small>(" + item.bookISBN10 + "/" + item.bookISBN13 + ")</small>" );
+
+              divColCoverRemover.append(buttonRemoveBookCover);
+              divColBookReaders.append(item.bookReadersUserID.length);
+              divColBookRemover.append(buttonRemoveBook);
+          });
+      });
+
+  }
+
+  $(document).ready(function() 
+  {
+      $.ajaxSetup({ cache: false });
+      RenderBookList();
+  });
+
+</script>
+
+	  </td>
+  </tr>
+</table>
+</body>
+</html>

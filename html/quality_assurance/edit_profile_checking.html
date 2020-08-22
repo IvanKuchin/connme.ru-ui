@@ -1,0 +1,1355 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+  <meta charset="windows-1251">
+  <title>Quality Assurance testing</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css">
+  <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
+
+  <!-- jQuery -->
+  <script src="/js/jquery/jquery-2.1.3.js"></script>
+
+  <!-- unveil.patched (lazy load) -->
+  <script src="/js/unveil/jquery.unveil.patched.js"></script>
+
+  <!-- jQuery UI -->
+  <link href="/css/jquery-ui/jquery-ui.css" rel="stylesheet">
+  <script src="/js/jquery-ui/jquery-ui-1.11.4.js"></script>
+
+  <!-- jQuery.cookie -->
+  <script src="/js/jquery.cookie/jquery.cookie.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/bootstrap/bootstrap.min.js"></script>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/js/getbootstrap/ie10-viewport-bug-workaround.js"></script>
+
+   <!-- Image uploader -->
+  <script src="/js/imageuploader/js/vendor/jquery.ui.widget.js"></script>
+  <script src="/js/imageuploader/js/load-image.all.min.js"></script>
+  <script src="/js/imageuploader/js/jquery.iframe-transport.js"></script>
+  <script src="/js/imageuploader/js/jquery.fileupload.js"></script>
+  <script src="/js/imageuploader/js/jquery.fileupload-process.js"></script>
+  <script src="/js/imageuploader/js/jquery.fileupload-image.js"></script>
+  <script src="/js/imageuploader/js/jquery.fileupload-validate.js"></script>
+
+  <script src="/js/pages/edit_profile.js"></script>
+
+  <!-- Common part -->
+  <script src="/js/pages/common.js"></script>
+
+  <script>
+    $(document).ready(function() 
+    {
+      'use strict';
+
+    var testUser1SessionID = "1__________________________________________________________1";
+    var testUser1Email = "notccie1@gmail.com";
+    var testUser1UserID = "25";
+    var testUser1Login = "notccie1@gmail.com";
+    var testUser2SessionID = "2__________________________________________________________2";
+    var testUser2Email = "notccie2@gmail.com";
+    var testUser2UserID = "26";
+    var testUser2Login = "notccie2@gmail.com";
+    var oldSessid;
+
+    $.ajaxSetup({ cache: false });
+
+    QUnit.begin(function(details)
+      {
+        console.log( "Qunit.begin: test amount:", details.totalTests );
+
+        // place to store cookies 
+        oldSessid = $.cookie("sessid");
+
+      });
+    QUnit.done(function(details)
+      {
+        console.log( "Qunit.done: Total: ", details.total, " Failed: ", details.failed, " Passed: ", details.passed, " Runtime: ", details.runtime );
+
+        // place to restore old cookies 
+        document.cookie = "sessid=" + oldSessid + ";path=/";
+      });
+
+    QUnit.test("Edit profile (upload avatar)", function( assert ) {
+      var asyncDone = assert.async(3);
+      assert.expect(3);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      // --- Image uploader
+      $(function () {
+          // Change this to the location of your server-side upload handler:
+          $('#fileupload').fileupload({
+              url: '/cgi-bin/avataruploader.cgi',
+              dataType: 'json',
+              maxFileSize: 999000, 
+              acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+
+
+                done: function (e, data) {
+
+                  $.each(data.result, function(index, value) 
+                    {
+                      assert.strictEqual(value.result, "success", "avatar uploaded");
+                      asyncDone();
+
+                      $.getJSON('/cgi-bin/index.cgi?action=JSON_getAvatarList', {param1: ''})
+                        .done(function(data) 
+                        {
+                          var JSON_AvatarList = data;
+
+                          assert.equal(JSON_AvatarList.length, 1, "# of afatars is 1");
+                          asyncDone();
+
+                          JSON_AvatarList.forEach(function (entry)
+                              {
+                                $.ajax({
+                                        url:"/cgi-bin/index.cgi",
+                                        data: {action:"AJAX_deleteAvatar", id:entry.avatarID}
+                                      }).done(function(data2)
+                                      {
+                                        var jsonReponse = JSON.parse(data2);
+
+                                        assert.strictEqual(jsonReponse[0].result, "success", "avatar removal");
+                                        asyncDone();
+
+                                        // --- last action: return coockies
+                                      });
+                              }
+                            );
+                        });
+
+
+                    });
+
+              },
+              progressall: function (e, data) {
+                  var progress = parseInt(data.loaded / data.total * 100, 10);
+              },
+                fail: function (e, data) {
+                  console.debug("ошибка загрузки фаила: " + data.textStatus);
+              }
+
+          }).prop('disabled', !$.support.fileInput)
+              .parent().addClass($.support.fileInput ? undefined : 'disabled');
+      });
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/quality_assurance/images/avatar-test.jpg', true);
+      xhr.responseType = 'blob';
+      xhr.onload = function(e) {
+        if (this.status == 200) {
+          // Note: .response instead of .responseText
+          var blob = new Blob([this.response], {type: 'image/png'});
+          $('#fileupload').fileupload('add', {files: blob});
+        }
+      };
+      xhr.send();
+
+
+    }); // --- test 1
+   
+    QUnit.test("Edit profile (change username firstname)", function( assert ) {
+      var asyncDone = assert.async(5);
+      assert.expect(5);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/system.cgi', 
+                {action: 'GetUserInfo', userID: testUser1UserID})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+          var   initialFirstName = objJSON.userArray[0].name;
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_updateFirstName', value: 'Petr'})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "change FirstName to Petr");
+              asyncDone();
+
+              $.getJSON('/cgi-bin/system.cgi', 
+                        {action: 'GetUserInfo', userID: testUser1UserID})
+                .done(function(data) 
+                {
+                  var   objJSON = data;
+
+                  assert.strictEqual(objJSON.userArray[0].name, "Petr", "check FirstName changing");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                             {action: 'AJAX_updateFirstName', value: ''})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "change FirstName to [empty]");
+                      asyncDone();
+
+                      $.getJSON('/cgi-bin/system.cgi', 
+                                {action: 'GetUserInfo', userID: testUser1UserID})
+                        .done(function(data) 
+                        {
+                          var   objJSON = data;
+
+                          assert.strictEqual(objJSON.userArray[0].name, "", "check FirstName changing");
+                          asyncDone();
+
+
+                          $.getJSON('/cgi-bin/index.cgi', 
+                                    {action: 'AJAX_updateFirstName', value: initialFirstName})
+                            .done(function(data) 
+                            {
+                              var   objJSON = data;
+
+                              assert.strictEqual(objJSON.result, "success", "FirstName change back to " + initialFirstName);
+                              asyncDone();
+                            });
+
+                        });
+
+                    });
+
+                });
+
+            });
+
+        });
+
+    }); // --- test 2
+   
+    QUnit.test("Edit profile (change username surname)", function( assert ) {
+      var asyncDone = assert.async(5);
+      assert.expect(5);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/system.cgi', 
+                {action: 'GetUserInfo', userID: testUser1UserID})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+          var   initialSurName = objJSON.userArray[0].nameLast;
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_updateLastName', value: 'Petrov'})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "change SurName to Petrov");
+              asyncDone();
+
+              $.getJSON('/cgi-bin/system.cgi', 
+                        {action: 'GetUserInfo', userID: testUser1UserID})
+                .done(function(data) 
+                {
+                  var   objJSON = data;
+
+                  assert.strictEqual(objJSON.userArray[0].nameLast, "Petrov", "check SurName changing");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                             {action: 'AJAX_updateLastName', value: ''})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "change SurName to [empty]");
+                      asyncDone();
+
+                      $.getJSON('/cgi-bin/system.cgi', 
+                                {action: 'GetUserInfo', userID: testUser1UserID})
+                        .done(function(data) 
+                        {
+                          var   objJSON = data;
+
+                          assert.strictEqual(objJSON.userArray[0].nameLast, "", "check SurName changing");
+                          asyncDone();
+
+                          $.getJSON('/cgi-bin/index.cgi', 
+                                    {action: 'AJAX_updateLastName', value: initialSurName})
+                            .done(function(data) 
+                            {
+                              var   objJSON = data;
+
+                              assert.strictEqual(objJSON.result, "success", "SurName change back to " + initialSurName);
+                              asyncDone();
+                            });
+
+                        });
+
+                    });
+
+                });
+
+            });
+
+        });
+
+    }); // --- test 3
+
+    QUnit.test("Edit profile (change username firstname and surname)", function( assert ) {
+      var asyncDone = assert.async(6);
+      assert.expect(6);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      assert.strictEqual(edit_profile.GetUserInitials(), "..", "check user initials in DOM-model is (empty)");
+      asyncDone();
+
+      $.getJSON('/cgi-bin/system.cgi', 
+                {action: 'GetUserInfo', userID: testUser1UserID})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+          var   initialSurName = objJSON.userArray[0].nameLast;
+          var   initialFirstName = objJSON.userArray[0].name;
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_updateFirstLastName', firstName: "Иван", lastName: "Петров"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "change FirstName and SurName to Иван Петров");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/system.cgi', 
+                        {action: 'GetUserInfo', userID: testUser1UserID})
+                .done(function(data) 
+                {
+                  var   objJSON = data;
+
+                  assert.strictEqual(objJSON.userArray[0].nameLast, "Петров", "check SurName changing");
+                  asyncDone();
+                  assert.strictEqual(objJSON.userArray[0].name, "Иван", "check FirstName changing");
+                  asyncDone();
+
+                  $("#firstName").text(objJSON.userArray[0].name);
+                  $("#lastName").text(objJSON.userArray[0].nameLast);
+                  assert.strictEqual(edit_profile.GetUserInitials(), "ИП", "check user initials in DOM-model is ИП (initials Иван Петров)");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'AJAX_updateFirstLastName', firstName: initialFirstName, lastName: initialSurName})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "FirstName and SurName change back to " + initialFirstName + " " + initialSurName);
+                      asyncDone();
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 4
+
+    QUnit.test("Edit profile (change userCV)", function( assert ) {
+      var asyncDone = assert.async(5);
+      assert.expect(5);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserCV'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+          var   initialCV = data.cv;
+
+          assert.strictEqual(objJSON.result, "success", "initial CV received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_updateUserCV', cv: "!;%:?*()_+Ёё1234567890-=ЙЦУКЕНГШЩЗХЪ/йцукенгшщзхъФЫВАПРОЛДЖЭфывапролджэЯЧСМИТЬБЮ,ячсмитьбю."})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "test CV applied");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserCV'})
+                .done(function(data) 
+                {
+                  var   objJSON = data;
+
+                  assert.strictEqual(objJSON.result, "success", "CV received");
+                  asyncDone();
+                  assert.strictEqual(objJSON.cv, "!;%:?*()_+Ёё1234567890-=ЙЦУКЕНГШЩЗХЪ/йцукенгшщзхъФЫВАПРОЛДЖЭфывапролджэЯЧСМИТЬБЮ,ячсмитьбю.", "correct CV");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'AJAX_updateUserCV', cv: initialCV})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "CV change back to " + initialCV);
+                      asyncDone();
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 5
+
+    QUnit.test("Edit profile (check carrier path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+          var   initialCV = data.cv;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddCarrierCompany', title: "Тюремный надзиратель", companyName: "Зерновая компания 'Настюша'", occupationStart: "2017-01-01", occupationFinish: "", currentCompany: "1", responsibilities: "работать работать и еще раз работать !"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new company in carrier path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].companies[0].responsibilities, "работать работать и еще раз работать !", "correct resposibilities");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'update_occupation_start', id: objJSONUserProfile.companies[0].companyID, value:"2017-01-02"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "occupation start changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'update_occupation_finish', id: objJSONUserProfile.companies[0].companyID, value:"2017-01-03"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "occupation finish changed");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'AJAX_changeEditProfileCompanyEmployemtEndDateStatus', companyID: objJSONUserProfile.companies[0].companyID})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "occupation finish changed to 'now'");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'AJAX_updateUserResponsibilities', id: objJSONUserProfile.companies[0].companyID, content:"ещё больше ответственности !!!Ё!;%:?*()_+№"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "success", "changed ongoing resposibilities");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].companies[0].responsibilities, "ещё больше ответственности !!!Ё!;%:?*()_+", "correct resposibilities");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].companies[0].companyName, "Зерновая компания 'Настюша'", "correct companyName");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].companies[0].title, "Тюремный надзиратель", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].companies[0].occupationStart, "2017-01-02", "correct occupation start date");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].companies[0].currentCompany, "0", "correct occupation final date");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeCompanyExperience', id: objJSON.companies[0].companyID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "carrier pathe removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 6
+
+
+    QUnit.test("Edit profile (check certification path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddCertificate', vendor: "Cisco Systems", track: "CCIE R&S", number: "1024"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new track in certification path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].certifications[0].certificationVendor, "Cisco Systems", "correct vendor");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'updateCertificationTrack', id: objJSONUserProfile.certifications[0].certificationID, value:"CCIE SP"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "certification track changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'updateCertificationNumber', id: objJSONUserProfile.certifications[0].certificationID, value:"1023"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "certification number changed to Microsoft");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'updateCertificationVendor', id: objJSONUserProfile.certifications[0].certificationID, value:"Microsoft"})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "certification vendor changed to Microsoft");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'updateCertificationVendor', id: objJSONUserProfile.certifications[0].certificationID, value:"Cisco Systems"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "success", "certification vendor changed back to Cisco");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].certifications[0].certificationVendor, "Cisco Systems", "correct vendor");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].certifications[0].certificationTrack, "CCIE SP", "correct track");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].certifications[0].certificationNumber, "1023", "correct number");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].certifications[0].certificationVendor, "Cisco Systems", "correct vendor");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].certifications[0].certificationTrack, "CCIE SP", "correct track");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeCertificationEntry', id: objJSON.certifications[0].certificationID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "certification entry removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 7
+
+    QUnit.test("Edit profile (check course path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddCourse', vendor: "Cisco Systems", track: "CCIE R&S"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new track in course path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].courses[0].courseVendor, "Cisco Systems", "correct vendor");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'updateCertificationTrack', id: objJSONUserProfile.courses[0].courseID, value:"CCIE SP"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "course track changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'updateCertificationTrack', id: objJSONUserProfile.courses[0].courseID, value:"CCIE R&S"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "course track changed");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'updateCertificationVendor', id: objJSONUserProfile.courses[0].courseID, value:"Microsoft"})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "course vendor changed to Microsoft");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'updateCertificationVendor', id: objJSONUserProfile.courses[0].courseID, value:"Cisco Systems"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "success", "course vendor changed back to Cisco");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].courses[0].courseVendor, "Cisco Systems", "correct vendor");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].courses[0].courseTrack, "CCIE R&S", "correct track");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].courses[0].courseTrack, "CCIE R&S", "correct track");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].courses[0].courseVendor, "Cisco Systems", "correct vendor");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].courses[0].courseTrack, "CCIE R&S", "correct track");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeCertificationEntry', id: objJSON.courses[0].courseID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "course entry removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 8
+
+    QUnit.test("Edit profile (check school path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddSchool', locality: "Ковров", title: "21", periodStart: "2000", periodFinish: "2011"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new track in school path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].school[0].schoolTitle, "21", "correct school number");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'updateSchoolLocality', id: objJSONUserProfile.school[0].schoolID, value:"Москва"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "school locality changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'updateSchoolTitle', id: objJSONUserProfile.school[0].schoolID, value:"1521"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "school title changed");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'updateSchoolOccupationStart', id: objJSONUserProfile.school[0].schoolID, value:"2010"})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "school startPeriod changed");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'updateSchoolOccupationFinish', id: objJSONUserProfile.school[0].schoolID, value:"2011"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "success", "school finishPeriod changed");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].school[0].schoolLocality, "Москва", "correct locality");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].school[0].schoolTitle, "1521", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].school[0].schoolOccupationStart, "2010", "correct schoolOccupationStart");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].school[0].schoolOccupationFinish, "2011", "correct schoolOccupationFinish");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].school[0].schoolOccupationFinish, "2011", "correct schoolOccupationFinish");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeSchoolEntry', id: objJSON.school[0].schoolID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "school entry removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 9
+
+    QUnit.test("Edit profile (check university path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddUniversity', region: "Москва", title: "Московский авиационный институт (МАИ)", degree: "Бакалавр", periodStart:"2000", periodFinish:"2011"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new track in university path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].university[0].universityTitle, "Московский авиационный институт (МАИ)", "correct title");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'updateUniversityTitle', id: objJSONUserProfile.university[0].universityID, value:"Институт иностранных языков"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "university title changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'updateUniversityRegion', id: objJSONUserProfile.university[0].universityID, value:"Санкт-Петербург"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "university region changed");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'updateUniversityDegree', id: objJSONUserProfile.university[0].universityID, value:"Магистр"})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "university degree changed");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'updateUniversityOccupationStart', id: objJSONUserProfile.university[0].universityID, value:"2005"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "success", "university start period changed");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].university[0].universityRegion, "Санкт-Петербург", "correct region");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].university[0].universityTitle, "Институт иностранных языков", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].university[0].universityDegree, "Магистр", "correct degree");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].university[0].universityOccupationStart, "2005", "correct occupationStart");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].university[0].universityOccupationFinish, "2011", "correct occupationFinish");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeUniversityEntry', id: objJSON.university[0].universityID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "university entry removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 10
+
+    QUnit.test("Edit profile (check language path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddLanguage', title: "Азербайджанский", level: "Начинающий"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new track in language path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].language[0].languageTitle, "Азербайджанский", "correct title");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'updateLanguageTitle', id: objJSONUserProfile.language[0].languageID, value:"Русский"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "language title changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'updateLanguageLevel', id: objJSONUserProfile.language[0].languageID, value:"Читаю, пишу"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "language level changed");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'updateLanguageTitle', id: objJSONUserProfile.language[0].languageID, value:"Английский"})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "language title changed");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'updateLanguageLevel', id: objJSONUserProfile.language[0].languageID, value:"xxxxxx"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "error", "language level was not updated, because wrong level");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].language[0].languageTitle, "Английский", "correct language");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeLanguageEntry', id: objJSON.language[0].languageID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "language entry removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 11
+
+    QUnit.test("Edit profile (check skill path)", function( assert ) {
+      var asyncDone = assert.async(15);
+      assert.expect(15);
+
+      document.cookie = "sessid=" + testUser1SessionID + ";path=/";
+
+      $.getJSON('/cgi-bin/index.cgi', 
+                {action: 'JSON_getUserProfile'})
+        .done(function(data) 
+        {
+          var   objJSON = data;
+
+          assert.strictEqual(objJSON.result, "success", "initial user profile received");
+          asyncDone();
+
+          $.getJSON('/cgi-bin/index.cgi', 
+                     {action: 'AJAX_addEditProfileAddSkill', title: "Service sales"})
+            .done(function(data) 
+            {
+              var   objJSON = data;
+
+              assert.strictEqual(objJSON.result, "success", "new track in skill path");
+              asyncDone();
+
+
+              $.getJSON('/cgi-bin/index.cgi', 
+                        {action: 'JSON_getUserProfile'})
+                .done(function(data) 
+                {
+                  var   objJSONUserProfile = data;
+
+                  assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
+                  asyncDone();
+                  assert.strictEqual(objJSONUserProfile.users[0].skill[0].skillTitle, "Service sales", "correct title");
+                  asyncDone();
+
+                  $.getJSON('/cgi-bin/index.cgi', 
+                            {action: 'updateSkillTitle', id: objJSONUserProfile.skill[0].skillID, value:"Sales"})
+                    .done(function(data) 
+                    {
+                      var   objJSON = data;
+
+                      assert.strictEqual(objJSON.result, "success", "skill title changed");
+                      asyncDone();
+                      $.getJSON('/cgi-bin/index.cgi', 
+                                  {action: 'updateSkillTitle', id: objJSONUserProfile.skill[0].skillID, value:"Service sales"})
+                          .done(function(data) 
+                          {
+                            var   objJSON = data;
+
+                            assert.strictEqual(objJSON.result, "success", "skill Title changed");
+                            asyncDone();
+                            $.getJSON('/cgi-bin/index.cgi', 
+                                        {action: 'updateSkillTitle', id: objJSONUserProfile.skill[0].skillID, value:"Sales"})
+                                .done(function(data) 
+                                {
+                                  var   objJSON = data;
+
+                                  assert.strictEqual(objJSON.result, "success", "skill title changed");
+                                  asyncDone();
+                                  $.getJSON('/cgi-bin/index.cgi', 
+                                            {action: 'updateSkillTitle', id: objJSONUserProfile.skill[0].skillID, value:"Service sales"})
+                                    .done(function(data) 
+                                    {
+                                      var   objJSON = data;
+
+                                      assert.strictEqual(objJSON.result, "success", "skill Title was not updated, because wrong level");
+                                      asyncDone();
+
+                                      $.getJSON('/cgi-bin/index.cgi', 
+                                                {action: 'JSON_getUserProfile'})
+                                        .done(function(data) 
+                                        {
+                                          var   objJSON = data;
+
+                                          assert.strictEqual(objJSON.result, "success", "updated user profile received");
+                                          asyncDone();
+
+                                          assert.strictEqual(objJSON.users[0].skill[0].skillTitle, "Service sales", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].skill[0].skillTitle, "Service sales", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].skill[0].skillTitle, "Service sales", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].skill[0].skillTitle, "Service sales", "correct title");
+                                          asyncDone();
+                                          assert.strictEqual(objJSON.users[0].skill[0].skillTitle, "Service sales", "correct title");
+                                          asyncDone();
+
+                                          $.getJSON('/cgi-bin/index.cgi', 
+                                                    {action: 'AJAX_removeSkillEntry', id: objJSON.skill[0].skillID})
+                                            .done(function(data) 
+                                            {
+                                              var   objJSON = data;
+
+                                              assert.strictEqual(objJSON.result, "success", "skill entry removed successfully");
+                                              asyncDone();
+                                            });
+
+                                        });
+
+                                    });
+
+                                });
+                          });
+                    });
+
+                })
+                .fail(function(result, status) {
+                })
+                .success(function (result, status) {
+                })
+                .error(function (result, status) {
+                });
+
+
+            })
+            .fail(function(result, status) {
+            })
+            .success(function (result, status) {
+            })
+            .error(function (result, status) {
+            });
+
+        });
+
+    }); // --- test 12
+
+
+
+    }); // --- $(document).ready(function() 
+  </script>
+</head>
+<body>
+ 
+<div id="qunit"></div>
+<div id="qunit-fixture">
+    <input id="fileupload" type="file" name="files[]" multiple>
+
+    <span id="firstName"></span> 
+    <span id="lastName"></span>
+</div> <!-- qunit-fixture -->
+ 
+</body>
+</html>

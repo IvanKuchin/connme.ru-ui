@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <<template:templates/admin_header.htmlt>>
+</head>
+ 
+<body>
+<table width="100%" height="255" border="0" cellspacing="5">
+  <tr> 
+    <td colspan="2" bgcolor="#FE8738"><div align="center"><strong><font color=white>Domain administration <<template:templates/domain.htmlt>><br>(Language list)</font></strong></div></td>
+  </tr>
+  <tr valign=top  bgcolor="EFF8FF"> 
+    <<template:templates/admin_menu.htmlt>>
+    <td width="76%">
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-2">
+    </div>
+    <div class="col-xs-8">
+      <div id="language_list_count">Number of languages: </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-1"> cover</div>
+    <div class="col-xs-1"> remove cover</div>
+    <div class="col-xs-8"> </div>
+    <div class="col-xs-1"> # of students</div>
+    <div class="col-xs-1"> remove language</div>
+  </div>
+</div>
+<div class="container-fluid" id="language_list">
+</div>
+
+<script type="text/javascript">
+  var RenderLanguageList = function()
+  {
+      $.getJSON('/cgi-bin/admin/admin.cgi?act=AJAX_getLanguageList', {rand: Math.round(Math.random() * 100000000)})
+      .done(function(data) {
+        $("#language_list_count").append(data.length);
+        data.forEach(function(item, i, arr)
+          {
+            var   buttonRemovelanguageCover = $("<button>").addClass("btn btn-danger")
+                                                        .append($("<span>").addClass("fa fa-trash"))
+                                                        .data("languageID", item.languageID)
+                                                        .on("click", function(e)
+                                                          {
+                                                              var   languageID = $(this).data("languageID");
+                                                              // $(this).parent().parent().remove();
+                                                              $("img#coverlanguageID" + languageID).attr("src", "/images/pages/common/empty.png");
+
+                                                                $.getJSON('/cgi-bin/admin/admin.cgi?act=AJAX_removeSpecifiedCover', {type: "language", id: languageID})
+                                                          });
+            var   buttonRemovelanguage = $("<button>").addClass("btn btn-danger")
+                                                        .append($("<span>").addClass("fa fa-trash"))
+                                                        .data("languageID", item.languageID)
+                                                        // .attr("disabled", "")
+                                                        .on("click", function(e)
+                                                          {
+                                                              var   currButton = $(this);
+                                                              var   languageID = $(this).data("languageID");
+                                                              // $(this).parent().parent().remove();
+
+                                                              $.getJSON('/cgi-bin/admin/admin.cgi?act=AJAX_removeLanguage', {id: languageID})
+                                                              .done(function(data){
+                                                                if(data.result == "success")
+                                                                {
+                                                                  $("div#languageID" + languageID).empty();
+                                                                }
+                                                                else
+                                                                {
+                                                                  currButton.popover({content: data.description, placement:'top'}).popover("show");
+                                                                  setTimeout(function () 
+                                                                        {
+                                                                          currButton.popover("destroy")
+                                                                        }, 3000);
+                                                                }
+
+                                                              });
+                                                          });
+            var   divRow = $("<div>").addClass("row").attr("id", "languageID" + item.languageID);
+            var   divCover = $("<div>").addClass("col-xs-1")
+            var   divCoverRemover = $("<div>").addClass("col-xs-1")
+            var   divMain = $("<div>").addClass("col-xs-8")
+            var   divLanguageStudents = $("<div>").addClass("col-xs-1")
+            var   divLanguageRemover = $("<div>").addClass("col-xs-1")
+            var   cover = $("<img>").attr("src", (item.languagePhotoCoverFilename == "" ? "/images/pages/common/empty.png" : "/images/flags/" + item.languagePhotoCoverFolder + "/" + item.languagePhotoCoverFilename))
+                                    .width("40px")
+                                    .attr("id", "coverlanguageID" + item.languageID);
+
+              divRow.append(divCover)
+                    .append(divCoverRemover)
+                    .append(divMain)
+                    .append(divLanguageStudents)
+                    .append(divLanguageRemover)
+                    .appendTo($("#language_list"));
+
+              divCover.append(cover)
+              divMain.append(item.languageID + ") " + item.languageTitle);
+
+              divCoverRemover.append(buttonRemovelanguageCover);
+              divLanguageStudents.append(item.languageStudentsUserID.length);
+              divLanguageRemover.append(buttonRemovelanguage);
+          });
+      });
+
+  }
+
+  $(document).ready(function() 
+  {
+      $.ajaxSetup({ cache: false });
+      RenderLanguageList();
+  });
+
+</script>
+
+	  </td>
+  </tr>
+</table>
+</body>
+</html>

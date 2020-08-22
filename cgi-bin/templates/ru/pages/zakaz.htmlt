@@ -1,0 +1,110 @@
+<<template:templates/ru/pages/header.htmlt>>
+
+
+<table width="100%" border="0" cellspacing="10" cellpadding="0">
+                          <tr> 
+                            <td valign="top" class="plain">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td width="13" height="34"><img src="/images/w_c1.gif" width="13" height="34"></td>
+                                  <td align="center" background="/images/w_upback.gif" class="black_b"> Оформление заказа <<vars:OrderID>>:</strong></font></td>
+                                  <td width="13"><img src="/images/w_c2.gif" width="13" height="34"></td>
+                                </tr>
+                                <tr>
+                                  <td background="/images/w_left.gif">&nbsp;</td>
+                                  <td bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="10">
+                                      <tr> 
+                                        <td width="200" align="center" valign="top">
+
+
+
+
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" >
+  <tr>
+    <td align="left" valign="top"><div>
+  
+     <form name="ship" method="post" action="/cgi-bin/index.cgi" >
+<script Language="JavaScript" Type="text/javascript">
+<!--
+function total_calculator(theField) {
+	var W = 0;
+	var C = <<vars:goods_price_rub>>;
+	var S = 0.00;
+	var T = 0.00;
+	var Q = 0.00;
+if(ship.shipoption.value == "Доставке по Москве и ближнему подмосковью"){S=250.00;T=C+S;}if(ship.shipoption.value == "Доставка в дальнее подмосковье"){S=600;T=C+S}if(ship.shipoption.value == "Доставка по России"){S=0;T=C+S}if(ship.shipoption.value == "Оплата наличными в офисе"){S=0;T=C+S}if(ship.shipoption.value == "Срочная доставка, ночью и в выходные"){S=350;T=C+S}
+	S = S.toFixed(2);
+	T = T.toFixed(2);
+	sprice.innerHTML = S + "<input type='hidden' name='ship_price' value='" + S + "'>";
+	total.innerHTML = T + "<input type='hidden' name='o_total' value='" + T + "'>";
+}
+//-->
+</script>
+<div align="center">
+<table border="0" cellpadding="3" cellspacing="0" class=plain width="100%" >
+<tr >
+<td align="right" nowrap>
+<font class="black">Тип отправки :</font></td>
+<td width="30%">
+
+<select name="shipoption" style=" font-size:10" onchange="return total_calculator(this)" language="JavaScript">
+<option value="Оплата наличными в офисе">Оплата наличными в офисе фото+</option>
+<option value="Доставке по Москве и ближнему подмосковью">Доставке по Москве и ближнему подмосковью</option>
+<option value="Доставка в дальнее подмосковье">Доставка в дальнее подмосковье</option>
+<option value="Срочная доставка, ночью и в выходные">Срочная доставка, ночью и в выходные</option>
+<option value="Доставка по России">Доставка по России</option>
+</select>
+
+</td></tr>
+
+<tr><td align="right" class="black"><font class="black">Стоимость руб.:</font></td><td width="30%" class=black><<vars:goods_price>><input type="hidden" name="subtotal" value="250"></td></tr>
+<tr ><td align="right" nowrap><font class="black">Стоимость отгрузки руб.:</font></td><td width="30%" class=black id="sprice"><font color="red"><b>Ваш browser не поддерживает JavaScript<br>Разрешите ActiveScripting в Опциях Интернета для правильной работы.</b></font></td></tr>
+<tr><td align="right" class="black" id="fee"></td><td width="30%" id="percent"></td></tr>
+<tr><td align="right" class=red><font class="option">Всего руб.:</font></td><td width="30%" class=red 	id="total"></td></tr>
+</table>
+</div>
+
+<script>total_calculator();</script><br>
+
+<center><font class="blue"><strong>Ваши данные:</strong></font></center><br>
+
+<table bgcolor=#DCECFE align="center" border="0" cellpadding="3" cellspacing="0" width="100%" bgcolor="#ffffff">
+<tr ><td align="right"><font class="black_b">EMail*:</font></td><td width="70%"><input class=fild type="text" name="o_email" size="20" value="<<vars:email>>"></td></tr>
+<tr><td align="right"><font class="black_b">ФИО*:</font></td><td width="70%"><input class=fild type="text" name="o_name" size="20" value="<<vars:name>>"></td></tr>
+<!--
+<tr bgcolor=#DCECFE><td align="right"><font class="black">Улица,  № дома:</font></td><td width="70%"><input type="text" class=fild name="street" size="20" value=""></td></tr>
+-->
+<tr ><td align="right"><font class="black"><b>Телефон*:</font></td><td width="70%"><input type="text" name="street1" size="20" value="<<vars:phone>>"></td></tr>
+<!--
+<tr bgcolor=#DCECFE><td align="right"><font class="black">Город:</font></td><td width="70%"><input type="text" name="city" size="20" value=""></td></tr>
+<tr><td align="right"><font class="black">станция метро:</font></td><td width="70%"><input type="text" name="state" size="10" value=""></td></tr>
+<tr bgcolor=#DCECFE><td align="right"><font class="black">Индекс:</font></td><td width="70%"><input type="text" name="zip" size="10" value=""></td></tr>
+-->
+<tr><td align="right"><font class="black_b">Адрес*:</font></td><td width="70%"><textarea name="address" class=fild rows=5 cols=50><<vars:address>></textarea></td></tr>
+<tr><td align="right"><font class="black">Коментарий:</font></td><td width="70%"><textarea rows="5" class=fild name="o_comment" cols="50"><<vars:o_comment>></textarea></td></tr>
+</table>
+<span class=black align=center>* - поля для обязательного заполнения</span><p>
+<input type="hidden" name="action" value="mail_zakaz">
+<input type="hidden" name="orderid" value="<<vars:OrderID>>">
+<input type="hidden" name="rand" value="<<vars:random>>">
+<br><center><a href="/cgi-bin/index.cgi?action=show_bucket&rand=<<vars:rand>>" class=bread>Вернуться в корзину</a><br><br>
+<input type="submit" value="Заказать" border ="0"></a> <img src=/images/ok.gif align=absmiddle></center>
+</form>
+</div>
+
+  </td>
+  </tr>
+</table> 
+</td>
+                                      </tr>
+                                    </table></td>
+                                  <td background="/images/w_right.gif">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                  <td><img src="/images/w_c4.gif" width="13" height="13"></td>
+                                  <td background="/images/w_down.gif"><img src="/images/1.gif" width="1" height="1"></td>
+                                  <td width="13" height="13"><img src="/images/w_c3.gif" width="13" height="13"></td>
+                                </tr>
+                              </table>
+<<template:templates/ru/pages/footer.htmlt>>
