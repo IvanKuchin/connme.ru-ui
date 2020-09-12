@@ -103,7 +103,7 @@
       {
         if(wsDDoSStatus == "closed")
         {
-          wsDDoS = new WebSocket("wss://dev.connme.ru:7681", testProtocol);
+          wsDDoS = new WebSocket("wss://" + window.location.hostname + ":7681", testProtocol);
 
           wsDDoS.onopen = wsDDoSOnOpen;
           wsDDoS.onmessage = wsDDoSOnMessage;

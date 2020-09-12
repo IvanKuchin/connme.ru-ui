@@ -245,7 +245,7 @@ chat = (function()
 	{
 		try 
 		{
-			ws = new WebSocket("wss://dev.connme.ru:7681", "text-message-protocol");
+			ws = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
 
 			ws.onopen = function() {
 				wsStatus = "connecting";
