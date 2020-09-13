@@ -93,8 +93,13 @@ system_calls = (function()
 		window.setTimeout(system_notifications.Display, 5000);
 */
 		// --- Main search
-		$("#navMenuSearchText").on("input", navMenu_search.OnInputHandler)
-								.on("keyup", navMenu_search.OnKeyupHandler);
+		$("#navMenuSearchText")
+								.on("keyup", navMenu_search.OnKeyupHandler)
+								.autocomplete({
+												source: "/cgi-bin/anyrole_1.cgi?action=AJAX_getUserAutocompleteList",
+												select: navMenu_search.AutocompleteSelectHandler,
+											});
+
 		$("#navMenuSearchSubmit").on("click", navMenu_search.OnSubmitClickHandler);
 	};
 
@@ -2234,131 +2239,23 @@ navMenu_search = (function()
 		var	selectedID = ui.item.id;
 		var selectedLabel = ui.item.label;
 
-		console.debug("navMenu_search.AutocompleteSelectHandler: start. (seletedID=" + selectedID + ", selectedLabel=" + selectedLabel + ")");
-
 		window.location.href = "/userprofile/" + selectedID;
-
-		console.debug("navMenu_search.AutocompleteSelectHandler: end");
 	};
-
-	var OnInputHandler = function() 
-	{
-		var		inputValue = $(this).val();
-		console.debug("navMenu_search.OnInputHandler: start. input.val() " + $(this).val());
-
-		if(inputValue.length >= 2)
-		{
-			$.getJSON(
-				'/cgi-bin/index.cgi',
-				{action:"JSON_getFindFriendsListAutocomplete", lookForKey:inputValue})
-				.done(function(data) {
-						console.debug("navMenu_search.OnInputHandler.done(): sucess");
-						AutocompleteList = [];
-						data.forEach(function(item, i, arr)
-							{
-								var	autocompleteLabel;
-								var	obj;
-
-								autocompleteLabel = "";
-
-								if((item.name.length > 0))
-								{
-									if(autocompleteLabel.length > 0) { autocompleteLabel += " "; }
-									autocompleteLabel += item.name;
-								}
-								if(item.nameLast.length > 0)
-								{
-									if(autocompleteLabel.length > 0) { autocompleteLabel += " "; }
-									autocompleteLabel += item.nameLast;
-								}
-								if(autocompleteLabel.length > 0)
-								{
-									if(item.currentEmployment.length > 0)
-									{
-										autocompleteLabel += " ";
-										item.currentEmployment.forEach(
-											function(item, i, arr)
-											{
-												autocompleteLabel += item.company;
-												if(i+1 < arr.length) { autocompleteLabel += ", "; }
-											}
-										);
-									}
-								}
-
-								AutocompleteList.push({id:item.id , label:autocompleteLabel});
-							});
-
-						console.debug("navMenu_search.OnInputHandler.done(): converted to autocomplete format. Number of elements in array " + AutocompleteList.length);
-
-						$("#navMenuSearchText").autocomplete({
-							delay : 300,
-							source: AutocompleteList,
-							select: AutocompleteSelectHandler,
-							change: function (event, ui) { 
-								console.debug ("navMenu_search.OnInputHandler autocomplete.change: change event handler"); 
-							},
-							close: function (event, ui) 
-							{ 
-								console.debug ("navMenu_search.OnInputHandler autocomplete.close: close event handler"); 
-							},
-							create: function () {
-								console.debug ("navMenu_search.OnInputHandler autocomplete.create: _create event handler"); 
-							},
-							_renderMenu: function (ul, items)  // --- requres plugin only
-							{
-								var	that = this;
-								var currentCategory = "";
-								$.each( items, function( index, item ) {
-									var li;
-								    if ( item.category != currentCategory ) {
-								    	ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-								        currentCategory = item.category;
-								    }
-									li = that._renderItemData( ul, item );
-									if ( item.category ) {
-									    li.attr( "aria-label", item.category + " : " + item.label + item.login );
-									} // --- getJSON.done() autocomplete.renderMenu foreach() if(item.category)
-								}); // --- getJSON.done() autocomplete.renderMenu foreach()
-							} // --- getJSON.done() autocomplete.renderMenu
-						}); // --- getJSON.done() autocomplete
-					}); // --- getJSON.done()
-
-		}
-		else
-		{
-			AutocompleteList = [];
-			$("#navMenuSearchText").autocomplete({
-							delay : 300,
-							source: AutocompleteList
-						});
-		} // --- if(inputValue.length >= 2)
-
-		console.debug("navMenu_search.OnInputHandler: end ");
-	};
-
 
 	var OnKeyupHandler = function(event)
 	{
-		/* Act on the event */
 		var	keyPressed = event.keyCode;
-
-		console.debug("navMenu_search.OnKeyupHandler: start. Pressed key [" + keyPressed + "]");
 
 		if(keyPressed == 13) {
 			/*Enter pressed*/
 			$("#navMenuSearchText").autocomplete("close");
 			// FindFriendsFormSubmitHandler();
 		}
-
-		console.debug("navMenu_search.OnKeyupHandler: end");
 	};
 
 	var OnSubmitClickHandler = function(event)
 	{
 		var		searchText = $("#navMenuSearchText").val();
-
-		console.debug("navMenu_search.OnSubmitClickHandler: start");
 
 		if(searchText.length <= 2)
 		{
@@ -2374,7 +2271,7 @@ navMenu_search = (function()
 	};
 
 	return {
-		OnInputHandler: OnInputHandler,	
+		AutocompleteSelectHandler: AutocompleteSelectHandler,	
 		OnKeyupHandler: OnKeyupHandler,
 		OnSubmitClickHandler: OnSubmitClickHandler
 	};

@@ -14,8 +14,12 @@ var find_friends = (function()
 			SendRequestAndRefreshList("JSON_getMyNetworkFriendList", "");
 
 		// --- search field
-		$("#friendSearchText").on("input", FindFriendsOnInputHandler)
-								.on("keyup", FindFriendsOnKeyupHandler);
+		$("#friendSearchText")
+									.on("keyup", FindFriendsOnKeyupHandler)
+									.autocomplete({
+													source: "/cgi-bin/anyrole_1.cgi?action=AJAX_getUserAutocompleteList",
+													select: JSON_getFindFriendByID,
+												});
 		$("#friendSearchButton").on("click", FindFriendsFormSubmitHandler);
 	};
 
@@ -41,101 +45,6 @@ var find_friends = (function()
 		return tempTag;
 	}
 
-	var FindFriendsOnInputHandler = function() 
-	{
-		var		inputValue = $(this).val();
-		console.debug("FindFriendsOnInputHandler: start. input.val() " + $(this).val());
-
-		if(inputValue.length == 3)
-		{
-			$.getJSON(
-				'/cgi-bin/index.cgi',
-				{action:"JSON_getFindFriendsListAutocomplete", lookForKey:inputValue})
-				.done(function(data) {
-						console.debug("JSON_getFindFriendsListAutocomplete.done(): sucess");
-						JSON_FindFriendsList_Autocomplete = [];
-						data.forEach(function(item, i, arr)
-							{
-								var	autocompleteLabel;
-								var	obj;
-
-								autocompleteLabel = "";
-
-								if((item.name.length > 0))
-								{
-									if(autocompleteLabel.length > 0) { autocompleteLabel += " "; };
-									autocompleteLabel += item.name;
-								}
-								if(item.nameLast.length > 0)
-								{
-									if(autocompleteLabel.length > 0) { autocompleteLabel += " "; };
-									autocompleteLabel += item.nameLast;
-								}
-								if(autocompleteLabel.length > 0)
-								{
-									if(item.currentEmployment.length > 0)
-									{
-										autocompleteLabel += " ";
-										item.currentEmployment.forEach(
-											function(item, i, arr)
-											{
-												autocompleteLabel += item.company;
-												if(i+1 < arr.length) { autocompleteLabel += ", "; }
-											}
-										);
-									}
-								}
-
-								obj = {id:item.id , label:autocompleteLabel};
-
-								JSON_FindFriendsList_Autocomplete.push(obj);
-							});
-
-						console.debug("JSON_getFindFriendsListAutocomplete.done(): converted to autocomplete format. Number of elements in array " + JSON_FindFriendsList_Autocomplete.length);
-
-						$("#friendSearchText").autocomplete({
-							delay : 300,
-							source: JSON_FindFriendsList_Autocomplete,
-							select: JSON_getFindFriendByID,
-							change: function (event, ui) { 
-								console.debug ("FindFriendsOnInputHandler autocomplete.change: change event handler"); 
-							},
-							close: function (event, ui) 
-							{ 
-								console.debug ("FindFriendsOnInputHandler autocomplete.close: close event handler"); 
-							},
-							create: function () {
-								console.debug ("FindFriendsOnInputHandler autocomplete.create: _create event handler"); 
-							},
-							_renderMenu: function (ul, items)  // --- requres plugin only
-							{
-								var	that = this;
-								currentCategory = "";
-								$.each( items, function( index, item ) {
-									var li;
-								    if ( item.category != currentCategory ) {
-								    	ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-								        currentCategory = item.category;
-								    }
-									li = that._renderItemData( ul, item );
-									if ( item.category ) {
-									    li.attr( "aria-label", item.category + " : " + item.label + item.login );
-									} // --- getJSON.done() autocomplete.renderMenu foreach() if(item.category)
-								}); // --- getJSON.done() autocomplete.renderMenu foreach()
-							} // --- getJSON.done() autocomplete.renderMenu
-						}); // --- getJSON.done() autocomplete
-					}); // --- getJSON.done()
-		}
-		else if(inputValue.length < 3)
-		{
-			JSON_FindFriendsList_Autocomplete = [];
-			$("#friendSearchText").autocomplete({
-							delay : 300,
-							source: JSON_FindFriendsList_Autocomplete
-						});
-		} // --- if(inputValue.length >= 2)
-	}
-
 	var	SendRequestAndRefreshList = function(action, lookForKey)
 	{
 
@@ -147,7 +56,7 @@ var find_friends = (function()
 				$("#find_friends").empty().append(BuildFoundFriendList(JSON_FindFriendsList));
 			})
 			.fail(function() {
-				console.debug("JSON_getFindFriendByID:ERROR: parsing JSON response from server");
+				console.debug("ERROR: parsing JSON response from server");
 			});
 	}
 
@@ -177,8 +86,6 @@ var find_friends = (function()
 	{
 		/* Act on the event */
 		var	keyPressed = event.keyCode;
-
-		console.debug("FindFriendsOnKeyupHandler: start. Pressed key [" + keyPressed + "]");
 
 		if(keyPressed == 13) {
 			/*Enter pressed*/
