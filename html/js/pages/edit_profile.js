@@ -169,12 +169,12 @@ var	Init = function()
 							})
 							jQuery.unique(JSON_school);
 
-							data.language.forEach(function(item, i, arr)
+							data.languages.forEach(function(item, i, arr)
 							{
 								JSON_language.push(system_calls.ConvertHTMLToText(item.title));
 							})
 
-							data.skill.forEach(function(item, i, arr)
+							data.skills.forEach(function(item, i, arr)
 							{
 								JSON_skill.push(system_calls.ConvertHTMLToText(item.title));
 							})
@@ -2212,7 +2212,7 @@ var AddLanguageAddButtonClickHandler = function()
 									};
 				AddLanguagePathToggleCollapsible();
 
-				userProfile.language.push(newLanguageObj);
+				userProfile.languages.push(newLanguageObj);
 				RenderLanguagePath();
 
 				AddLanguagePathCollapsibleZeroize();			
@@ -2277,7 +2277,7 @@ var AddSkillAddButtonClickHandler = function()
 									};
 				AddSkillPathToggleCollapsible();
 
-				userProfile.skill.push(newSkillObj);
+				userProfile.skills.push(newSkillObj);
 				RenderSkillPath();
 
 				AddSkillPathCollapsibleZeroize();			
@@ -3355,7 +3355,7 @@ var	RenderLanguagePath = function()
 	}
 
 	$("div#LanguagePath").empty();
-	userProfile.language.sort(function(a, b)
+	userProfile.languages.sort(function(a, b)
 		{
 			var		titleA = a.languageTitle;
 			var		titleB = b.languageTitle;
@@ -3367,7 +3367,7 @@ var	RenderLanguagePath = function()
 
 			return result;
 		});
-	userProfile.language.forEach( function(item, i, arr) {
+	userProfile.languages.forEach( function(item, i, arr) {
 		var		divRowLanguage = $("<div>").addClass("row")
 											.attr("id", "language" + item.languageID);
 
@@ -3439,7 +3439,7 @@ var	RenderSkillPath = function()
 	}
 
 	$("div#SkillPath").empty();
-	userProfile.skill.sort(function(a, b)
+	userProfile.skills.sort(function(a, b)
 		{
 			var		titleA = a.skillTitle;
 			var		titleB = b.skillTitle;
@@ -3451,7 +3451,7 @@ var	RenderSkillPath = function()
 
 			return result;
 		});
-	userProfile.skill.forEach( function(item, i, arr) {
+	userProfile.skills.forEach( function(item, i, arr) {
 		var		divRowSkill = $("<div>").addClass("row")
 											.attr("id", "skill" + item.skillID);
 
@@ -3870,11 +3870,11 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 					$("img#editProfileCoverLanguageID" + uploadCoverID).attr("src", "/images/flags/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.language.length; i++)
-						if(userProfile.language[i].languageInternalID == uploadCoverID)
+					for(var i = 0; i < userProfile.languages.length; i++)
+						if(userProfile.languages[i].languageInternalID == uploadCoverID)
 						{
-							userProfile.language[i].languagePhotoFolder = jsonObj[0].logo_folder;
-							userProfile.language[i].languagePhotoFilename = jsonObj[0].logo_filename;
+							userProfile.languages[i].languagePhotoFolder = jsonObj[0].logo_folder;
+							userProfile.languages[i].languagePhotoFilename = jsonObj[0].logo_filename;
 						}
 				}
 				if(uploadCoverType == "book")
@@ -5612,7 +5612,7 @@ var	ajaxReturnSuccess = function(data) {
 						}
 						else if(ajaxAction == "updateLanguageTitle")
 						{
-							userProfile.language.forEach(function(item, i, arr)
+							userProfile.languages.forEach(function(item, i, arr)
 							{
 								if(item.languageID == ajaxActionID)
 								{
@@ -5622,7 +5622,7 @@ var	ajaxReturnSuccess = function(data) {
 						}
 						else if(ajaxAction == "updateSkillTitle")
 						{
-							userProfile.skill.forEach(function(item, i, arr)
+							userProfile.skills.forEach(function(item, i, arr)
 							{
 								if(item.skillID == ajaxActionID)
 								{
@@ -5685,7 +5685,7 @@ var	ajaxReturnSuccess = function(data) {
 				{
 					if(ajaxAction == "updateLanguageLevel")
 					{
-						userProfile.language.forEach(function(item, i, arr)
+						userProfile.languages.forEach(function(item, i, arr)
 						{
 							if(item.languageID == ajaxActionID)
 							{
@@ -5866,20 +5866,20 @@ var	ajaxReturnSuccess = function(data) {
 		}
 		if(affectedAction == "AJAX_removeLanguageEntry")
 		{
-			userProfile.language.forEach(function(item, i, arr) {
+			userProfile.languages.forEach(function(item, i, arr) {
 				if(item.languageID == affectedID)
 				{
-					userProfile.language.splice(i, 1);
+					userProfile.languages.splice(i, 1);
 				}
 			});
 			RenderLanguagePath();
 		}
 		if(affectedAction == "AJAX_removeSkillEntry")
 		{
-			userProfile.skill.forEach(function(item, i, arr) {
+			userProfile.skills.forEach(function(item, i, arr) {
 				if(item.skillID == affectedID)
 				{
-					userProfile.skill.splice(i, 1);
+					userProfile.skills.splice(i, 1);
 				}
 			});
 			RenderSkillPath();

@@ -91,13 +91,13 @@ onmessage = function(e)
 			})
 			JSON_school = JSON_school.sort().filter(function(item, i, arr) { return !i || (arr[i] != arr[i-1]); });
 
-			data.language.forEach(function(item, i, arr)
+			data.languages.forEach(function(item, i, arr)
 			{
 				JSON_language.push(ConvertHTMLToText(item.title));
 				JSONarrWithID_language.push({id:item.id, value:ConvertHTMLToText(item.title)});
 			})
 
-			data.skill.forEach(function(item, i, arr)
+			data.skills.forEach(function(item, i, arr)
 			{
 				JSON_skill.push(ConvertHTMLToText(item.title));
 				JSONarrWithID_skill.push({id:item.id, value:ConvertHTMLToText(item.title)});
@@ -145,53 +145,6 @@ onmessage = function(e)
 	{
 		console.debug("edit_profile_worker:ERROR: creating XMLHttpRequest");
 	}
-
-/*
-	$.getJSON('/cgi-bin/index.cgi?action=AJAX_getDataForProfile', {param1: ''})
-			.done(function(data) {
-				JSON_dataForProfile = data;
-
-				data.geo_country.forEach(function(item, i, arr)
-				{
-					JSON_geoCountry.push(ConvertHTMLToText(item.title));
-				})
-
-				data.geo_region.forEach(function(item, i, arr)
-				{
-					JSON_geoRegion.push(ConvertHTMLToText(item.title));
-				})
-
-				data.geo_locality.forEach(function(item, i, arr)
-				{
-					JSON_geoLocality.push(ConvertHTMLToText(item.title));
-				})
-
-				data.university.forEach(function(item, i, arr)
-				{
-					JSON_university.push(ConvertHTMLToText(item.title));
-				})
-				jQuery.unique(JSON_university);
-
-				data.school.forEach(function(item, i, arr)
-				{
-					JSON_school.push(ConvertHTMLToText(item.title));
-				})
-				jQuery.unique(JSON_school);
-
-				data.language.forEach(function(item, i, arr)
-				{
-					JSON_language.push(ConvertHTMLToText(item.title));
-				})
-
-				data.skill.forEach(function(item, i, arr)
-				{
-					JSON_skill.push(ConvertHTMLToText(item.title));
-				})
-				jQuery.unique(JSON_skill);
-
-				AddDataForProfileCollapsibleInit();
-			});
-*/
 }
 
 

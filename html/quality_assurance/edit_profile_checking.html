@@ -1113,11 +1113,11 @@
 
                   assert.strictEqual(objJSONUserProfile.result, "success", "updated user profile received");
                   asyncDone();
-                  assert.strictEqual(objJSONUserProfile.users[0].language[0].languageTitle, "Азербайджанский", "correct title");
+                  assert.strictEqual(objJSONUserProfile.users[0].languages[0].languageTitle, "Азербайджанский", "correct title");
                   asyncDone();
 
                   $.getJSON('/cgi-bin/index.cgi', 
-                            {action: 'updateLanguageTitle', id: objJSONUserProfile.language[0].languageID, value:"Русский"})
+                            {action: 'updateLanguageTitle', id: objJSONUserProfile.languages[0].languageID, value:"Русский"})
                     .done(function(data) 
                     {
                       var   objJSON = data;
@@ -1125,7 +1125,7 @@
                       assert.strictEqual(objJSON.result, "success", "language title changed");
                       asyncDone();
                       $.getJSON('/cgi-bin/index.cgi', 
-                                  {action: 'updateLanguageLevel', id: objJSONUserProfile.language[0].languageID, value:"Читаю, пишу"})
+                                  {action: 'updateLanguageLevel', id: objJSONUserProfile.languages[0].languageID, value:"Читаю, пишу"})
                           .done(function(data) 
                           {
                             var   objJSON = data;
@@ -1133,7 +1133,7 @@
                             assert.strictEqual(objJSON.result, "success", "language level changed");
                             asyncDone();
                             $.getJSON('/cgi-bin/index.cgi', 
-                                        {action: 'updateLanguageTitle', id: objJSONUserProfile.language[0].languageID, value:"Английский"})
+                                        {action: 'updateLanguageTitle', id: objJSONUserProfile.languages[0].languageID, value:"Английский"})
                                 .done(function(data) 
                                 {
                                   var   objJSON = data;
@@ -1141,7 +1141,7 @@
                                   assert.strictEqual(objJSON.result, "success", "language title changed");
                                   asyncDone();
                                   $.getJSON('/cgi-bin/index.cgi', 
-                                            {action: 'updateLanguageLevel', id: objJSONUserProfile.language[0].languageID, value:"xxxxxx"})
+                                            {action: 'updateLanguageLevel', id: objJSONUserProfile.languages[0].languageID, value:"xxxxxx"})
                                     .done(function(data) 
                                     {
                                       var   objJSON = data;
@@ -1158,19 +1158,19 @@
                                           assert.strictEqual(objJSON.result, "success", "updated user profile received");
                                           asyncDone();
 
-                                          assert.strictEqual(objJSON.users[0].language[0].languageTitle, "Английский", "correct language");
+                                          assert.strictEqual(objJSON.users[0].languages[0].languageTitle, "Английский", "correct language");
                                           asyncDone();
-                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          assert.strictEqual(objJSON.users[0].languages[0].languageLevel, "Читаю, пишу", "correct degree");
                                           asyncDone();
-                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          assert.strictEqual(objJSON.users[0].languages[0].languageLevel, "Читаю, пишу", "correct degree");
                                           asyncDone();
-                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          assert.strictEqual(objJSON.users[0].languages[0].languageLevel, "Читаю, пишу", "correct degree");
                                           asyncDone();
-                                          assert.strictEqual(objJSON.users[0].language[0].languageLevel, "Читаю, пишу", "correct degree");
+                                          assert.strictEqual(objJSON.users[0].languages[0].languageLevel, "Читаю, пишу", "correct degree");
                                           asyncDone();
 
                                           $.getJSON('/cgi-bin/index.cgi', 
-                                                    {action: 'AJAX_removeLanguageEntry', id: objJSON.language[0].languageID})
+                                                    {action: 'AJAX_removeLanguageEntry', id: objJSON.languages[0].languageID})
                                             .done(function(data) 
                                             {
                                               var   objJSON = data;

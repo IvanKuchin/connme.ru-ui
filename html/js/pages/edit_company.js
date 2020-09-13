@@ -227,12 +227,12 @@ edit_company = (function()
 
 								jQuery.unique(JSON_school);
 
-								data.language.forEach(function(item, i, arr)
+								data.languages.forEach(function(item, i, arr)
 								{
 									JSON_language.push(system_calls.ConvertHTMLToText(item.title));
 								});
 
-								data.skill.forEach(function(item, i, arr)
+								data.skills.forEach(function(item, i, arr)
 								{
 									JSON_skill.push(system_calls.ConvertHTMLToText(item.title));
 								});

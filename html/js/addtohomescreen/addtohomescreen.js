@@ -200,11 +200,11 @@ _extend(ath, {
 	isIDevice: (/iphone|ipod|ipad/i).test(_ua),
 	isMobileChrome: _ua.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(_ua) && _ua.indexOf("Version") == -1,
 	isMobileIE: _ua.indexOf('Windows Phone') > -1,
-	language: _nav.language && _nav.language.toLowerCase().replace('-', '_') || ''
+	language: _nav.languages && _nav.languages.toLowerCase().replace('-', '_') || ''
 });
 
 // falls back to en_us if language is unsupported
-ath.language = ath.language && ath.language in ath.intl ? ath.language : 'en_us';
+ath.languages = ath.languages && ath.languages in ath.intl ? ath.languages : 'en_us';
 
 ath.isMobileSafari = ath.isIDevice && _ua.indexOf('Safari') > -1 && _ua.indexOf('CriOS') < 0;
 ath.OS = ath.isIDevice ? 'ios' : ath.isMobileChrome ? 'android' : ath.isMobileIE ? 'windows' : 'unsupported';
@@ -496,16 +496,16 @@ ath.Class.prototype = {
 
 		var message = '';
 
-		if ( typeof this.options.message == 'object' && ath.language in this.options.message ) {		// use custom language message
-			message = this.options.message[ath.language][ath.OS];
+		if ( typeof this.options.message == 'object' && ath.languages in this.options.message ) {		// use custom language message
+			message = this.options.message[ath.languages][ath.OS];
 		} else if ( typeof this.options.message == 'object' && ath.OS in this.options.message ) {		// use custom os message
 			message = this.options.message[ath.OS];
 		} else if ( this.options.message in ath.intl ) {				// you can force the locale
 			message = ath.intl[this.options.message][ath.OS];
 		} else if ( this.options.message !== '' ) {						// use a custom message
 			message = this.options.message;
-		} else if ( ath.OS in ath.intl[ath.language] ) {				// otherwise we use our message
-			message = ath.intl[ath.language][ath.OS];
+		} else if ( ath.OS in ath.intl[ath.languages] ) {				// otherwise we use our message
+			message = ath.intl[ath.languages][ath.OS];
 		}
 
 		// add the action icon

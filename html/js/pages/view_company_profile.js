@@ -190,7 +190,7 @@ view_company_profile = (function()
 		{
 			myUserProfile.skills.forEach(function(item)
 				{
-					if(item.title == skillTitle) result = true;
+					if(item.skillTitle == skillTitle) result = true;
 				});
 		}
 

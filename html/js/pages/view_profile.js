@@ -894,7 +894,7 @@ view_profile = (function()
 		}
 
 		$("div#LanguagePath").empty();
-		userProfile.language.sort(function(a, b)
+		userProfile.languages.sort(function(a, b)
 			{
 				var		titleA = a.languageTitle;
 				var		titleB = b.languageTitle;
@@ -906,7 +906,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.language.forEach( function(item, i, arr) {
+		userProfile.languages.forEach( function(item, i, arr) {
 			var		divRowLanguage = $("<div>").addClass("row form-group")
 												.attr("id", "Language" + item.languageID);
 
@@ -964,7 +964,7 @@ view_profile = (function()
 		}
 
 		$("div#SkillPath").empty();
-		userProfile.skill.sort(function(a, b)
+		userProfile.skills.sort(function(a, b)
 			{
 				var		titleA = a.skillConfirmed.length;
 				var		titleB = b.skillConfirmed.length;
@@ -976,7 +976,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.skill.forEach( function(item, i, arr) {
+		userProfile.skills.forEach( function(item, i, arr) {
 			var		divRowSkill = $("<div>").addClass("row")
 											.attr("id", "skill" + item.skillID);
 
@@ -1482,7 +1482,7 @@ view_profile = (function()
 		// --- improve UseExpirience to avoid delay in server response
 		if(currTagAction == "viewProfile_SkillApprove")
 		{
-			userProfile.skill.forEach(function(item, i, arr)
+			userProfile.skills.forEach(function(item, i, arr)
 			{
 				if(item.skillID == currTagID)
 				{
@@ -1495,7 +1495,7 @@ view_profile = (function()
 		}
 		if(currTagAction == "viewProfile_SkillReject")
 		{
-			userProfile.skill.forEach(function(item, i, arr)
+			userProfile.skills.forEach(function(item, i, arr)
 			{
 				if(item.skillID == currTagID)
 				{
