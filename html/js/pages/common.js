@@ -1340,71 +1340,73 @@ system_calls = (function()
 	// ---		housingTag - tag where buttons have to be placed to
 	var RenderFriendshipButtons = function(friendInfo, housingTag)
 	{
-		var		tagButtonFriend1, tagButtonFriend2;
+		var	tagButtonFriend1 = $("<button/>").data("action", "");
+		var	tagButtonFriend2 = $("<button/>").data("action", "");
 
-		tagButtonFriend1 = $("<button/>").data("action", "");
-		tagButtonFriend2 = $("<button/>").data("action", "");
-		Object.keys(friendInfo).forEach(function(itemChild, i, arr) {
-			tagButtonFriend1.data(itemChild, friendInfo[itemChild]);
-			tagButtonFriend2.data(itemChild, friendInfo[itemChild]);
-		});
-		if(friendInfo.userFriendship == "empty") 
-		{ 
-			tagButtonFriend1.append("<span class=\"fa fa-plus\">") 
-							.removeClass()
-							.addClass("btn btn-primary float_right")
-							.data("action", "requested");
-		}
-		else if(friendInfo.userFriendship == "confirmed") 
-		{ 
-			tagButtonFriend1.addClass("btn btn-default float_right")
-							.append("<span class=\"fa fa-times\">")
-							.data("action", "disconnectDialog");
-		}
-		else if(friendInfo.userFriendship == "requested") 
-		{ 
-			tagButtonFriend1.addClass("btn btn-primary")
-							.append("Подтвердить")
-							.data("action", "confirm");
-			tagButtonFriend2.addClass("btn btn-default")
-							.append("Отказаться")
-							.data("action", "disconnect");
-		}
-		else if(friendInfo.userFriendship == "requesting") 
-		{ 
-			tagButtonFriend1.append("Отменить запрос дружбы")
-							.removeClass()
-							.addClass("btn btn-default")
-							.data("action", "disconnect");
-		}
-		else if(friendInfo.userFriendship == "blocked") 
-		{ 
-			tagButtonFriend1.addClass("btn btn-default")
-							.append("Снять блокировку")
-							.data("action", "disconnect");
-		}
-		else if(friendInfo.userFriendship == "ignored") 
-		{ 
-			tagButtonFriend1.addClass("btn btn-default")
-							.append("Игнорируется")
-							.data("action", "requested");
-		}
-		else
-		{ 
-			tagButtonFriend1.addClass("btn btn-primary")
-							.append("Добавить в друзья")
-							.data("action", "requested");
-			console.debug("BuildFoundFriendSingleBlock: ERROR: unknown friendship status [" + item.userFriendship + "]");
-		}
-
-		tagButtonFriend1.on("click", FriendshipButtonClickHandler);
-		tagButtonFriend2.on("click", FriendshipButtonClickHandler);
-
-		housingTag.append(tagButtonFriend1);
-		if(tagButtonFriend2.data("action").length > 0)
+		if($("#myUserID").data("myuserid"))
 		{
-			housingTag.append(" ")
-					.append(tagButtonFriend2);
+			Object.keys(friendInfo).forEach(function(itemChild, i, arr) {
+				tagButtonFriend1.data(itemChild, friendInfo[itemChild]);
+				tagButtonFriend2.data(itemChild, friendInfo[itemChild]);
+			});
+			if(friendInfo.userFriendship == "empty") 
+			{ 
+				tagButtonFriend1.append("<span class=\"fa fa-plus\">") 
+								.removeClass()
+								.addClass("btn btn-primary float_right")
+								.data("action", "requested");
+			}
+			else if(friendInfo.userFriendship == "confirmed") 
+			{ 
+				tagButtonFriend1.addClass("btn btn-default float_right")
+								.append("<span class=\"fa fa-times\">")
+								.data("action", "disconnectDialog");
+			}
+			else if(friendInfo.userFriendship == "requested") 
+			{ 
+				tagButtonFriend1.addClass("btn btn-primary")
+								.append("Подтвердить")
+								.data("action", "confirm");
+				tagButtonFriend2.addClass("btn btn-default")
+								.append("Отказаться")
+								.data("action", "disconnect");
+			}
+			else if(friendInfo.userFriendship == "requesting") 
+			{ 
+				tagButtonFriend1.append("Отменить запрос дружбы")
+								.removeClass()
+								.addClass("btn btn-default")
+								.data("action", "disconnect");
+			}
+			else if(friendInfo.userFriendship == "blocked") 
+			{ 
+				tagButtonFriend1.addClass("btn btn-default")
+								.append("Снять блокировку")
+								.data("action", "disconnect");
+			}
+			else if(friendInfo.userFriendship == "ignored") 
+			{ 
+				tagButtonFriend1.addClass("btn btn-default")
+								.append("Игнорируется")
+								.data("action", "requested");
+			}
+			else
+			{ 
+				tagButtonFriend1.addClass("btn btn-primary")
+								.append("Добавить в друзья")
+								.data("action", "requested");
+				console.debug("BuildFoundFriendSingleBlock: ERROR: unknown friendship status [" + item.userFriendship + "]");
+			}
+
+			tagButtonFriend1.on("click", FriendshipButtonClickHandler);
+			tagButtonFriend2.on("click", FriendshipButtonClickHandler);
+
+			housingTag.append(tagButtonFriend1);
+			if(tagButtonFriend2.data("action").length > 0)
+			{
+				housingTag.append(" ")
+						.append(tagButtonFriend2);
+			}
 		}
 
 	}; // --- RenderFriendshipButtons

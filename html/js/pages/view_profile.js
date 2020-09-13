@@ -366,8 +366,6 @@ view_profile = (function()
 			$.getJSON('/cgi-bin/index.cgi?action=JSON_getShakeHands', {user1: my_user_id, user2: friend_user_id})
 		 		.done(function(data) 
 		 		{
-					console.debug("HandShakers: getJSON(JSON_getShakeHands).done(): receive answer from server on message delete");
-
 					if(data.result == "success")
 					{
 						if(data.user1.id != data.user2.id)
