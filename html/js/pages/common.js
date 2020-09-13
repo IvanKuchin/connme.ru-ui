@@ -1878,8 +1878,6 @@ var FriendshipButtonClickHandler = function(e)
 	"use strict";
 	var		handlerButton = $(this);
 
-	console.debug("FriendshipButtonClickHandler: click handler start");
-
 	if(handlerButton.data("action") == "disconnectDialog")
 	{
 		$("#ButtonFriendshipRemovalYes").data("clickedButton", handlerButton);
@@ -1896,7 +1894,7 @@ var FriendshipButtonClickHandler = function(e)
 			.done(function(data) {
 					console.debug("AJAX_setFindFriend_FriendshipStatus.done(): sucess");
 
-					if(data.result == "ok")
+					if(data.result == "success")
 					{
 						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
 
@@ -1955,9 +1953,7 @@ var FriendshipButtonClickHandler = function(e)
 
 				}); // --- getJSON.done()
 	}
-
-	console.debug("FriendshipButtonClickHandler: click handler finish");
-}; // --- FriendshipButtonClickHandler
+};
 
 // --- avatar part start
 var GetUserInitials = function(firstName, lastName)
