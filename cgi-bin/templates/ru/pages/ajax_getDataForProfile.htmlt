@@ -5,6 +5,6 @@
 "geo_locality": [<<vars:geo_locality>>],
 "university": [<<vars:university>>],
 "school": [<<vars:school>>],
-"language": [<<vars:language>>],
-"skill": [<<vars:skill>>]
+"languages": [<<vars:language>>],
+"skills": [<<vars:skill>>]
 }
