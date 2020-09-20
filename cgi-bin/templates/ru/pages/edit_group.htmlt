@@ -49,19 +49,19 @@
 			</div>
 
 			<div class="row">
-				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"> <!-- columns photo block + First Name-->
+				<div class="col-lg-3 col-md-3 col-sm-3 col-xs-4"> <!-- columns photo block + First Name-->
 					<!-- Place for big avatar	-->
-					<canvas id="canvasForGroupLogo" width="230" height="230" class="canvas-big-logo">
+					<canvas id="canvasForGroupLogo" width="230" height="230" class="canvas-big-logo cursor_pointer">
 						Your browser does not support the HTML5 canvas tag.
 					</canvas>
 
-					<span id="spanForFileUploadButton" class="btn btn-default fileinput-button">
+					<div id="spanForFileUploadButton" hidden>
 							<i class="glyphicon glyphicon-briefcase"></i>
 							<span>Загрузить логотип...</span>
 							<!-- The file input field used as target for the file upload widget -->
 							<input id="fileupload" type="file" name="files[]" accept="image/*">
 					<!-- The global progress bar -->
-					</span> 
+					</div> 
 			 
 					<div id="progress" class="progress divProgressUploadThin" width="80%">
 						<div class="progress-bar progress-bar-primary"></div>
@@ -72,11 +72,11 @@
 
 				 </div> <!-- columns photo block + First Name-->
 
-				<div class="col-sm-9 col-xs-12"> <!-- columns for group information -->
+				<div class="col-sm-9 col-xs-8"> <!-- columns for group information -->
 						<span>Ссылка: </span>
 						<span id="groupLink" class="editableSpan" data-action="AJAX_updateGroupLink" data-id=""></span>
 				</div> <!-- columns for group information -->
-				<div class="col-sm-9 col-xs-12"> <!-- columns for group information -->
+				<div class="col-sm-9 col-xs-8"> <!-- columns for group information -->
 						<p id="groupDescription" class="editableParagraph" data-action="updateGroupDescription" data-id=""></p>
 				</div> <!-- columns for group information -->
 			</div>

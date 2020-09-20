@@ -25,7 +25,9 @@ edit_group = (function()
 
 
 		$("#AreYouSure #Remove").on("click", AreYouSureRemoveHandler);
-		$("#groupBlock").on("click", BlockButtonClickHandler);
+		$("#groupBlock")		.on("click", BlockButtonClickHandler);
+		$("#canvasForGroupLogo").on("click", function() { $("#fileupload").click(); });
+
 
 
 		$.getJSON('/cgi-bin/group.cgi?action=AJAX_getGroupProfile', {id: groupProfile.id})
