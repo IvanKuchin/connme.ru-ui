@@ -23,7 +23,7 @@ view_group_profile = (function()
 		$("#AreYouSure #Remove").on("click", AreYouSureRemoveHandler);
 
 		FillinGroupProfile();
-	}
+	};
 
 	var FillinGroupProfile = function()
 	{
@@ -40,6 +40,7 @@ view_group_profile = (function()
 
 						RenderCommonInfo();
 						RenderFollowButton();
+						RenderSubscribersAvatars();
 
 						if(system_calls.GetParamFromURL("scrollto").length) system_calls.ScrollWindowToElementID("#" + system_calls.GetParamFromURL("scrollto"));
 					}
@@ -57,8 +58,7 @@ view_group_profile = (function()
 			.fail(function() {
 				console.debug("FillinGroupProfile: error parsing JSON from server");
 			});
-
-	}
+	};
 
 	var	DrawGroupLogo = function (groupImageFolder, groupImageFilename, groupName)
 	{
@@ -73,7 +73,7 @@ view_group_profile = (function()
 		else
 			DrawCompanyAvatar(canvasCtx, "", groupName, "");
 
-	}
+	};
 
 	var	RenderCommonInfo = function()
 	{
@@ -81,7 +81,16 @@ view_group_profile = (function()
 		$("#groupFoundationDate").append(system_calls.GetLocalizedDateNoTimeFromSeconds(groupProfile.eventTimestampCreation));
 		$("#numberOfMembers").append(groupProfile.numberOfMembers);
 		$("#groupDescription").append(groupProfile.description);
-	}
+	};
+
+	var	RenderSubscribersAvatars = function()
+	{
+		$("#subscribersAvatarList").append(system_calls.GetAvatarsList(groupProfile.subscribers));
+		if(groupProfile.numberOfMembers > groupProfile.subscribers.length)
+		{
+			$("#subscribersAvatarList").append("...")
+		}
+	};
 
 	var	amISubsribedToGroup = function(groupID)
 	{
@@ -97,7 +106,7 @@ view_group_profile = (function()
 		}
 
 		return result;
-	}
+	};
 
 	var	RenderFollowButton = function()
 	{
@@ -124,7 +133,7 @@ view_group_profile = (function()
 		}
 
 		$("#groupFollowButton").empty().append(followButton);
-	}
+	};
 
 	var	GroupSubscriptionClickHandler = function(e)
 	{
@@ -165,7 +174,7 @@ view_group_profile = (function()
 			console.debug("GroupSubscriptionClickHandler: ERROR: action doesn't defined");
 		}
 
-	}
+	};
 
 	// --- aditional modals
 	var DisplaySpecifiedImageModal_Show = function()
@@ -181,7 +190,7 @@ view_group_profile = (function()
 
 		$("#ImageDisplayModal").modal("show");
 
-	}
+	};
 
 	var	AreYouSureRemoveHandler = function() {
 		var		affectedID = $("#AreYouSure #Remove").data("id");
@@ -375,7 +384,7 @@ view_group_profile = (function()
 
 
 	return {
-			Init: Init
+			Init: Init,
 		};
-})() // --- view_group_profile object
+})(); // --- view_group_profile object
 

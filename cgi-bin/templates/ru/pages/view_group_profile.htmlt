@@ -64,12 +64,18 @@
       <p></p>
       <p id="groupDescription"></p>
     </div>
-    <div class="col-md-9 col-sm-8 col-xs-12">
-      <span class="display_inline">Количество подписчиков:</span>
+    <div class="col-md-2 col-sm-8 col-xs-12">
+      <span class="display_inline">Подписчиков:</span>
       <span id="numberOfMembers"></span>
     </div>
-    <div class="col-md-3" label="for future usage">
+    <div class="col-md-7 col-sm-8 col-xs-12">
+      <span id="subscribersAvatarList"></span>
     </div>
+    <div class="col-md-9 col-sm-8 col-xs-12">
+      <span class="display_inline">Активность:</span>
+      <span id="post_frquency"></span>
+    </div>
+
 
     <div class="col-xs-12">
       <h6><small>

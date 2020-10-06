@@ -1515,7 +1515,38 @@ system_calls = (function()
 			DrawCompanyImage(canvas, logoPath, canvas.canvas.width);
 		}
 	};
+
+	var	GetAvatarsList = function(usersArray)
+	{
+		var		guestAvatarsList = $();
+
+		usersArray.forEach(function(user) 
+			{
+				if(user.name.length || user.nameLast.length)
+				{
+					var		spanContainer	= $("<span>")	.data("obj", user);
+					var		href			= $("<a>")		.attr("href", "/userprofile/" + user.id + "?rand=" + system_calls.GetUUID());
+					var		canvas			= $("<canvas>")	.attr("height", "30")
+															.attr("width", "30");
+
+					DrawUserAvatar(canvas[0].getContext("2d"), user.avatar, user.name, user.nameLast);
+
+					canvas		
+								.attr("data-placement", "top")
+								.attr("title", user.name + " " + user.nameLast)
+								.tooltip({ animation: "animated bounceIn"});
+
+					spanContainer.append(href.append(canvas)).append(" ");
+
+					guestAvatarsList = guestAvatarsList.add(spanContainer);
+				}
+			});
+
+		return	guestAvatarsList;		
+	};
 	// --- avatar part end
+
+
 
 	// --- rating rendering
 	// --- input: 
@@ -1648,8 +1679,8 @@ system_calls = (function()
 	};
 
 	return {
-		companyTypes: companyTypes,
 		Init: Init,
+		companyTypes: companyTypes,
 		isUserSignedin: isUserSignedin,
 		SendEchoRequest: SendEchoRequest,
 		GetUserRequestNotifications: GetUserRequestNotifications,
@@ -1694,6 +1725,9 @@ system_calls = (function()
 		GetHoursSpelling: GetHoursSpelling,
 		GetDaysSpelling: GetDaysSpelling,
 		GetMonthsSpelling: GetMonthsSpelling,
+
+		GetAvatarsList: GetAvatarsList,
+
 		PopoverError: PopoverError,
 		PopoverInfo: PopoverInfo,
 		AlertError: AlertError,
