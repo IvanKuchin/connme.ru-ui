@@ -73,7 +73,7 @@
     </div>
     <div class="col-md-9 col-sm-8 col-xs-12">
       <span class="display_inline">Активность:</span>
-      <span id="post_frquency"></span>
+      <span id="post_frequency"></span>
     </div>
 
 
