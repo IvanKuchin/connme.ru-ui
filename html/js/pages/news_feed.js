@@ -3402,14 +3402,17 @@ news_feed = (function()
 		var		total_sum = 0;
 		var		messages_timestamp_diff = [];
 		var		i;
+		var		prev_timestamp = 0;
 
 		messages_timestamp_diff.push(0);
 
 		for(i = 0; i < messages.length; ++i)
 		{
 			messages_timestamp_diff.push(
-					parseInt(messages[i].eventTimestampDelta) - messages_timestamp_diff[messages_timestamp_diff.length - 1]
+					 - messages_timestamp_diff[messages_timestamp_diff.length - 1] - prev_timestamp
 			);
+
+			prev_timestamp = parseInt(messages[i].eventTimestampDelta);
 		}
 
 		total_sum = messages_timestamp_diff.reduce(function(a, b) { return a+b; }, 0);
@@ -3431,7 +3434,7 @@ news_feed = (function()
 
 			if(isFinite(relative_freq) && relative_freq > 1)
 			{
-				result = Math.round(relative_freq) + " сообщений в " + period[i];
+				result = Math.round(relative_freq) + " сообщен(ий/ия) в " + period[i];
 				break;
 			}
 		}
