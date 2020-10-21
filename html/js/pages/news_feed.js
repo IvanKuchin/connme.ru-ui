@@ -3397,25 +3397,23 @@ news_feed = (function()
 		}
 	};
 
+	// --- return freq could be NaN if message array is empty
 	var GetMessageFrequency = function(messages)
 	{
 		var		total_sum = 0;
 		var		messages_timestamp_diff = [];
 		var		i;
 		var		prev_timestamp = 0;
+		var		temp;
 
 		messages_timestamp_diff.push(0);
 
-		for(i = 0; i < messages.length; ++i)
+		for(i = 1; i < messages.length; ++i)
 		{
-			messages_timestamp_diff.push(
-					 - messages_timestamp_diff[messages_timestamp_diff.length - 1] - prev_timestamp
-			);
-
-			prev_timestamp = parseInt(messages[i].eventTimestampDelta);
+			temp = parseInt(messages[i].eventTimestampDelta) - parseInt(messages[i-1].eventTimestampDelta)
+			messages_timestamp_diff.push(temp);
+			total_sum += temp;
 		}
-
-		total_sum = messages_timestamp_diff.reduce(function(a, b) { return a+b; }, 0);
 
 		return total_sum / messages_timestamp_diff.length;
 	};
