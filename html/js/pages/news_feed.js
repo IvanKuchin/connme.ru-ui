@@ -3453,7 +3453,7 @@ news_feed = (function()
 			// reduce counter
 			--globalPageCounter;
 
-			console.debug("reduce page# due to request return empty result");
+			console.debug("reduce page# due to request returns empty result");
 		}
 		else
 		{
