@@ -37,6 +37,8 @@ var	Init = function()
 	DrawAllAvatars();
 	RenderCVandTitle();
 
+	AddYearsToSelectBoxes([$("#AddUniversityPeriodStart"), $("#AddUniversityPeriodFinish"), $("#AddSchoolPeriodStart"), $("#AddSchoolPeriodFinish")]);
+
 	$("#AreYouSure #Remove").on("click", AreYouSureRemoveHandler);
 
 	$.getJSON('/cgi-bin/index.cgi?action=JSON_getUserProfile', {param1: "_"})
@@ -361,7 +363,20 @@ var	ScrollToElementID = function(elementID)
 {
 	if((elementID.length > 1) && $(elementID).length) // --- elementID is "#XXXX"
 		system_calls.ScrollWindowToElementID(elementID);
-}
+};
+
+var	AddYearsToSelectBoxes = function(host_tags)
+{
+	var	curr_year = new Date().getFullYear();
+
+	host_tags.forEach(function(host_tag)
+	{
+		for(var year = curr_year; year >= curr_year - 60; --year)
+		{
+			host_tag.append($("<option>").append(year));
+		}
+	});
+};
 
 var	getDate = function ( elem ) 
 {
