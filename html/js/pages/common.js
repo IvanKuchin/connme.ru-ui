@@ -1665,6 +1665,21 @@ system_calls = (function()
 		return lenghtyWord.length;
 	};
 
+	var	isTagFullyVisibleInWindowByHeight = function(tag)
+	{
+		var		windowTop		= $(window).scrollTop();
+		var		windowBottom	= windowTop + document.documentElement.clientHeight;
+
+		var		tagTop			= tag.offset().top;
+		var		tagBottom		= tagTop + tag.height();
+
+		var		result			=
+									(windowTop <= tagTop) && (tagTop <= windowBottom) &&
+									(windowTop <= tagBottom) && (tagBottom <= windowBottom)
+									;
+		return result;
+	};
+
 	var ClearSession = function()
 	{
 		$.removeCookie("sessid");
@@ -1735,6 +1750,7 @@ system_calls = (function()
 		ReplaceTextLinkToURL: ReplaceTextLinkToURL,
 		LongestWordSize: LongestWordSize,
 		LongestWord: LongestWord,
+		isTagFullyVisibleInWindowByHeight: isTagFullyVisibleInWindowByHeight,
 		ClearSession: ClearSession
 	};
 }

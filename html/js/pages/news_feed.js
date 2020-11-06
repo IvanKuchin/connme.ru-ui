@@ -2103,7 +2103,7 @@ news_feed = (function()
 			var		imageArr = imageList;
 			var		tagDivContainer = $("<div/>").addClass("videoTag");
 			var		videoTag = $("<video>").addClass("videoPlacement")
-											.data("playedAttempts", "0")
+											.attr("data_playedAttempts", "0")
 											.attr("id", "videoTag" + uniqueID)
 											.attr("controls", "true");
 
@@ -3577,10 +3577,7 @@ news_feed = (function()
 			{
 				var		tag = $(this);
 				// console.debug("HandlerScrollToShow: carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
-				if(
-					(tag.offset().top >= windowPosition) && (tag.offset().top <= windowPosition + clientHeight) &&
-					((tag.offset().top + tag.height()) >= windowPosition) && ((tag.offset().top + tag.height()) <= windowPosition + clientHeight)
-				)
+				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
 					tag.carousel('cycle');
 				else
 					tag.carousel('pause');
@@ -3592,12 +3589,12 @@ news_feed = (function()
 			{
 				var		tag = $(this);
 				// console.debug("HandlerScrollToShow: carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
-				if((tag.offset().top >= windowPosition) && (tag.offset().top <= windowPosition + clientHeight))
+				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
 				{
-					var		playedAttempts = parseInt(tag.data("playedAttempts"));
-					if(!playedAttempts)
+					var		playedAttempts = parseInt(tag.attr("data_playedAttempts"));
+					if(playedAttempts == 0)
 					{
-						tag.data("playedAttempts", playedAttempts + 1);
+						tag.attr("data_playedAttempts", playedAttempts + 1);
 						tag.get(0).play();
 					}
 				}
