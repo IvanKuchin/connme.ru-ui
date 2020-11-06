@@ -25,7 +25,7 @@
 		<script src="/js/pages/view_company_profile.js"></script>
 
 		<script src="/js/pages/news_feed.js"></script>
-		<script src="/js/pages/pi/NoSleep.js"></script>
+		<script src="/js/nosleep/NoSleep.js"></script>
 		
 		<link href="/css/pages/news_feed.css" rel="stylesheet">
 

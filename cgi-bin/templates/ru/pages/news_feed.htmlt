@@ -17,7 +17,7 @@
 		<title><<vars:title_head>></title>
 
 		<script src="/js/pages/news_feed.js"></script>
-		<script src="/js/pages/pi/NoSleep.js"></script>
+		<script src="/js/nosleep/NoSleep.js"></script>
 		<!-- Custom styles for this template -->
 		<link href="/css/pages/news_feed.css" rel="stylesheet">
 
