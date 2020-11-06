@@ -20,9 +20,6 @@
 		<script src="/js/pages/edit_company.js"></script>
 		<link href="/css/pages/edit_company.css" rel="stylesheet">
 		
-		<script src="/js/pages/tooltip.js"></script>
-		<link href="/css/pages/animate.min.css" rel="stylesheet">
-
 		<title><<vars:title_head>></title>
 
 		<script>

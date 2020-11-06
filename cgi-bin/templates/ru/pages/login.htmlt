@@ -7,12 +7,7 @@
     <script src="/js/sha512/sha512.js"></script>
     <script src="/js/pages/login.js"></script>
     
-
     <title>Добро пожаловать</title>
-
-    <!-- Custom styles for this template -->
-    <link href="/css/pages/login.css" rel="stylesheet">
-    <script src="/js/pages/pi/domain_replacer.js"></script>
 
     <script>
       $(document).ready(function() {
