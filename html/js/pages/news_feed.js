@@ -3577,7 +3577,10 @@ news_feed = (function()
 			{
 				var		tag = $(this);
 				// console.debug("HandlerScrollToShow: carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
-				if((tag.offset().top >= windowPosition) && (tag.offset().top <= windowPosition + clientHeight))
+				if(
+					(tag.offset().top >= windowPosition) && (tag.offset().top <= windowPosition + clientHeight) &&
+					((tag.offset().top + tag.height()) >= windowPosition) && ((tag.offset().top + tag.height()) <= windowPosition + clientHeight)
+				)
 					tag.carousel('cycle');
 				else
 					tag.carousel('pause');
