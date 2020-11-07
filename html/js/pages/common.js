@@ -963,7 +963,7 @@ system_calls = (function()
 										$("#user-requests-ahref").append(badgeSpan);
 									}
 
-									navMenu_userNotification.InitilizeData(data.userNotificationsArray);
+									navMenu_userNotification.InitializeData(data.userNotificationsArray);
 									navMenu_userNotification.BuildUserNotificationList();
 
 									if(data.userNotificationsArray.length > 0)
@@ -1339,7 +1339,7 @@ system_calls = (function()
 		return divContainer;
 	};
 
-	// --- build "frindship" buttons and put them into DOM-model
+	// --- build "friendship" buttons and put them into DOM-model
 	// --- input
 	// ---		friendInfo - info from GetUserListInJSONFormat
 	// ---		housingTag - tag where buttons have to be placed to
@@ -2588,7 +2588,7 @@ navMenu_userNotification = (function()
 
 	var		userNotificationsArray = []; // --- storing all notifications
 
-	var	InitilizeData = function (data)
+	var	InitializeData = function (data)
 	{
 		userNotificationsArray = data;
 	};
@@ -2929,7 +2929,7 @@ navMenu_userNotification = (function()
 
 
 	return {
-		InitilizeData: InitilizeData,
+		InitializeData: InitializeData,
 		BuildUserNotificationList: BuildUserNotificationList,
 		BadgeUpdate: BadgeUpdate,
 		GetAdditionalTitle: GetAdditionalTitle

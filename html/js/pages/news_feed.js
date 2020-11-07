@@ -592,7 +592,7 @@ news_feed = (function()
 					console.debug("ERROR: $(document).getJSON(AJAX_cleanupFeedImages).fail(): result");
 				});
 
-		// --- actvate noSleep feature to avoid screen dimming during upload
+		// --- activate noSleep feature to avoid screen dimming during upload
 		if(isMobile.phone) NoSleep_global.enable();
 	};
 
@@ -889,7 +889,7 @@ news_feed = (function()
 		imageTempSet = "";
 		$('#editFileupload').fileupload({formData: {imageTempSet: imageTempSet}});
 
-		// --- deactvate noSleep feature, reverse back to normal behavior
+		// --- deactivate noSleep feature, reverse back to normal behavior
 		if(isMobile.phone) NoSleep_global.disable();
 	};
 
@@ -967,7 +967,7 @@ news_feed = (function()
 
 	var DeleteMessage = function(messageID) 
 	{
-		// --- improve user expirience by removing message immediately
+		// --- improve user Experience by removing message immediately
 		// --- on a slow speed links users can continue seeing it some time
 		$("div#message" + messageID).parent().empty();
 		$.getJSON('/cgi-bin/index.cgi?action=AJAX_deleteNewsFeedMessage', {messageID: messageID})
@@ -1020,7 +1020,7 @@ news_feed = (function()
 				}
 			});
 
-		// --- !!! It is imprtant to rebuild carousel after downloading carousel-images
+		// --- !!! It is important to rebuild carousel after downloading carousel-images
 		$(".carousel").carousel();
 	};
 
@@ -1108,7 +1108,6 @@ news_feed = (function()
 								}
 								else if((typeof(data.mediaType) != "undefined") && (data.mediaType == "youtube_video"))
 								{
-									// --- <iframe width="560" height="315" src="https://www.youtube.com/embed/WNkCqa1LfuI" frameborder="0" allowfullscreen></iframe>
 									mediaPreview = $("<iframe>").addClass("max_100percents_100px")
 																.attr("src", data.imageURL)
 																.attr("frameborder", "0")
@@ -2350,7 +2349,7 @@ news_feed = (function()
 		{
 			// --- this function will be invoked for feed rendering and modal rendering
 			// --- require to keep attr("id") uniq
-			// --- first time will always be choosen Init value
+			// --- first time will always be chosen Init value
 			// --- first time will appear on rendering main page
 			var		uniqueID = jsonBook.bookID;
 			while($("#bookCommonRating" + uniqueID).length) {
@@ -3783,7 +3782,7 @@ news_feed = (function()
 		// --- enable all field for safelty reason, just in case they were disabled earlier
 		NewMessageModalResetLayout();
 
-		// --- actvate noSleep feature to avoid screen dimming during upload
+		// --- activate noSleep feature to avoid screen dimming during upload
 		if(isMobile.phone) NoSleep_global.enable();
 	};
 
@@ -3824,7 +3823,7 @@ news_feed = (function()
 		imageTempSet = "";
 		$('#newMessageFileUpload').fileupload({formData: {imageTempSet: imageTempSet}});
 
-		// --- deactvate noSleep feature, reverse back to normal behavior
+		// --- deactivate noSleep feature, reverse back to normal behavior
 		if(isMobile.phone) NoSleep_global.disable();
 	};
 

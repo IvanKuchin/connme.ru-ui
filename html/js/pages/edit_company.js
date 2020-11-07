@@ -1797,7 +1797,7 @@ edit_company = (function()
 			});
 
 		// --- update GUI has to be inside getJSON->done->if(success).
-		// --- To improve User Expirience (react on user actions immediately, inspite on potential server error's) 
+		// --- To improve User Experience (react on user actions immediately, in spite to potential server error's) 
 		if(affectedAction == "AJAX_removeCompanyFounder")
 		{
 			var		removeItemIndex = -1;
@@ -1893,7 +1893,7 @@ edit_company = (function()
 
 		$(this).replaceWith(tag);
 		$(tag).on('keyup', keyupEventHandler);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 
 		if($(tag).data("action") == "AJAX_updateCompanyLink") 
 		{
@@ -2150,7 +2150,7 @@ edit_company = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
 		$(tag).on('keyup', keyupEventHandler);
@@ -2239,7 +2239,7 @@ edit_company = (function()
 		$(tag).on('keyup', keyupEventHandler);
 		$(tag).on('change', selectChangeHandler);
 		$(tag).on('blur', selectChangeHandler);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
@@ -2317,11 +2317,11 @@ edit_company = (function()
 	};
 
 	var editableFuncHighlightBgcolor = function () {
-		$(this).addClass("editable_highlited_class", 400);
+		$(this).addClass("editable_highlighted_class", 400);
 	};
 
 	var editableFuncNormalizeBgcolor = function () {
-		$(this).removeClass("editable_highlited_class", 200, "easeInOutCirc");
+		$(this).removeClass("editable_highlighted_class", 200, "easeInOutCirc");
 	};
 
 	var	AddNewOpenVacancyClickHandler = function() 

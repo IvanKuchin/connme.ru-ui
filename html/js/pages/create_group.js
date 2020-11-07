@@ -326,17 +326,17 @@ create_group = (function()
 		$("span#groupFoundationDate").html(system_calls.GetLocalizedDateNoTimeFromSeconds(groupProfile.eventTimestampCreation));
 		$("p#groupDescription").html(groupProfile.description ? groupProfile.description : "(описание отсутствует)")
 
-		$("div#groupInfo .createableSpan").on("click", createableFuncReplaceSpanToInput);
-		$("div#groupInfo .createableSpan").mouseenter(createableFuncHighlightBgcolor);
-		$("div#groupInfo .createableSpan").mouseleave(createableFuncNormalizeBgcolor);
+		$("div#groupInfo .creatableSpan").on("click", creatableFuncReplaceSpanToInput);
+		$("div#groupInfo .creatableSpan").mouseenter(creatableFuncHighlightBgcolor);
+		$("div#groupInfo .creatableSpan").mouseleave(creatableFuncNormalizeBgcolor);
 
-		$("div#groupInfo .createableParagraph").on("click", createableFuncReplaceParagraphToTextarea);
-		$("div#groupInfo .createableParagraph").mouseenter(createableFuncHighlightBgcolor);
-		$("div#groupInfo .createableParagraph").mouseleave(createableFuncNormalizeBgcolor);
+		$("div#groupInfo .creatableParagraph").on("click", creatableFuncReplaceParagraphToTextarea);
+		$("div#groupInfo .creatableParagraph").mouseenter(creatableFuncHighlightBgcolor);
+		$("div#groupInfo .creatableParagraph").mouseleave(creatableFuncNormalizeBgcolor);
 
-		$("div#groupInfo .createableSelectGroupType").on("click", createableFuncReplaceSpanToSelectGroupType);
-		$("div#groupInfo .createableSelectGroupType").mouseenter(createableFuncHighlightBgcolor);
-		$("div#groupInfo .createableSelectGroupType").mouseleave(createableFuncNormalizeBgcolor);
+		$("div#groupInfo .creatableSelectGroupType").on("click", creatableFuncReplaceSpanToSelectGroupType);
+		$("div#groupInfo .creatableSelectGroupType").mouseenter(creatableFuncHighlightBgcolor);
+		$("div#groupInfo .creatableSelectGroupType").mouseleave(creatableFuncNormalizeBgcolor);
 	};
 
 
@@ -357,6 +357,7 @@ create_group = (function()
 		var		affectedID = $("#AreYouSure #Remove").data("id");
 		var		affectedAction = $("#AreYouSure #Remove").data("action");
 		var		affectedScript = $("#AreYouSure #Remove").data("script");
+		var		removeItemIndex = -1;
 
 		if((typeof(affectedScript) == "undefined") || (affectedScript == ""))
 			affectedScript = "group.cgi";
@@ -375,10 +376,10 @@ create_group = (function()
 			});
 
 		// --- update GUI has to be inside getJSON->done->if(success).
-		// --- To improve User Expirience (react on user actions immediately, inspite on potential server error's) 
+		// --- To improve User Experience (react on user actions immediately, in spite to potential server error's) 
 		if(affectedAction == "AJAX_removeGroupFounder")
 		{
-			var		removeItemIndex = -1;
+			removeItemIndex = -1;
 
 			groupProfile.founders.forEach(function(item, i, arr)
 			{
@@ -390,7 +391,7 @@ create_group = (function()
 		}
 		if(affectedAction == "AJAX_removeGroupOwner")
 		{
-			var		removeItemIndex = -1;
+			removeItemIndex = -1;
 
 			groupProfile.owners.forEach(function(item, i, arr)
 			{
@@ -402,7 +403,7 @@ create_group = (function()
 		}
 		if(affectedAction == "AJAX_removeGroupIndustry")
 		{
-			var		removeItemIndex = -1;
+			removeItemIndex = -1;
 
 			groupProfile.industries.forEach(function(item, i, arr)
 			{
@@ -414,7 +415,7 @@ create_group = (function()
 		}
 		if(affectedAction == "AJAX_removeOpenVacancy")
 		{
-			var		removeItemIndex = -1;
+			removeItemIndex = -1;
 
 			groupProfile.open_vacancies.forEach(function(item, i, arr)
 			{
@@ -426,13 +427,13 @@ create_group = (function()
 		}
 		if(affectedAction == "AJAX_rejectCandidate")
 		{
-			var		removeItemIndex = -1;
+			removeItemIndex = -1;
 
 			$("#rowAppliedCandidate" + affectedID).remove();
 		}
 	};
 
-	var	createableFuncReplaceSpanToInput = function () 
+	var	creatableFuncReplaceSpanToInput = function () 
 	{
 		var	tag = $("<input>", {
 			val: $(this).text(),
@@ -449,13 +450,13 @@ create_group = (function()
 			if(keyPressed == 13) 
 			{
 				/*Enter pressed*/
-				createableFuncReplaceInputToSpan($(this));
+				creatableFuncReplaceInputToSpan($(this));
 			}
 			if(keyPressed == 27) 
 			{
 				/*Escape pressed*/
 				$(this).val($(this).attr("initValue"));
-				createableFuncReplaceInputToSpan($(this));
+				creatableFuncReplaceInputToSpan($(this));
 			}
 
 		};
@@ -467,15 +468,15 @@ create_group = (function()
 
 		$(this).replaceWith(tag);
 		$(tag).on('keyup', keyupEventHandler);
-		$(tag).removeClass('createable_highlited_class');
+		$(tag).removeClass('creatable_highlighted_class');
 
 		if($(tag).data("action") == "AJAX_updateGroupLink") 
 		{
-			$(tag).on('blur', createableFuncReplaceInputToSpan);
+			$(tag).on('blur', creatableFuncReplaceInputToSpan);
 		}
 		if($(tag).data("action") == "AJAX_updateGroupEmployeeNumber") 
 		{
-			$(tag).on('blur', createableFuncReplaceInputToSpan);
+			$(tag).on('blur', creatableFuncReplaceInputToSpan);
 		}
 		if($(tag).data("action") == "AJAX_updateGroupFoundationDate") 
 		{
@@ -500,7 +501,7 @@ create_group = (function()
 		$(tag).select();
 	};
 
-	var	createableFuncReplaceInputToSpan = function (param) 
+	var	creatableFuncReplaceInputToSpan = function (param) 
 	{
 		var currentTag = ((typeof param.html == "function") ? param : $(this));
 		var	newTag = $("<span>", {
@@ -520,16 +521,16 @@ create_group = (function()
 		else
 		{
 			$(currentTag).replaceWith(newTag);
-			$(newTag).on('click', createableFuncReplaceSpanToInput);
-			$(newTag).mouseenter(createableFuncHighlightBgcolor);
-			$(newTag).mouseleave(createableFuncNormalizeBgcolor);
+			$(newTag).on('click', creatableFuncReplaceSpanToInput);
+			$(newTag).mouseenter(creatableFuncHighlightBgcolor);
+			$(newTag).mouseleave(creatableFuncNormalizeBgcolor);
 		}
 
 		if(system_calls.ConvertTextToHTML($(currentTag).val()) == system_calls.ConvertTextToHTML($(currentTag).attr("initValue")))
 		{
 			// --- value hasn't been changed
 			// --- no need to update server part
-			console.error("createableFuncReplaceInputToSpan: value hasn't been changed");
+			console.error("creatableFuncReplaceInputToSpan: value hasn't been changed");
 		}
 		else
 		{
@@ -562,7 +563,7 @@ create_group = (function()
 						}
 						else
 						{
-							console.error("createableFuncReplaceInputToSpan: ERROR in ajax [action = " + ajaxAction + ", id = " + groupProfile.id + ", ajaxValue = " + ajaxValue + "] " + ajaxResult.description);
+							console.error("creatableFuncReplaceInputToSpan: ERROR in ajax [action = " + ajaxAction + ", id = " + groupProfile.id + ", ajaxValue = " + ajaxValue + "] " + ajaxResult.description);
 
 							if(ajaxAction == "AJAX_updateGroupLink")
 							{
@@ -573,7 +574,7 @@ create_group = (function()
 					}
 					catch(e)
 					{
-						console.error("createableFuncReplaceInputToSpan:ERROR: can't parse JSON form server");
+						console.error("creatableFuncReplaceInputToSpan:ERROR: can't parse JSON form server");
 					}
 
 				});
@@ -587,7 +588,7 @@ create_group = (function()
 
 
 
-	var	createableFuncReplaceToParagraphRenderHTML = function (currentTag, content) {
+	var	creatableFuncReplaceToParagraphRenderHTML = function (currentTag, content) {
 		/*Escape pressed*/
 		var currentID = currentTag.attr("id");
 		var	newTag = $("<p>", {
@@ -601,12 +602,12 @@ create_group = (function()
 		currentTag.replaceWith(newTag);
 		$("#" + currentID + "ButtonAccept").remove();
 		$("#" + currentID + "ButtonReject").remove();
-		$(newTag).on('click', createableFuncReplaceParagraphToTextarea);
-		$(newTag).mouseenter(createableFuncHighlightBgcolor);
-		$(newTag).mouseleave(createableFuncNormalizeBgcolor);
+		$(newTag).on('click', creatableFuncReplaceParagraphToTextarea);
+		$(newTag).mouseenter(creatableFuncHighlightBgcolor);
+		$(newTag).mouseleave(creatableFuncNormalizeBgcolor);
 	};
 
-	var	createableFuncReplaceToParagraphAccept = function (currentTag) {
+	var	creatableFuncReplaceToParagraphAccept = function (currentTag) {
 		var currentContent = $(currentTag).val();
 
 		if(system_calls.ConvertTextToHTML($(currentTag).val()) != system_calls.FilterUnsupportedUTF8Symbols($(currentTag).attr("initValue")))
@@ -625,7 +626,7 @@ create_group = (function()
 				if(filteredGroupDescription.length > 16384)
 				{
 					filteredGroupDescription = filteredGroupDescription.substr(0, 16384);
-					console.error("createableFuncReplaceToParagraphAccept:ERROR: description bigger than 16384 symbols");
+					console.error("creatableFuncReplaceToParagraphAccept:ERROR: description bigger than 16384 symbols");
 				}
 
 				groupProfile.description = filteredGroupDescription;
@@ -648,35 +649,35 @@ create_group = (function()
 						}
 						else
 						{
-							console.error("createableFuncReplaceToParagraphAccept: ERROR: " + resultJSON.description);
+							console.error("creatableFuncReplaceToParagraphAccept: ERROR: " + resultJSON.description);
 						}
 					});
 			} // --- if action == updateGroupDescription
 		} // --- if textarea value changed
 		else
 		{
-			console.error("createableFuncReplaceToParagraphAccept: textarea value hasn't change")
+			console.error("creatableFuncReplaceToParagraphAccept: textarea value hasn't change")
 		}
 
-		createableFuncReplaceToParagraphRenderHTML(currentTag, system_calls.ConvertTextToHTML(currentContent));
+		creatableFuncReplaceToParagraphRenderHTML(currentTag, system_calls.ConvertTextToHTML(currentContent));
 
 	};
 
-	var	createableFuncReplaceToParagraphReject = function (currentTag) {
+	var	creatableFuncReplaceToParagraphReject = function (currentTag) {
 		/*Escape pressed*/
-		createableFuncReplaceToParagraphRenderHTML(currentTag, currentTag.attr("initValue"));
+		creatableFuncReplaceToParagraphRenderHTML(currentTag, currentTag.attr("initValue"));
 	};
 
-	var	createableFuncReplaceParagraphToTextarea = function (e) 
+	var	creatableFuncReplaceParagraphToTextarea = function (e) 
 	{
 		var	ButtonAcceptHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
-			createableFuncReplaceToParagraphAccept($("#" + associatedTextareaID));
+			creatableFuncReplaceToParagraphAccept($("#" + associatedTextareaID));
 		};
 
 		var	ButtonRejectHandler = function(e) {
 			var		associatedTextareaID = $(this).data("associatedTagID");
-			createableFuncReplaceToParagraphReject($("#" + associatedTextareaID));
+			creatableFuncReplaceToParagraphReject($("#" + associatedTextareaID));
 		};
 
 		var	currentTag = $(this);
@@ -711,11 +712,11 @@ create_group = (function()
 			if((event.ctrlKey && event.keyCode == 10) || (event.ctrlKey && event.keyCode == 13))
 			{
 				/*Ctrl+Enter pressed*/
-				createableFuncReplaceToParagraphAccept($(this));
+				creatableFuncReplaceToParagraphAccept($(this));
 			}
 			if(keyPressed == 27) {
 				/* Esc pressed */
-				createableFuncReplaceToParagraphReject($(this));
+				creatableFuncReplaceToParagraphReject($(this));
 			}
 		};
 
@@ -727,7 +728,7 @@ create_group = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('createable_highlited_class');
+		$(tag).removeClass('creatable_highlighted_class');
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
 		$(tag).on('keyup', keyupEventHandler);
@@ -771,7 +772,7 @@ create_group = (function()
 		}
 	};
 
-	var	createableFuncReplaceSpanToSelectGroupType = function () 
+	var	creatableFuncReplaceSpanToSelectGroupType = function () 
 	{
 		var	currentValue = $(this).text();
 		var	tag = $("<select>", {
@@ -788,7 +789,7 @@ create_group = (function()
 
 		var	selectChangeHandler = function(event) 
 		{
-			createableFuncReplaceSelectToSpan($(this), createableFuncReplaceSpanToSelectGroupType);
+			creatableFuncReplaceSelectToSpan($(this), creatableFuncReplaceSpanToSelectGroupType);
 		};
 
 		var keyupEventHandler = function(event) 
@@ -803,7 +804,7 @@ create_group = (function()
 			if(keyPressed == 27) {
 				/*Escape pressed*/
 				$(this).val($(this).attr("initValue"));
-				createableFuncReplaceSelectToSpan($(this), createableFuncReplaceSpanToSelectGroupType);
+				creatableFuncReplaceSelectToSpan($(this), creatableFuncReplaceSpanToSelectGroupType);
 			}
 		};
 
@@ -816,7 +817,7 @@ create_group = (function()
 		$(tag).on('keyup', keyupEventHandler);
 		$(tag).on('change', selectChangeHandler);
 		$(tag).on('blur', selectChangeHandler);
-		$(tag).removeClass('createable_highlited_class');
+		$(tag).removeClass('creatable_highlighted_class');
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
@@ -826,7 +827,7 @@ create_group = (function()
 	// --- Replacement Select to Span
 	// --- input: 1) tag
 	// ---        2) function to call to convert Span->Select
-	var	createableFuncReplaceSelectToSpan = function (param, funcFromSelectToSpan) 
+	var	creatableFuncReplaceSelectToSpan = function (param, funcFromSelectToSpan) 
 	{
 		var		ajaxAction;
 		var		ajaxActionID;
@@ -846,8 +847,8 @@ create_group = (function()
 
 		$(currentTag).replaceWith(newTag);
 		$(newTag).on('click', funcFromSelectToSpan);
-		$(newTag).mouseenter(createableFuncHighlightBgcolor);
-		$(newTag).mouseleave(createableFuncNormalizeBgcolor);
+		$(newTag).mouseenter(creatableFuncHighlightBgcolor);
+		$(newTag).mouseleave(creatableFuncNormalizeBgcolor);
 
 		ajaxAction = $(newTag).data("action");
 		ajaxActionID = $(newTag).data("id");
@@ -855,7 +856,7 @@ create_group = (function()
 
 		if(ajaxValue == initValue)
 		{
-			console.error("createableFuncReplaceSelectToSpan: value hasn't been changed");
+			console.error("creatableFuncReplaceSelectToSpan: value hasn't been changed");
 		}
 		else
 		{
@@ -874,7 +875,7 @@ create_group = (function()
 					}
 					else
 					{
-						console.error("createableFuncReplaceSelectToSpan: ERROR in ajax [action = " + ajaxAction + ", id = " + actionID + ", ajaxValue = " + ajaxValue + "] " + ajaxResult.description);
+						console.error("creatableFuncReplaceSelectToSpan: ERROR in ajax [action = " + ajaxAction + ", id = " + actionID + ", ajaxValue = " + ajaxValue + "] " + ajaxResult.description);
 					}
 
 				});
@@ -893,12 +894,12 @@ create_group = (function()
 		system_calls.RenderCompanyLogo(tagCanvas[0].getContext("2d"), logoPath, groupProfile.title, " ");
 	};
 
-	var createableFuncHighlightBgcolor = function () {
-		$(this).addClass("createable_highlited_class", 400);
+	var creatableFuncHighlightBgcolor = function () {
+		$(this).addClass("creatable_highlighted_class", 400);
 	};
 
-	var createableFuncNormalizeBgcolor = function () {
-		$(this).removeClass("createable_highlited_class", 200, "easeInOutCirc");
+	var creatableFuncNormalizeBgcolor = function () {
+		$(this).removeClass("creatable_highlighted_class", 200, "easeInOutCirc");
 	};
 
 	return {

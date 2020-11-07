@@ -451,7 +451,7 @@ view_profile = (function()
 													.attr("data-action", "update_occupation_start")
 													.addClass("occupation_start datePick formatDate")
 													.append(system_calls.ConvertDateSQLToHuman(item.occupationStart));
-			var		spanFinishEmplyment = $("<span>").attr("data-id", item.companyID)
+			var		spanFinishEmployment = $("<span>").attr("data-id", item.companyID)
 													.attr("data-action", "update_occupation_finish")
 													.addClass("occupation_finish editableSpan formatDate")
 													.append(system_calls.ConvertDateSQLToHuman(item.occupationFinish));
@@ -514,7 +514,7 @@ view_profile = (function()
 			divRowTitle.append(divTimeline.append(paragraphTimeline.append("c ")
 																	.append(spanStartEmployment)
 																	.append(" по ")
-																	.append(item.currentCompany == "1" ? spanCurrentPositionText : spanFinishEmplyment) ));
+																	.append(item.currentCompany == "1" ? spanCurrentPositionText : spanFinishEmployment) ));
 			if(employmentDuration.length) paragraphEmployment.append(spanEmploymentDuration);
 
 
@@ -751,7 +751,7 @@ view_profile = (function()
 													.append(item.schoolOccupationStart);
 			var		spanOccupationFinish = $("<span>").attr("data-id", item.schoolID)
 													.attr("data-action", "updateSchoolOccupationFinish")
-													.addClass("schoolOccupationFnish editableSelectYears19302017")
+													.addClass("schoolOccupationFinish editableSelectYears19302017")
 													.append(item.schoolOccupationFinish);
 			var		spanLocality = $("<span>").attr("data-id", item.schoolID)
 													.attr("data-action", "updateSchoolLocality")
@@ -833,7 +833,7 @@ view_profile = (function()
 													.append(item.universityOccupationStart);
 			var		spanOccuopationFinish = $("<span>").attr("data-id", item.universityID)
 													.attr("data-action", "updateUniversityOccupationFinish")
-													.addClass("UniversityOccupationFnish editableSelectYears19302017")
+													.addClass("UniversityOccupationFinish editableSelectYears19302017")
 													.append(item.universityOccupationFinish);
 			var		spanDegree = $("<span>").attr("data-id", item.universityID)
 													.attr("data-action", "updateUniversityDegree")
@@ -1479,7 +1479,7 @@ view_profile = (function()
 				}
 			});
 		
-		// --- improve UseExpirience to avoid delay in server response
+		// --- improve UseExperience to avoid delay in server response
 		if(currTagAction == "viewProfile_SkillApprove")
 		{
 			userProfile.skills.forEach(function(item, i, arr)
@@ -1676,7 +1676,7 @@ view_profile = (function()
 			});
 
 		// --- update GUI has to be inside getJSON->done->if(success).
-		// --- To improve User Expirience (react on user actions immediately) 
+		// --- To improve User Experience (react on user actions immediately) 
 		// ---     I'm updating GUI immediately after click, not waiting server response
 		if(affectedAction == "AJAX_removeRecommendationEntry")
 		{
@@ -1692,11 +1692,11 @@ view_profile = (function()
 
 	// --- Editable function
 	var editableFuncHighlightBgcolor = function () {
-		$(this).addClass("editable_highlited_class", 400);
+		$(this).addClass("editable_highlighted_class", 400);
 	};
 
 	var editableFuncNormalizeBgcolor = function () {
-		$(this).removeClass("editable_highlited_class", 200, "easeInOutCirc");
+		$(this).removeClass("editable_highlighted_class", 200, "easeInOutCirc");
 
 	};
 
@@ -1840,7 +1840,7 @@ view_profile = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
 		$(tag).on('keyup', keyupEventHandler);

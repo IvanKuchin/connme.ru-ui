@@ -50,7 +50,7 @@ var	Init = function()
 				InitAppliedVacanciesLabel();
 
 				RenderUserSex();
-				RenderUserBirthay();
+				RenderUserBirthday();
 				RenderCarrierPath();
 				RenderCertificationPath();
 				RenderCoursePath();
@@ -299,12 +299,12 @@ var	Init = function()
 	});
 
 	$("#DeleteAvatarDialogBoxBS_Submit").on("click", function() {
-		console.debug("removed avatar id " + $("#DeteledAvatarID_InBSForm").val());
+		console.debug("removed avatar id " + $("#DeletedAvatarID_InBSForm").val());
 
 		$("#DeleteAvatarDialogBoxBS").modal("hide");
 
-		// --- Real avatar deletion after closing dialog to improve User Expirience
-		DeletePreviewAvatar($("#DeteledAvatarID_InBSForm").val());
+		// --- Real avatar deletion after closing dialog to improve User Experience
+		DeletePreviewAvatar($("#DeletedAvatarID_InBSForm").val());
 	});
 
 	$("#canvasForAvatar").on("click", function(e) { $("#fileupload").click(); });
@@ -522,11 +522,11 @@ var AddCarrierPathCollapsibleInit = function()
 														function() {
 															$(this).children("img").data("initial_src", $(this).children("img").attr("src"));
 															// $(this).children("img").attr("src", "/images/pages/common/checkbox_animated.gif"); 
-															$(this).addClass("editable_highlited_class", 400);
+															$(this).addClass("editable_highlighted_class", 400);
 														}, 
 														function() {
 															// $(this).children("img").attr("src", $(this).children("img").data("initial_src")); 
-															$(this).removeClass("editable_highlited_class", 200, "easeInOutCirc");
+															$(this).removeClass("editable_highlighted_class", 200, "easeInOutCirc");
 														})
 														.on("click", AddCarrierPathCollapsibleCurrentEmploymentClickHandler);
 	$("div#AddCarrierCompany button#AddCarrierCompanyAddButton").on("click", AddCarrierCompanyAddButtonClickHandler);
@@ -2718,7 +2718,7 @@ var ChangeCurrentStatusClickHandler = function()
 				item.currentCompany = "0";
 			}
 
-			$.getJSON('/cgi-bin/index.cgi?action=AJAX_changeEditProfileCompanyEmployemtEndDateStatus', {companyID: item.companyID})
+			$.getJSON('/cgi-bin/index.cgi?action=AJAX_changeEditProfileCompanyEmploymentEndDateStatus', {companyID: item.companyID})
 				.done(function(data) {
 					if(data.result === "success")
 					{
@@ -2784,7 +2784,7 @@ var	RenderUserSex = function()
 
 }
 
-var	RenderUserBirthay = function()
+var	RenderUserBirthday = function()
 {
 	var		result = $();
 	var		currentEmploymentText = "";
@@ -2851,7 +2851,7 @@ var	RenderCarrierPath = function()
 												.attr("data-action", "update_occupation_start")
 												.addClass("occupation_start datePick formatDate")
 												.append(system_calls.ConvertMonthNumberToAbbrName(item.occupationStart));
-		var		spanFinishEmplyment = $("<span>").attr("data-id", item.companyID)
+		var		spanFinishEmployment = $("<span>").attr("data-id", item.companyID)
 												.attr("data-action", "update_occupation_finish")
 												.addClass("occupation_finish editableSpan formatDate")
 												.append(system_calls.ConvertMonthNumberToAbbrName(item.occupationFinish));
@@ -2879,11 +2879,11 @@ var	RenderCarrierPath = function()
 														function() {
 															$(this).children("img").data("initial_src", $(this).children("img").attr("src"));
 															$(this).children("img").attr("src", "/images/pages/common/checkbox_animated.gif"); 
-															$(this).addClass("editable_highlited_class", 400);
+															$(this).addClass("editable_highlighted_class", 400);
 														}, 
 														function() {
 															$(this).children("img").attr("src", $(this).children("img").data("initial_src")); 
-															$(this).removeClass("editable_highlited_class", 200, "easeInOutCirc");
+															$(this).removeClass("editable_highlighted_class", 200, "easeInOutCirc");
 														})
 													.on("click", ChangeCurrentStatusClickHandler);
 		var		spanClose = $("<span>").attr("data-id", item.companyID)
@@ -2919,7 +2919,7 @@ var	RenderCarrierPath = function()
 		divRowTitle.append(divTimeline.append(paragraphTimeline.append("c ")
 																.append(spanStartEmployment)
 																.append("<br>по ")
-																.append((item.currentCompany == "1" ? "" : spanFinishEmplyment))
+																.append((item.currentCompany == "1" ? "" : spanFinishEmployment))
 																.append(spanCurrentPositionText)));
 		divRowTitle.append(divClose.append(spanClose));
 
@@ -3079,7 +3079,7 @@ var	RenderSchoolPath = function()
 												.append(item.schoolOccupationStart);
 		var		spanOccupationFinish = $("<span>").attr("data-id", item.schoolID)
 												.attr("data-action", "updateSchoolOccupationFinish")
-												.addClass("schoolOccupationFnish editableSelectYears19302017")
+												.addClass("schoolOccupationFinish editableSelectYears19302017")
 												.append(item.schoolOccupationFinish);
 		var		spanLocality = $("<span>").attr("data-id", item.schoolID)
 												.attr("data-action", "updateSchoolLocality")
@@ -3175,7 +3175,7 @@ var	RenderUniversityPath = function()
 												.append(item.universityOccupationStart);
 		var		spanOccuopationFinish = $("<span>").attr("data-id", item.universityID)
 												.attr("data-action", "updateUniversityOccupationFinish")
-												.addClass("UniversityOccupationFnish editableSelectYears19302017")
+												.addClass("UniversityOccupationFinish editableSelectYears19302017")
 												.append(item.universityOccupationFinish);
 		var		spanDegree = $("<span>").attr("data-id", item.universityID)
 												.attr("data-action", "updateUniversityDegree")
@@ -4352,7 +4352,7 @@ var	DeletePreviewAvatar = function (id)
 						// $("#DeleteAvatarDialogBox").dialog("option", "id", id);
 						// $("#DeleteAvatarDialogBox").dialog("open");
 
-						$("#DeteledAvatarID_InBSForm").val(id);
+						$("#DeletedAvatarID_InBSForm").val(id);
 						$("#DeleteAvatarDialogBoxBS").modal("show");
 
 						
@@ -4506,7 +4506,7 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).on('keyup', keyupEventHandler);
 		$(tag).on('change', selectChangeHandler);
 		$(tag).on('blur', selectChangeHandler);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
@@ -4574,7 +4574,7 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).on('keyup', keyupEventHandler);
 		$(tag).on('change', selectChangeHandler);
 		$(tag).on('blur', selectChangeHandler);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
@@ -4639,7 +4639,7 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).on('keyup', keyupEventHandler);
 		$(tag).on('change', selectChangeHandler);
 		$(tag).on('blur', selectChangeHandler);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
@@ -4694,7 +4694,7 @@ var	ajaxReturnSuccess = function(data) {
 
 		$(this).replaceWith(tag);
 		$(tag).on('keyup', keyupEventHandler);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 
 		if($(tag).data("action") == "AJAX_updateFirstName") 
 		{
@@ -5279,7 +5279,7 @@ var	ajaxReturnSuccess = function(data) {
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlited_class');
+		$(tag).removeClass('editable_highlighted_class');
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
 		$(tag).on('keyup', keyupEventHandler);
@@ -5778,11 +5778,11 @@ var	ajaxReturnSuccess = function(data) {
 	};
 
 	var editableFuncHighlightBgcolor = function () {
-		$(this).addClass("editable_highlited_class", 400);
+		$(this).addClass("editable_highlighted_class", 400);
 	};
 
 	var editableFuncNormalizeBgcolor = function () {
-		$(this).removeClass("editable_highlited_class", 200, "easeInOutCirc");
+		$(this).removeClass("editable_highlighted_class", 200, "easeInOutCirc");
 
 	};
 
@@ -5826,7 +5826,7 @@ var	ajaxReturnSuccess = function(data) {
 			});
 
 		// --- update GUI has to be inside getJSON->done->if(success).
-		// --- To improve User Expirience (react on user actions immediately) 
+		// --- To improve User Experience (react on user actions immediately) 
 		// ---	 I'm updating GUI immediately after click, not waiting server response
 		if(affectedAction == "AJAX_removeCompanyExperience")
 		{

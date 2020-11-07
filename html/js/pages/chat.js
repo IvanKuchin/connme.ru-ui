@@ -54,7 +54,7 @@ chat = (function()
 {unicode1: 9786, unicode2:65039,  shortcut: "^_^",  shownOnMenu:"yes", image:"/images/pages/common/smiley_grinningface.png"}
 						];
 
-	// --- scrollLock used to avoid requesting to much data from server during single crolling
+	// --- scrollLock used to avoid requesting to much data from server during single scrolling
 	var		scrollLock = false; 
 
 	var escapable = /[\x00-\x1f\ud800-\udfff\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufff0-\uffff]/g;

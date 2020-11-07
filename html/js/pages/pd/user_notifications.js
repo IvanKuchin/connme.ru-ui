@@ -6,7 +6,7 @@ var	user_notifications = (function()
 	"use strict";
 
 	var usersNotificationArray = [];
-	var scrollLock = false; // --- controlls consecutive pagination
+	var scrollLock = false; // --- controls consecutive pagination
 	var	globalPageCounter;
 
 	var	Init = function()
@@ -264,7 +264,7 @@ var	user_notifications = (function()
 			}
 			else if((item.notificationCommentType == "certification"))
 			{
-				// --- certificate comments belongs to certification track, not to User/Certififcate pair
+				// --- certificate comments belongs to certification track, not to User/Certificate pair
 				spanNotifTypeTitle.empty().append(" на получение сертификата");
 
 				spanTitle.append($("<h4>").append(item.notificationCertificationCompanyName + " " + item.notificationCertificationTitle));
