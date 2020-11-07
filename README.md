@@ -1,3 +1,3 @@
 # connme.ru-ui
 
-![Spell checking](https://github.com/IvanKuchin/test/workflows/Spell%20checking/badge.svg)
+![Spell checking](https://github.com/IvanKuchin/connme.ru-ui/workflows/Spell%20checking/badge.svg)
