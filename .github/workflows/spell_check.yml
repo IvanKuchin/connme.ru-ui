@@ -43,7 +43,7 @@ jobs:
         uses: check-spelling/check-spelling@0.0.16-alpha
         with:
           bucket: .github/actions
-          project: spelling
+          project: spell_check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
