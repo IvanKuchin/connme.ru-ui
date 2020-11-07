@@ -14,7 +14,7 @@
 
 // --- change it in (chat.js, common.js, localy.h)
 var FREQUENCY_ECHO_REQUEST = 60;
-var FREQUENCY_USRENOTIFICATION_REQUEST = 60 * 5;
+var FREQUENCY_USERNOTIFICATION_REQUEST = 60 * 5;
 var FREQUENCY_RANDOM_FACTOR = 10;
 
 // -- global var used because of setTimeout don't support parameters in IE9
@@ -151,7 +151,7 @@ system_calls = (function()
 		return result;
 	};
 
-	var CutLongMesssages = function(message)
+	var CutLongMessages = function(message)
 	{
 	 	if(message.length > 19)
 		{
@@ -1009,7 +1009,7 @@ system_calls = (function()
 		}
 
 		// --- check system notifications
-		window.setTimeout(system_calls.GetUserRequestNotifications, (FREQUENCY_USRENOTIFICATION_REQUEST + (Math.random() * FREQUENCY_RANDOM_FACTOR - FREQUENCY_RANDOM_FACTOR / 2)) * 1000);
+		window.setTimeout(system_calls.GetUserRequestNotifications, (FREQUENCY_USERNOTIFICATION_REQUEST + (Math.random() * FREQUENCY_RANDOM_FACTOR - FREQUENCY_RANDOM_FACTOR / 2)) * 1000);
 
 		// console.debug('system_calls.GetUserRequestNotifications: end');
 	};
@@ -1143,7 +1143,7 @@ system_calls = (function()
 
 			// --- scroll only if 
 			// --- 1) scroll length to element > 10
-			// --- 2) scroll from previous to current cycles is successfull (page was scrolled)
+			// --- 2) scroll from previous to current cycles is successful (page was scrolled)
 			// if((Math.abs(elementOffset - windowScrollTop) > 10) && (!globalScrollPrevOffset || (globalScrollPrevOffset > Math.abs(elementOffset - windowScrollTop))))
 			if((Math.abs(elementOffset - windowScrollTop) > 10) && (globalScrollPrevOffset != (elementOffset - windowScrollTop)))
 			{
@@ -1700,7 +1700,7 @@ system_calls = (function()
 		SendEchoRequest: SendEchoRequest,
 		GetUserRequestNotifications: GetUserRequestNotifications,
 		isTouchBasedUA: isTouchBasedUA,
-		CutLongMesssages: CutLongMesssages,
+		CutLongMessages: CutLongMessages,
 		RemoveSpaces: RemoveSpaces,
 		isOrientationLandscape: isOrientationLandscape,
 		isOrientationPortrait: isOrientationPortrait,
@@ -1761,7 +1761,7 @@ system_calls = (function()
 var userCache = (function()
 {
 	"use strict";
-	var		cache = []; // --- main sotage
+	var		cache = []; // --- main storage
 	var		userCacheFutureUpdateArr = []; // --- used for update userCache object with new users
 	var		callbackRunAfterUpdateArr = []; 
 	var		runLock = false; // --- semaphore for racing conditions
@@ -1822,7 +1822,7 @@ var userCache = (function()
 		var		updateFlag = true;
 
 		// --- add callback function just in case userscache not empty
-		// --- otherwise there is no value to runn callback without any changes
+		// --- otherwise there is no value to run callback without any changes
 		if(userCacheFutureUpdateArr.length)
 		{
 			callbackRunAfterUpdateArr.forEach(function(item)
@@ -1949,7 +1949,7 @@ var FriendshipButtonClickHandler = function(e)
 			'/cgi-bin/index.cgi',
 			{action:"AJAX_setFindFriend_FriendshipStatus", friendID:handlerButton.data("id"), status:handlerButton.data("action")})
 			.done(function(data) {
-					console.debug("AJAX_setFindFriend_FriendshipStatus.done(): sucess");
+					console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
 
 					if(data.result == "success")
 					{
@@ -2275,7 +2275,7 @@ var BuildUserRequestList = function()
 
 
 		}
-	); // --- data.notofocationsArray.forEach()
+	);
 };
 
 navMenu_search = (function() 
@@ -2348,7 +2348,7 @@ navMenu_chat = (function()
 
 	};
 
-	var CutLongMultilineMesssages = function(message)
+	var CutLongMultilineMessages = function(message)
 	{
 		var		lineList;
 		var		cutMessage = [];
@@ -2457,7 +2457,7 @@ navMenu_chat = (function()
 
 					var hrefTemp = $("<a/>").attr("href", "/userprofile/" + userInfo.id)
 							.addClass("UnreadChatListHrefLineHeigh")
-							.append(system_calls.CutLongMesssages(userInfo.name + " " + userInfo.nameLast));
+							.append(system_calls.CutLongMessages(userInfo.name + " " + userInfo.nameLast));
 					userSpan.append(canvasAvatar)
 							.append(hrefTemp)
 							.append(buttonSpan);
@@ -2466,7 +2466,7 @@ navMenu_chat = (function()
 							.append(" ")
 							.append(buttonClose);
 
-					messageBody.append((item.messageType == "text" ? CutLongMultilineMesssages(item.message) : "<i>Вам прислали картинку</i>"));
+					messageBody.append((item.messageType == "text" ? CutLongMultilineMessages(item.message) : "<i>Вам прислали картинку</i>"));
 
 					DrawUserAvatar(canvasAvatar[0].getContext("2d"), userInfo.avatar, userInfo.name, userInfo.nameLast);
 
@@ -2613,7 +2613,7 @@ navMenu_userNotification = (function()
 		{		
 			matchArray.forEach(function(item) 
 				{
-					// --- substr'ing: @1030 -> 1030
+					// --- substring: @1030 -> 1030
 					if(userCache.isUserCached(item.substr(1, item.length - 1)))
 					{
 						var 	user = userCache.GetUserByID(item.substr(1, item.length - 1));
@@ -2761,7 +2761,7 @@ navMenu_userNotification = (function()
 								avatarLink = "/userprofile/" + item.notificationFriendUserID + "?rand=" + system_calls.GetUUID();
 								hrefTemp = $("<a>").attr("href", avatarLink)
 										.addClass("UnreadChatListHrefLineHeigh")
-										.append(system_calls.CutLongMesssages(item.notificationFriendUserName + " " + item.notificationFriendUserNameLast));
+										.append(system_calls.CutLongMessages(item.notificationFriendUserName + " " + item.notificationFriendUserNameLast));
 
 								if(userCache.isUserCached(item.notificationFriendUserID))
 								{
@@ -2789,7 +2789,7 @@ navMenu_userNotification = (function()
 								avatarLink = "/companyprofile/" + item.notificationFromCompany[0].id + "?rand=" + system_calls.GetUUID();
 								hrefTemp = $("<a>").attr("href", avatarLink)
 										.addClass("UnreadChatListHrefLineHeigh")
-										.append(system_calls.CutLongMesssages(item.notificationFromCompany[0].name));
+										.append(system_calls.CutLongMessages(item.notificationFromCompany[0].name));
 
 								if(item.notificationFromCompany[0].logo_folder.length && item.notificationFromCompany[0].logo_filename.length)
 								{
@@ -2963,20 +2963,20 @@ system_notifications = (function ()
 
 						if((currTimestamp - notificationShownTimestamp) > 24 * 3600)
 						{
-							var		notify, prononciation;
+							var		notify, pronunciation;
 
 							localStorage.setItem("notificationShownTimestamp", currTimestamp);
 
-							if(numberOfChatMessages == 1) { prononciation = " новое сообщение"; }
-							if(numberOfChatMessages == 2) { prononciation = " новых сообщения"; }
-							if(numberOfChatMessages == 3) { prononciation = " новых сообщения"; }
-							if(numberOfChatMessages == 4) { prononciation = " новых сообщения"; }
-							if(numberOfChatMessages >= 5) { prononciation = " новых сообщений"; }
-							if(((numberOfChatMessages % 10) == 1) && (numberOfChatMessages > 19)) { prononciation = " новое сообщение"; }
-							if(((numberOfChatMessages % 10) == 2) && (numberOfChatMessages > 19)) { prononciation = " новых сообщения"; }
-							if(((numberOfChatMessages % 10) > 2) && (numberOfChatMessages > 19)) { prononciation = " новых сообщений"; }
-							if(((numberOfChatMessages % 10) > 0) && (numberOfChatMessages > 19)) { prononciation = " новых сообщений"; }
-							notify = new Notification("Вам письмо !", { icon: "/images/pages/chat/chat_notification_" + (Math.floor(Math.random() * 18) + 1) + ".png", body: "Вам прислали " + numberOfChatMessages + prononciation } );
+							if(numberOfChatMessages == 1) { pronunciation = " новое сообщение"; }
+							if(numberOfChatMessages == 2) { pronunciation = " новых сообщения"; }
+							if(numberOfChatMessages == 3) { pronunciation = " новых сообщения"; }
+							if(numberOfChatMessages == 4) { pronunciation = " новых сообщения"; }
+							if(numberOfChatMessages >= 5) { pronunciation = " новых сообщений"; }
+							if(((numberOfChatMessages % 10) == 1) && (numberOfChatMessages > 19)) { pronunciation = " новое сообщение"; }
+							if(((numberOfChatMessages % 10) == 2) && (numberOfChatMessages > 19)) { pronunciation = " новых сообщения"; }
+							if(((numberOfChatMessages % 10) > 2) && (numberOfChatMessages > 19)) { pronunciation = " новых сообщений"; }
+							if(((numberOfChatMessages % 10) > 0) && (numberOfChatMessages > 19)) { pronunciation = " новых сообщений"; }
+							notify = new Notification("Вам письмо !", { icon: "/images/pages/chat/chat_notification_" + (Math.floor(Math.random() * 18) + 1) + ".png", body: "Вам прислали " + numberOfChatMessages + pronunciation } );
 							notify.onclick = function() {
 								notify.close();
 								window.location.href = "/chat?rand=" + Math.random()*98765432123456;

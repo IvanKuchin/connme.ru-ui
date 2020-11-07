@@ -21,7 +21,7 @@ var	companies_i_own_list = (function()
 								.on("keyup", FindCompaniesOnKeyupHandler);
 		$("#companySearchButton").on("click", FindCompaniesFormSubmitHandler);
 
-		$("#mailCompanyPosessionReuest").on("click", CraftPosessionMail);
+		$("#mailCompanyPosessionRequest").on("click", CraftPosessionMail);
 		$("#PosessionAlertModal_Submit").on("click", SendPosessionAlert);
 		$("#PosessionRequestModal_Submit").on("click", SendPosessionRequest);
 		$("#PosessionRequestModal").on("hidden.bs.modal", function() { setTimeout(SendPosessionRequestResult, 100); });
@@ -210,8 +210,8 @@ var	companies_i_own_list = (function()
 		var	selectedID = ui.item.id;
 		var selectedLabel = ui.item.label;
 
-		console.debug("AJAX_getFindCompanyByID autocomplete.select: selet event handler");
-		console.debug("AJAX_getFindCompanyByID autocomplete.select: seletedID=" + selectedID + " selectedLabel=" + selectedLabel);
+		console.debug("AJAX_getFindCompanyByID autocomplete.select: select event handler");
+		console.debug("AJAX_getFindCompanyByID autocomplete.select: selectedID=" + selectedID + " selectedLabel=" + selectedLabel);
 
 		$.getJSON(
 			'/cgi-bin/company.cgi',
@@ -287,7 +287,7 @@ var	companies_i_own_list = (function()
 								create: function () {
 									console.debug ("FindCompaniesOnInputHandler autocomplete.create: _create event handler"); 
 								},
-								_renderMenu: function (ul, items)  // --- requres plugin only
+								_renderMenu: function (ul, items)  // --- requires plugin only
 								{
 									var	that = this;
 									currentCategory = "";

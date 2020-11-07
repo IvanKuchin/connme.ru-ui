@@ -481,7 +481,7 @@ chat = (function()
 				}
 				else
 				{
-					console.debug("WebSocket.onmessage: ERROR: RequestType and ResponsType are missed: " + obj.RequestType);
+					console.debug("WebSocket.onmessage: ERROR: RequestType and ResponseType are missed: " + obj.RequestType);
 				}
 			};
 

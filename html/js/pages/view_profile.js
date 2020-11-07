@@ -519,7 +519,7 @@ view_profile = (function()
 
 
 			var		divRowResponsibilities = $("<div>").addClass("row")
-													.attr("id", "responsibilitie" + item.companyID);
+													.attr("id", "responsibilities" + item.companyID);
 			var		divResponsibilities = $("<div>").addClass("col-xs-offset-1 col-xs-11");
 			var		paragraphResponsibilities = $("<p>").attr("id", "paragraphRowResponsibilities" + item.companyID)
 														.addClass("editableParagraph")
@@ -831,7 +831,7 @@ view_profile = (function()
 													.attr("data-action", "updateUniversityOccupationStart")
 													.addClass("UniversityOccupationStart editableSelectYears19302017")
 													.append(item.universityOccupationStart);
-			var		spanOccuopationFinish = $("<span>").attr("data-id", item.universityID)
+			var		spanOccupationFinish = $("<span>").attr("data-id", item.universityID)
 													.attr("data-action", "updateUniversityOccupationFinish")
 													.addClass("UniversityOccupationFinish editableSelectYears19302017")
 													.append(item.universityOccupationFinish);
@@ -874,7 +874,7 @@ view_profile = (function()
 
 			divRowUniversity.append(divUniversityTitle.append(paragraphUniversity).append(spanDegree).append(" в ").append(spanTitle).append(" (").append(spanRegion).append(")"));
 			divRowUniversity.append(divCover.append(imgCover));
-			divRowUniversity.append(divUniversityOccupation.append(spanOccupationStart).append(" - ").append(spanOccuopationFinish));
+			divRowUniversity.append(divUniversityOccupation.append(spanOccupationStart).append(" - ").append(spanOccupationFinish));
 			// divRowUniversity.append(divClose);
 
 			educationInTitle += item.universityTitle + "<br>";

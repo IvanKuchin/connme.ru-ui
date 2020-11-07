@@ -249,7 +249,7 @@ create_group = (function()
 				create: function () {
 					// console.error ("CreateAutocompleteWithChangeCallback: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";

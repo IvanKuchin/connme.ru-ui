@@ -612,7 +612,7 @@ var AddCarrierPathCollapsibleInitJobTitle = function()
 		create: function () {
 			// console.debug ("AddCarrierPathCollapsibleInitJobTitle: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -661,7 +661,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 		create: function () {
 			// console.debug ("AddCertificationPathCollapsibleInitVendorTitle:AddCertificationVendor: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -705,7 +705,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 		create: function () {
 			// console.debug ("AddCertificationPathCollapsibleInitVendorTitle:AddCourseVendor: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -753,7 +753,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 		create: function () {
 			// console.debug ("AddCertificationPathCollapsibleInitTracksTitle: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -795,7 +795,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 		create: function () {
 			// console.debug ("AddCertificationPathCollapsibleInitTracksTitle: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -844,7 +844,7 @@ var AddDataForProfileCollapsibleInit = function()
 				// $("select#AddUniversityPeriodStart").removeAttr("disabled");
 				// $("select#AddUniversityPeriodFinish").removeAttr("disabled");
 
-				AddUnivertityUpdateRadioSelect();
+				AddUniversityUpdateRadioSelect();
 			}
 		},
 		close: function (event, ui) 
@@ -854,7 +854,7 @@ var AddDataForProfileCollapsibleInit = function()
 		create: function () {
 			// console.debug ("AddDataForProfileCollapsibleInit: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -895,7 +895,7 @@ var AddDataForProfileCollapsibleInit = function()
 		create: function () {
 			// console.debug ("AddDataForProfileCollapsibleInit: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -936,7 +936,7 @@ var AddDataForProfileCollapsibleInit = function()
 		create: function () {
 			// console.debug ("AddDataForProfileCollapsibleInit: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -978,7 +978,7 @@ var AddDataForProfileCollapsibleInit = function()
 				// $("select#AddSchoolPeriodStart").removeAttr("disabled");
 				// $("select#AddSchoolPeriodFinish").removeAttr("disabled");
 
-				AddUnivertityUpdateRadioSelect();
+				AddUniversityUpdateRadioSelect();
 			}
 		},
 		close: function (event, ui) 
@@ -988,7 +988,7 @@ var AddDataForProfileCollapsibleInit = function()
 		create: function () {
 			// console.debug ("AddDataForProfileCollapsibleInit: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -1032,7 +1032,7 @@ var AddDataForProfileCollapsibleInit = function()
 		create: function () {
 			// console.debug ("AddDataForProfileCollapsibleInit: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -1073,7 +1073,7 @@ var AddDataForProfileCollapsibleInit = function()
 		create: function () {
 			// console.debug ("AddDataForProfileCollapsibleInit: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -1119,7 +1119,7 @@ var AddCarrierPathCollapsibleInitCompany = function()
 		create: function () {
 			// console.debug ("AddCarrierPathCollapsibleInitCompany: _create event handler"); 
 		},
-		_renderMenu: function (ul, items)  // --- requres plugin only
+		_renderMenu: function (ul, items)  // --- requires plugin only
 		{
 			var	that = this;
 			currentCategory = "";
@@ -1150,7 +1150,7 @@ var	GetRegionNameByID = function(regionID)
 	return regionName;
 }
 
-var AddUnivertityUpdateRadioSelect = function()
+var AddUniversityUpdateRadioSelect = function()
 {
 	var		universityPicked = $("input#AddUniversityTitle").val();
 	var		radioButtonUniversityArray;
@@ -2562,7 +2562,7 @@ var	AutocompleteWithBookAuthors = function(e)
 							create: function () {
 								console.debug ("autocompleteBookAuthor.OnInputHandler autocomplete.create: _create event handler"); 
 							},
-							_renderMenu: function (ul, items)  // --- requres plugin only
+							_renderMenu: function (ul, items)  // --- requires plugin only
 							{
 								var	that = this;
 								var currentCategory = "";
@@ -2647,7 +2647,7 @@ var	AutocompleteWithBookTitles = function(e)
 							create: function () {
 								console.debug ("AutocompleteWithBookTitle.OnInputHandler autocomplete.create: _create event handler"); 
 							},
-							_renderMenu: function (ul, items)  // --- requres plugin only
+							_renderMenu: function (ul, items)  // --- requires plugin only
 							{
 								var	that = this;
 								var currentCategory = "";
@@ -2925,7 +2925,7 @@ var	RenderCarrierPath = function()
 
 
 		var		divRowResponsibilities = $("<div>").addClass("row")
-												.attr("id", "responsibilitie" + item.companyID);
+												.attr("id", "responsibilities" + item.companyID);
 		var		divResponsibilities = $("<div>").addClass("col-xs-12 col-sm-offset-1 col-sm-9");
 		var		paragraphResponsibilities = $("<p>").attr("id", "paragraphRowResponsibilities" + item.companyID)
 													.addClass("editableParagraph")
@@ -3173,7 +3173,7 @@ var	RenderUniversityPath = function()
 												.attr("data-action", "updateUniversityOccupationStart")
 												.addClass("UniversityOccupationStart editableSelectYears19302017")
 												.append(item.universityOccupationStart);
-		var		spanOccuopationFinish = $("<span>").attr("data-id", item.universityID)
+		var		spanOccupationFinish = $("<span>").attr("data-id", item.universityID)
 												.attr("data-action", "updateUniversityOccupationFinish")
 												.addClass("UniversityOccupationFinish editableSelectYears19302017")
 												.append(item.universityOccupationFinish);
@@ -3217,7 +3217,7 @@ var	RenderUniversityPath = function()
 
 		divRowUniversity.append(divUniversityTitle.append(paragraphUniversity).append(spanDegree).append(" в ").append(spanTitle).append(" (").append(spanRegion).append(")"))
 						.append(divCover.append(imgCover))
-						.append(divUniversityOccupation.append(spanOccupationStart).append(" - ").append(spanOccuopationFinish))
+						.append(divUniversityOccupation.append(spanOccupationStart).append(" - ").append(spanOccupationFinish))
 						.append(divClose.append(spanClose));
 
 		educationInTitle += item.universityTitle + "<br>";
@@ -4005,7 +4005,7 @@ var BirthdayAccessButtonClickHeader = function(e)
 		}
 	})
 	.fail(function(data){
-		  console.debug("BirthdayAccessButtonClickHeader: ERROR: fail parse server responce")
+		  console.debug("BirthdayAccessButtonClickHeader: ERROR: fail parse server response")
 	});
 
 	RenderGUIBirthdayAccessLabel();
@@ -4033,7 +4033,7 @@ var AppliedVacanciesButtonClickHeader = function(e)
 		}
 	})
 	.fail(function(data){
-		  console.debug("AppliedVacanciesButtonClickHeader: ERROR: fail parse server responce")
+		  console.debug("AppliedVacanciesButtonClickHeader: ERROR: fail parse server response")
 	});
 
 	RenderGUIAppliedVacancies();
@@ -4724,7 +4724,7 @@ var	ajaxReturnSuccess = function(data) {
 				{
 					console.debug ("autocomplete updateJobTitle: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -4758,7 +4758,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateCompanyName: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -4820,7 +4820,7 @@ var	ajaxReturnSuccess = function(data) {
 			var tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
 
 			$(tag).val(tagValue);
-			$(tag).on("change", UpdateOcupationStartDatePickerOnChangeHandler);
+			$(tag).on("change", UpdateOccupationStartDatePickerOnChangeHandler);
 			$(tag).datepicker({
 				firstDay: 1,
 				dayNames: [ "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" ],
@@ -4839,7 +4839,7 @@ var	ajaxReturnSuccess = function(data) {
 			var tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
 
 			$(tag).val(tagValue);
-			$(tag).on("change", UpdateOcupationFinishDatePickerOnChangeHandler);
+			$(tag).on("change", UpdateOccupationFinishDatePickerOnChangeHandler);
 			$(tag).datepicker({
 				firstDay: 1,
 				dayNames: [ "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" ],
@@ -4869,7 +4869,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateCourseVendor: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -4904,7 +4904,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateCertificationTrack: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -4939,7 +4939,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateSchoolLocality: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -4974,7 +4974,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateUniversityRegion: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -5009,7 +5009,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateUniversityTitle: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -5044,7 +5044,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateSchoolTitle: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -5079,7 +5079,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateLanguageTitle: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -5114,7 +5114,7 @@ var	ajaxReturnSuccess = function(data) {
 				create: function () {
 					// console.debug ("autocomplete updateLanguageTitle: _create event handler"); 
 				},
-				_renderMenu: function (ul, items)  // --- requres plugin only
+				_renderMenu: function (ul, items)  // --- requires plugin only
 				{
 					var	that = this;
 					currentCategory = "";
@@ -5355,7 +5355,7 @@ var	ajaxReturnSuccess = function(data) {
 				data: {action:ajaxAction, id:ajaxActionID, value:dateReadBook.getTime()/1000}
 			}).done(function (data) 
 				{
-					var		ajaxResul = JSON.parse(data);
+					var		ajaxResult = JSON.parse(data);
 					console.debug("UpdateBookReadDatePickerOnChangeHandler(" + data + "): enter");
 
 					userProfile.companies.forEach(function(item, i, arr)
@@ -5373,21 +5373,21 @@ var	ajaxReturnSuccess = function(data) {
 		}
 	};
 
-	var UpdateOcupationStartDatePickerOnChangeHandler = function(event) {
+	var UpdateOccupationStartDatePickerOnChangeHandler = function(event) {
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
 		var		ajaxValue = $(this).val();
 
 		/* Act on the event */
-		console.debug("UpdateOcupationStartDatePickerOnChangeHandler change event");
+		console.debug("UpdateOccupationStartDatePickerOnChangeHandler change event");
 		$(this).next().datepicker("option", "minDate", ajaxValue);
 		$.ajax({
 			url:"/cgi-bin/index.cgi",
 			data: {action:ajaxAction, id:ajaxActionID, value:ajaxValue}
 		}).done(function (data) 
 			{
-				var		ajaxResul = JSON.parse(data);
-				console.debug("UpdateOcupationStartDatePickerOnChangeHandler(" + data + "): enter");
+				var		ajaxResult = JSON.parse(data);
+				console.debug("UpdateOccupationStartDatePickerOnChangeHandler(" + data + "): enter");
 
 				userProfile.companies.forEach(function(item, i, arr)
 				{
@@ -5397,24 +5397,24 @@ var	ajaxReturnSuccess = function(data) {
 					}
 				})
 
-				console.debug("UpdateOcupationStartDatePickerOnChangeHandler: exit");
+				console.debug("UpdateOccupationStartDatePickerOnChangeHandler: exit");
 			});
 	};
 
-	var UpdateOcupationFinishDatePickerOnChangeHandler = function(event) {
+	var UpdateOccupationFinishDatePickerOnChangeHandler = function(event) {
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
 		var		ajaxValue = $(this).val();
 
 		/* Act on the event */
-		console.debug("UpdateOcupationFinishDatePickerOnChangeHandler change event");
+		console.debug("UpdateOccupationFinishDatePickerOnChangeHandler change event");
 		$(this).prev().datepicker("option", "maxDate", ajaxValue);
 		$.getJSON(
 			'/cgi-bin/index.cgi',
 			{action:ajaxAction, id:ajaxActionID, value:ajaxValue},
 			function (data) 
 			{
-				console.debug("UpdateOcupationFinishDatePickerOnChangeHandler(" + data + "): enter");
+				console.debug("UpdateOccupationFinishDatePickerOnChangeHandler(" + data + "): enter");
 
 				userProfile.companies.forEach(function(item, i, arr)
 				{
@@ -5424,7 +5424,7 @@ var	ajaxReturnSuccess = function(data) {
 					}
 				})
 
-				console.debug("UpdateOcupationFinishDatePickerOnChangeHandler: exit");
+				console.debug("UpdateOccupationFinishDatePickerOnChangeHandler: exit");
 			}
 		);
 
