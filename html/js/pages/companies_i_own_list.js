@@ -21,13 +21,13 @@ var	companies_i_own_list = (function()
 								.on("keyup", FindCompaniesOnKeyupHandler);
 		$("#companySearchButton").on("click", FindCompaniesFormSubmitHandler);
 
-		$("#mailCompanyPosessionRequest").on("click", CraftPosessionMail);
-		$("#PosessionAlertModal_Submit").on("click", SendPosessionAlert);
-		$("#PosessionRequestModal_Submit").on("click", SendPosessionRequest);
-		$("#PosessionRequestModal").on("hidden.bs.modal", function() { setTimeout(SendPosessionRequestResult, 100); });
+		$("#mailCompanyPossessionRequest").on("click", CraftPossessionMail);
+		$("#PossessionAlertModal_Submit").on("click", SendPossessionAlert);
+		$("#PossessionRequestModal_Submit").on("click", SendPossessionRequest);
+		$("#PossessionRequestModal").on("hidden.bs.modal", function() { setTimeout(SendPossessionRequestResult, 100); });
 	};
 
-	var CraftPosessionMail = function()
+	var CraftPossessionMail = function()
 	{
 		var		currTag = $(this);
 		var		mailDomain;
@@ -41,7 +41,7 @@ var	companies_i_own_list = (function()
 
 		link	= 'mailto:admin@' + mailDomain + '?subject=Смена владельца компании'
 				+ '&body=Добрый день ! ' + encodeURIComponent("\n\n")
-				+ 'Прошу передать владение компанией ' + $("#PosessionRequestModal_Submit").data("name") + '(id: ' + $("#PosessionRequestModal_Submit").data("id") + ') мне ' + $("#myFirstName").text() + " " + $("#myLastName").text() + ' (id: ' + $("#myUserID").data("myuserid") + '). ' + encodeURIComponent("\n")
+				+ 'Прошу передать владение компанией ' + $("#PossessionRequestModal_Submit").data("name") + '(id: ' + $("#PossessionRequestModal_Submit").data("id") + ') мне ' + $("#myFirstName").text() + " " + $("#myLastName").text() + ' (id: ' + $("#myUserID").data("myuserid") + '). ' + encodeURIComponent("\n")
 				+ 'Свидетельство собственности и копия паспорта приложены к письму.' + encodeURIComponent("\n\n")
 				+ 'С уважением ' + $("#myFirstName").text() + " " + $("#myLastName").text() + '.';
 
@@ -49,12 +49,12 @@ var	companies_i_own_list = (function()
 	    window.location.href = link;
 	}
 
-	var	SendPosessionRequestResult = function()
+	var	SendPossessionRequestResult = function()
 	{
-		// --- data properties setup in SendPosessionRequest function
-		if(typeof($("#PosessionRequestModal_Submit").data("result")) == "string")
+		// --- data properties setup in SendPossessionRequest function
+		if(typeof($("#PossessionRequestModal_Submit").data("result")) == "string")
 		{
-			if($("#PosessionRequestModal_Submit").data("result") == "success")
+			if($("#PossessionRequestModal_Submit").data("result") == "success")
 			{
 				$("#ResultModal .modal-title").empty().append("Ваш запрос отправлен");
 				$("#ResultModal .description").empty().append("Администрация сайта <ul><li>НЕ влияет на принятие решения</li><li>НЕ влияет на сроки принятия решения</li><li>НЕ несет ответственности за решение приянтое владельцем компании</li></ul>");
@@ -62,15 +62,15 @@ var	companies_i_own_list = (function()
 			else
 			{
 				$("#ResultModal .modal-title").empty().append("<i class=\"fa fa-exclamation-triangle color_red\" aria-hidden=\"true\"></i> Ошибка");
-				$("#ResultModal .description").empty().append($("#PosessionRequestModal_Submit").data("description"));
+				$("#ResultModal .description").empty().append($("#PossessionRequestModal_Submit").data("description"));
 			}
 			$("#ResultModal").modal("show");
 		}
 
-		$("#PosessionRequestModal_Submit").removeData();
+		$("#PossessionRequestModal_Submit").removeData();
 	}
 
-	var	SendPosessionAlert = function()
+	var	SendPossessionAlert = function()
 	{
 		var		currTag = $(this);
 
@@ -101,7 +101,7 @@ var	companies_i_own_list = (function()
 				}); // --- getJSON.done()
 	}
 
-	var	SendPosessionRequest = function()
+	var	SendPossessionRequest = function()
 	{
 		var		currTag = $(this);
 
@@ -109,15 +109,15 @@ var	companies_i_own_list = (function()
 
 		$.getJSON(
 			'/cgi-bin/company.cgi',
-			{ action:"AJAX_companyPosessionRequest", id:currTag.data("id"), description:$("#PosessionRequestModal textarea").val() })
+			{ action:"AJAX_companyPossessionRequest", id:currTag.data("id"), description:$("#PossessionRequestModal textarea").val() })
 			.done(function(data) {
 					currTag	.data("result", data.result)
 							.data("description", (typeof(data.description) != "undefined" ? data.description : ""));
-					$("#PosessionRequestModal").modal("hide");
+					$("#PossessionRequestModal").modal("hide");
 
 					if(data.result == "success")
 					{
-						$("#PosessionRequestModal textarea").val("");
+						$("#PossessionRequestModal textarea").val("");
 					}
 					else
 					{
@@ -133,7 +133,7 @@ var	companies_i_own_list = (function()
 
 					currTag	.data("result", "error")
 							.data("description", "ОШИБКА ответа сервера");
-					$("#PosessionRequestModal").modal("hide");
+					$("#PossessionRequestModal").modal("hide");
 
 					currTag.button("reset");
 				}); // --- getJSON.done()
@@ -151,12 +151,12 @@ var	companies_i_own_list = (function()
 		}
 		else if(currAction == "companyProfileTakeOwnership")
 		{
-			$("#PosessionAlertModal_Submit")	.data("id", currTag.data("id"))
+			$("#PossessionAlertModal_Submit")	.data("id", currTag.data("id"))
 												.data("name", currTag.data("name"));
 		}
 		else if(currAction == "companyProfileRequestOwnership")
 		{
-			$("#PosessionRequestModal_Submit")	.data("id", currTag.data("id"))
+			$("#PossessionRequestModal_Submit")	.data("id", currTag.data("id"))
 												.data("name", currTag.data("name"));
 		}
 	}

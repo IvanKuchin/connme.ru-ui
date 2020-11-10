@@ -42,7 +42,7 @@
 				</p>
 			</div>
 			<div class="col-md-3 col-xs-12 form-group">
-				<button class="btn form-control btn-default" id="companyDropPosession" data-loading-text="<span class='fa fa-refresh fa-spin fa-fw animateClass'></span> Ждите ..." data-action="AJAX_dropCompanyPosession">Не моя компания</button>
+				<button class="btn form-control btn-default" id="companyDropPossession" data-loading-text="<span class='fa fa-refresh fa-spin fa-fw animateClass'></span> Ждите ..." data-action="AJAX_dropCompanyPossession">Не моя компания</button>
 			</div>
 		</div>
 		<div class="row">
