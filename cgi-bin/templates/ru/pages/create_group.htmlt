@@ -6,14 +6,15 @@
 		<<template:templates/ru/pages/header.htmlt>>
 
 		 <!-- Image uploader -->
-		<script src="/js/imageuploader/js/vendor/jquery.ui.widget.js"></script>
+<!--
+ 		<script src="/js/imageuploader/js/vendor/jquery.ui.widget.js"></script>
 		<script src="/js/imageuploader/js/load-image.all.min.js"></script>
 		<script src="/js/imageuploader/js/jquery.iframe-transport.js"></script>
 		<script src="/js/imageuploader/js/jquery.fileupload.js"></script>
 		<script src="/js/imageuploader/js/jquery.fileupload-process.js"></script>
 		<script src="/js/imageuploader/js/jquery.fileupload-image.js"></script>
 		<script src="/js/imageuploader/js/jquery.fileupload-validate.js"></script>
-
+ -->
 		
 		<link href="/css/pages/switcher.css" rel="stylesheet">
 
