@@ -1,5 +1,6 @@
 /*jslint devel: true, indent: 4, maxerr: 50*/ 
-/*globals $:false localStorage:false location: false*/
+/*globals localStorage:off*/
+/*globals location: off*/
 /*globals localStorage:false*/
 /*globals location:false*/
 /*globals document:false*/
@@ -45,8 +46,8 @@ system_calls = (function()
 		$("#imageLogo").on("mouseout", function() { $(this).removeClass("box-shadow--8dp"); });
 
 		// --- Friendship buttons
-		$("#ButtonFriendshipRemovalYes").on('click', ButtonFriendshipRemovalYesHandler);
-		$("#DialogFriendshipRemovalYesNo").on('shown.bs.modal', 
+		$("#ButtonFriendshipRemovalYes").on("click", ButtonFriendshipRemovalYesHandler);
+		$("#DialogFriendshipRemovalYesNo").on("shown.bs.modal", 
 			function()
 			{
 				$("#DialogFriendshipRemovalYesNo button.btn.btn-default").focus();
@@ -54,29 +55,29 @@ system_calls = (function()
 
 
 		// --- Friends href
-		$("#navbar-my_network").on('click', function() 
+		$("#navbar-my_network").on("click", function() 
 			{
 				window.location.href = "/my_network?rand=" + Math.random()*98765432123456;
 			} );
 
 		// --- Сhat href
-		$("#navbar-chat").on('click', function() 
+		$("#navbar-chat").on("click", function() 
 			{
 				window.location.href = "/chat?rand=" + Math.random()*98765432123456;
 			} );
 
 		// --- Notification href
-		$("#navbar-notification").on('click', function() 
+		$("#navbar-notification").on("click", function() 
 			{
 				window.location.href = "/user_notifications?rand=" + Math.random()*98765432123456;
 			} );
 
 		// --- Menu drop down on mouse over
-		jQuery('ul.nav li.dropdown').mouseenter(function() {
-		  jQuery(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+		jQuery("ul.nav li.dropdown").mouseenter(function() {
+			jQuery(this).find(".dropdown-menu").stop(true, true).delay(200).fadeIn();
 		});
-		jQuery('ul.nav li.dropdown').mouseleave(function() {
-		  jQuery(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+		jQuery("ul.nav li.dropdown").mouseleave(function() {
+			jQuery(this).find(".dropdown-menu").stop(true, true).delay(200).fadeOut();
 		});
 
 		// --- Check availability / sign-in
@@ -1154,7 +1155,7 @@ system_calls = (function()
 			{
 				globalScrollPrevOffset = elementOffset - windowScrollTop;
 
-				$('body').animate({scrollTop: elementOffset }, 400);
+				$("body").animate({scrollTop: elementOffset }, 400);
 				$('html').animate({scrollTop: elementOffset }, 400);
 
 				setTimeout(function() { ScrollWindowToElementID(elementID); }, 600);
@@ -2360,13 +2361,13 @@ navMenu_chat = (function()
 		var		cutMessage = [];
 		
 		lineList = message;
-		lineList = lineList.replace(/\&ishort\;/g, "й");
-		lineList = lineList.replace(/\&euml\;/g, "ё");
-		lineList = lineList.replace(/\&zsimple\;/g, "з");
-		lineList = lineList.replace(/\&Ishort\;/g, "Й");
-		lineList = lineList.replace(/\&Euml\;/g, "Ё");
-		lineList = lineList.replace(/\&Zsimple\;/g, "З");
-		lineList = lineList.replace(/\&Norder;\;/g, "№");
+		lineList = lineList.replace(/&ishort;/g, "й");
+		lineList = lineList.replace(/&euml;/g, "ё");
+		lineList = lineList.replace(/&zsimple;/g, "з");
+		lineList = lineList.replace(/&Ishort;/g, "Й");
+		lineList = lineList.replace(/&Euml;/g, "Ё");
+		lineList = lineList.replace(/&Zsimple;/g, "З");
+		lineList = lineList.replace(/&Norder\;/g, "№");
 		lineList = lineList.replace(/<br>/g, "\n").replace(/\r/g, "").split("\n");
 
 		lineList.forEach(function(item, i, arr)
@@ -2908,16 +2909,16 @@ navMenu_userNotification = (function()
 		var		cutMessage = [];
 		
 		lineList = message;
-		lineList = lineList.replace(/\&ishort\;/g, "й");
-		lineList = lineList.replace(/\&euml\;/g, "ё");
-		lineList = lineList.replace(/\&zsimple\;/g, "з");
-		lineList = lineList.replace(/\&Ishort\;/g, "Й");
-		lineList = lineList.replace(/\&Euml\;/g, "Ё");
-		lineList = lineList.replace(/\&Zsimple\;/g, "З");
-		lineList = lineList.replace(/\&Norder;\;/g, "№");
+		lineList = lineList.replace(/&ishort;/g, "й");
+		lineList = lineList.replace(/&euml;/g, "ё");
+		lineList = lineList.replace(/&zsimple;/g, "з");
+		lineList = lineList.replace(/&Ishort;/g, "Й");
+		lineList = lineList.replace(/&Euml;/g, "Ё");
+		lineList = lineList.replace(/&Zsimple;/g, "З");
+		lineList = lineList.replace(/&Norder;/g, "№");
 		lineList = lineList.replace(/<br>/g, "\n").replace(/\r/g, "").split("\n");
 
-		lineList.forEach(function(item, i, arr)
+		lineList.forEach(function(item, i)
 			{
 				if(i < 3) 
 				{
@@ -2997,7 +2998,7 @@ system_notifications = (function ()
 				}
 				else
 				{
-					if (Notification.permission !== 'denied') 
+					if (Notification.permission !== "denied") 
 					{
 						Notification.requestPermission();
 					}
@@ -3027,9 +3028,7 @@ system_notifications = (function ()
 troubleshooting = (function ()
 {
 	var		before_at = "issue";
-	var		very_important_var;
 	var		at_sign = "@";
-	var		another_very_important_var;
 	var		after_at = "timecard.su";
 	var		Recipient = before_at + at_sign + after_at;
 
@@ -3038,12 +3037,12 @@ troubleshooting = (function ()
 		var	traceback = "";
 
 		var callback = function(stackframes) {
-		  var stringifiedStack = stackframes.map(function(sf) {
-			return sf.toString();
-		  }).join('\n');
-		  traceback += stringifiedStack + "\n";
+			var stringifiedStack = stackframes.map(function(sf) {
+				return sf.toString();
+			}).join("\n");
+			traceback += stringifiedStack + "\n";
 
-		  return traceback;
+			return traceback;
 		};
 
 		var errback = function(err) { console.log(err.message); };
@@ -3100,29 +3099,29 @@ troubleshooting = (function ()
 		other_chrome		= /(CriOS|Chrome)(?=.*\bMobile\b)/i,
 		other_firefox	   = /(?=.*\bFirefox\b)(?=.*\bMobile\b)/i, // Match 'Firefox' AND 'Mobile'
 		seven_inch = new RegExp(
-			'(?:' +		 // Non-capturing group
+			"(?:" +		 // Non-capturing group
 
-			'Nexus 7' +	 // Nexus 7
+			"Nexus 7" +	 // Nexus 7
 
-			'|' +		   // OR
+			"|" +		   // OR
 
-			'BNTV250' +	 // B&N Nook Tablet 7 inch
+			"BNTV250" +	 // B&N Nook Tablet 7 inch
 
-			'|' +		   // OR
+			"|" +		   // OR
 
-			'Kindle Fire' + // Kindle Fire
+			"Kindle Fire" + // Kindle Fire
 
-			'|' +		   // OR
+			"|" +		   // OR
 
-			'Silk' +		// Kindle Fire, Silk Accelerated
+			"Silk" +		// Kindle Fire, Silk Accelerated
 
-			'|' +		   // OR
+			"|" +		   // OR
 
-			'GT-P1000' +	// Galaxy Tab 7 inch
+			"GT-P1000" +	// Galaxy Tab 7 inch
 
-			')',			// End non-capturing group
+			")",			// End non-capturing group
 
-			'i');		   // Case-insensitive matching
+			"i");		   // Case-insensitive matching
 
 	var match = function(regex, userAgent) {
 		return regex.test(userAgent);
@@ -3133,8 +3132,8 @@ troubleshooting = (function ()
 
 		// Facebook mobile app's integrated browser adds a bunch of strings that
 		// match everything. Strip it out if it exists.
-		var tmp = ua.split('[FBAN');
-		if (typeof tmp[1] !== 'undefined') {
+		var tmp = ua.split("[FBAN");
+		if (typeof tmp[1] !== "undefined") {
 			ua = tmp[0];
 		}
 
@@ -3142,7 +3141,7 @@ troubleshooting = (function ()
 		// iPhone" string. Same probable happens on other tablet platforms.
 		// This will confuse detection so strip it out if it exists.
 		tmp = ua.split('Twitter');
-		if (typeof tmp[1] !== 'undefined') {
+		if (typeof tmp[1] !== "undefined") {
 			ua = tmp[0];
 		}
 
@@ -3184,7 +3183,7 @@ troubleshooting = (function ()
 		// excludes 7 inch devices, classifying as phone or tablet is left to the user
 		this.tablet = this.apple.tablet || this.android.tablet || this.windows.tablet;
 
-		if (typeof window === 'undefined') {
+		if (typeof window === "undefined") {
 			return this;
 		}
 	};
@@ -3195,10 +3194,10 @@ troubleshooting = (function ()
 		return IM;
 	};
 
-	if (typeof module !== 'undefined' && module.exports && typeof window === 'undefined') {
+	if (typeof module !== "undefined" && module.exports && typeof window === "undefined") {
 		//node
 		module.exports = IsMobileClass;
-	} else if (typeof module !== 'undefined' && module.exports && typeof window !== 'undefined') {
+	} else if (typeof module !== "undefined" && module.exports && typeof window !== "undefined") {
 		//browserify
 		module.exports = instantiate();
 	} else if (typeof define === 'function' && define.amd) {

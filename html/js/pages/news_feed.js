@@ -2,7 +2,7 @@ var	news_feed = news_feed || {};
 
 news_feed = (function()
 {
-	'use strict';
+	"use strict";
 
 	var	myCompanies = [];
 	var	globalPageCounter = 0;  // --- used for transfer arg to function HandlerScrollToShow
@@ -89,9 +89,9 @@ news_feed = (function()
 			// --- New message image uploader
 			$(function () {
 				// Change this to the location of your server-side upload handler:
-				$('#newMessageFileUpload').fileupload({
-					url: '/cgi-bin/imageuploader.cgi',
-					dataType: 'json',
+				$("#newMessageFileUpload").fileupload({
+					url: "/cgi-bin/imageuploader.cgi",
+					dataType: "json",
 					maxFileSize: 300 * 1024 * 1024,
 					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 					acceptFileTypes: uploadFileRegexImageVideo,
@@ -262,8 +262,8 @@ news_feed = (function()
 			$(function () {
 				// Change this to the location of your server-side upload handler:
 				$('#editFileupload').fileupload({
-					url: '/cgi-bin/imageuploader.cgi',
-					dataType: 'json',
+					url: "/cgi-bin/imageuploader.cgi",
+					dataType: "json",
 					maxFileSize: 100 * 1024 * 1024, 
 					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 					acceptFileTypes: uploadFileRegexImageVideo,
@@ -497,7 +497,7 @@ news_feed = (function()
 			*/
 			if(isMobile.apple.device)
 			{
-				$('body').addClass('iOS-device');
+				$("body").addClass("iOS-device");
 
 				$('.modal').on('show.bs.modal', function() {
 						modalScrollPosition = $(window).scrollTop();
@@ -926,9 +926,9 @@ news_feed = (function()
 			$("#NewsFeedMessageSubmit").button("loading");
 
 			$.ajax({
-					url: '/cgi-bin/index.cgi', 
-					type: 'POST',
-					dataType: 'json',
+					url: "/cgi-bin/index.cgi", 
+					type: "POST",
+					dataType: "json",
 					data: 
 					{
 						action: 'AJAX_updateNewsFeedMessage',
@@ -1414,7 +1414,7 @@ news_feed = (function()
 				});
 
 
-			$.getJSON('/cgi-bin/index.cgi', {action: action, comment: replyToUserList.join('') + comment, messageID: messageID})
+			$.getJSON("/cgi-bin/index.cgi", {action: action, comment: replyToUserList.join("") + comment, messageID: messageID})
 					.done(function(data) {
 						console.debug("WriteCommentButtonHandler: done(): result = " + data.result);
 
@@ -1456,7 +1456,6 @@ news_feed = (function()
 		{
 			var		spanHeaderText = $("<span/>");
 			var		spanHeaderLink = $("<a/>");
-			var		spanBodyText = $("<span/>");
 			var		srcObjName = messageObject.srcObj.name + " " + messageObject.srcObj.nameLast;
 
 			$("#viewNewsFeedMessage").modal("show");
@@ -1501,7 +1500,7 @@ news_feed = (function()
 			{
 				BuildCarousel(messageObject.messageImageList, $("#divNewsFeedMessageBody"));
 				setTimeout(function() {
-					$("#divNewsFeedMessageBody div.carousel.slide[data-ride='carousel']").carousel('pause');
+					$("#divNewsFeedMessageBody div.carousel.slide[data-ride='carousel']").carousel("pause");
 				}, 1000);
 				
 			}
@@ -3437,7 +3436,7 @@ news_feed = (function()
 		}
 
 		return result;
-	}
+	};
 
 	var RenderExtraParameters = function(messages)
 	{
@@ -3508,7 +3507,7 @@ news_feed = (function()
 
 		if(action.length && cgiScript.length)
 		{
-			$.getJSON('/cgi-bin/' + cgiScript + '?action=' + action, cgiParams)
+			$.getJSON("/cgi-bin/" + cgiScript + "?action=" + action, cgiParams)
 				.done(function(data) {
 					if(data.result == "success")
 					{
@@ -3548,9 +3547,6 @@ news_feed = (function()
 
 	var	ZeroizeThenUpdateNewsFeedThenScrollTo = function(scrollToElementID)
 	{
-		var		action = "";
-		var		cgiScript = "";
-
 		globalPageCounter = 0;
 		GetNewsFeedFromServer(true, scrollToElementID);
 	};
@@ -3563,7 +3559,6 @@ news_feed = (function()
 
 		if(((windowPosition + clientHeight) > divPosition) && (!scrollLock))
 		{
-			// console.debug("HandlerScrollToShow: globalPageCounter = " + globalPageCounter);
 			// --- AJAX get news_feed from the server 
 			globalPageCounter += 1;
 
@@ -3577,9 +3572,9 @@ news_feed = (function()
 				var		tag = $(this);
 				// console.debug("HandlerScrollToShow: carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
 				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
-					tag.carousel('cycle');
+					tag.carousel("cycle");
 				else
-					tag.carousel('pause');
+					tag.carousel("pause");
 			});
 
 		// console.debug("HandlerScrollToShow: defining position of each carousel");
@@ -3613,7 +3608,6 @@ news_feed = (function()
 
 	var	NewsFeedPostMessage_ClickHandler = function () 
 	{
-		var	isClearToSubmit = false;
 		var	title = $("#newsFeedMessageTitle").val();
 		var	text = $("#newsFeedMessageText").val();
 		var	images = $("#PostMessage_PreviewImage").html();
@@ -3645,9 +3639,9 @@ news_feed = (function()
 			$("#NewsFeedMessageSubmit").button("loading");
 
 			$.ajax({
-					url: '/cgi-bin/index.cgi', 
-					type: 'POST',
-					dataType: 'json',
+					url: "/cgi-bin/index.cgi", 
+					type: "POST",
+					dataType: "json",
 					cache: false,
 					data: 
 					{
@@ -3730,10 +3724,10 @@ news_feed = (function()
 
 		// --- set var imageTempSet to random
 		imageTempSet = Math.floor(Math.random()*99999999);
-		$('#newMessageFileUpload').fileupload({formData: {imageTempSet: imageTempSet}});
+		$("#newMessageFileUpload").fileupload({formData: {imageTempSet: imageTempSet}});
 
 		// --- zeroize tempSet for user at image_news table
-		$.getJSON('/cgi-bin/index.cgi?action=AJAX_prepareFeedImages', {param1: ''})
+		$.getJSON('/cgi-bin/index.cgi?action=AJAX_prepareFeedImages', {param1: ""})
 				.done(function(data) {
 					if(data.result == "success")
 					{
@@ -3821,7 +3815,7 @@ news_feed = (function()
 
 		// --- set var imageSet to NULL
 		imageTempSet = "";
-		$('#newMessageFileUpload').fileupload({formData: {imageTempSet: imageTempSet}});
+		$("#newMessageFileUpload").fileupload({formData: {imageTempSet: imageTempSet}});
 
 		// --- deactivate noSleep feature, reverse back to normal behavior
 		if(isMobile.phone) NoSleep_global.disable();
