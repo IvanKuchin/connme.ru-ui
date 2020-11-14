@@ -3,7 +3,7 @@ var	companies_i_own_list = companies_i_own_list || {};
 
 var	companies_i_own_list = (function()
 {
-	'use strict';
+	"use strict";
 
 	var	JSON_FindCompaniesList_Autocomplete = [];
 	var JSON_MyCompaniesList;
@@ -34,20 +34,20 @@ var	companies_i_own_list = (function()
 		var		link;
 
 		{
-			var		tempArr = document.location.host.split('.');
+			var		tempArr = document.location.host.split(".");
 
-			mailDomain = tempArr.slice(tempArr.length - 2).join('.');
+			mailDomain = tempArr.slice(tempArr.length - 2).join(".");
 		}
 
-		link	= 'mailto:admin@' + mailDomain + '?subject=Смена владельца компании'
-				+ '&body=Добрый день ! ' + encodeURIComponent("\n\n")
-				+ 'Прошу передать владение компанией ' + $("#PossessionRequestModal_Submit").data("name") + '(id: ' + $("#PossessionRequestModal_Submit").data("id") + ') мне ' + $("#myFirstName").text() + " " + $("#myLastName").text() + ' (id: ' + $("#myUserID").data("myuserid") + '). ' + encodeURIComponent("\n")
-				+ 'Свидетельство собственности и копия паспорта приложены к письму.' + encodeURIComponent("\n\n")
-				+ 'С уважением ' + $("#myFirstName").text() + " " + $("#myLastName").text() + '.';
+		link	= "mailto:admin@" + mailDomain + "?subject=Смена владельца компании"
+				+ "&body=Добрый день ! " + encodeURIComponent("\n\n")
+				+ "Прошу передать владение компанией " + $("#PossessionRequestModal_Submit").data("name") + "(id: " + $("#PossessionRequestModal_Submit").data("id") + ") мне " + $("#myFirstName").text() + " " + $("#myLastName").text() + " (id: " + $("#myUserID").data("myuserid") + "). " + encodeURIComponent("\n")
+				+ "Свидетельство собственности и копия паспорта приложены к письму." + encodeURIComponent("\n\n")
+				+ "С уважением " + $("#myFirstName").text() + " " + $("#myLastName").text() + ".";
 
 
 		window.location.href = link;
-	}
+	};
 
 	var	SendPossessionRequestResult = function()
 	{
@@ -68,7 +68,7 @@ var	companies_i_own_list = (function()
 		}
 
 		$("#PossessionRequestModal_Submit").removeData();
-	}
+	};
 
 	var	SendPossessionAlert = function()
 	{
@@ -77,7 +77,7 @@ var	companies_i_own_list = (function()
 		currTag.button("loading");
 
 		$.getJSON(
-			'/cgi-bin/company.cgi',
+			"/cgi-bin/company.cgi",
 			{ action:"AJAX_companyTakeOwnership", id:currTag.data("id") })
 			.done(function(data) {
 					if(data.result == "success")
@@ -99,7 +99,7 @@ var	companies_i_own_list = (function()
 
 					setTimeout(function() {currTag.button("reset"); }, 500); // --- wait for animation
 				}); // --- getJSON.done()
-	}
+	};
 
 	var	SendPossessionRequest = function()
 	{
@@ -108,7 +108,7 @@ var	companies_i_own_list = (function()
 		currTag.button("loading");
 
 		$.getJSON(
-			'/cgi-bin/company.cgi',
+			"/cgi-bin/company.cgi",
 			{ action:"AJAX_companyPossessionRequest", id:currTag.data("id"), description:$("#PossessionRequestModal textarea").val() })
 			.done(function(data) {
 					currTag	.data("result", data.result)
@@ -137,7 +137,7 @@ var	companies_i_own_list = (function()
 
 					currTag.button("reset");
 				}); // --- getJSON.done()
-	}
+	};
 
 	// --- company button callback function 
 	var	CompanyManagementButtonClickHandler = function(e)
@@ -159,7 +159,7 @@ var	companies_i_own_list = (function()
 			$("#PossessionRequestModal_Submit")	.data("id", currTag.data("id"))
 												.data("name", currTag.data("name"));
 		}
-	}
+	};
 
 
 	var	RenderCompaniesList = function(arrayCompaniesList)
@@ -178,12 +178,12 @@ var	companies_i_own_list = (function()
 					$("#companies_i_own_list").append(system_calls.BuildCompanySingleBlock(item, i, arr, CompanyManagementButtonClickHandler));
 				});
 		}
-	}
+	};
 
 	var	GetCompaniesList = function () 
 	{
 		$.getJSON(
-			'/cgi-bin/company.cgi',
+			"/cgi-bin/company.cgi",
 			{action:"AJAX_getMyCompaniesList"})
 			.done(function(data) {
 						if(data.status == "success")
@@ -203,7 +203,7 @@ var	companies_i_own_list = (function()
 							console.debug("AJAX_getMyCompaniesList.done(): ERROR: " + data.description);
 						}
 				}); // --- getJSON.done()
-	}
+	};
 
 	var	AJAX_getFindCompanyByID = function (event, ui) 
 	{
@@ -214,7 +214,7 @@ var	companies_i_own_list = (function()
 		console.debug("AJAX_getFindCompanyByID autocomplete.select: selectedID=" + selectedID + " selectedLabel=" + selectedLabel);
 
 		$.getJSON(
-			'/cgi-bin/company.cgi',
+			"/cgi-bin/company.cgi",
 			{action:"AJAX_getFindCompanyByID", lookForKey:selectedID})
 			.done(function(data) {
 						if(data.status == "success")
@@ -236,7 +236,7 @@ var	companies_i_own_list = (function()
 				}); // --- getJSON.done()
 
 		console.debug("AJAX_getFindCompanyByID autocomplete.select: end");
-	}
+	};
 
 	var FindCompaniesOnInputHandler = function() 
 	{
@@ -246,7 +246,7 @@ var	companies_i_own_list = (function()
 		if(inputValue.length == 3)
 		{
 			$.getJSON(
-				'/cgi-bin/company.cgi',
+				"/cgi-bin/company.cgi",
 				{action:"AJAX_getFindCompaniesListAutocomplete", lookForKey:inputValue})
 				.done(function(data) {
 						if(data.status == "success")
@@ -262,7 +262,7 @@ var	companies_i_own_list = (function()
 
 									if((item.name.length > 0))
 									{
-										if(autocompleteLabel.length > 0) { autocompleteLabel += " "; };
+										if(autocompleteLabel.length > 0) { autocompleteLabel += " "; }
 										autocompleteLabel += item.name;
 									}
 
@@ -320,7 +320,7 @@ var	companies_i_own_list = (function()
 							source: JSON_FindCompaniesList_Autocomplete
 						});
 		} // --- if(inputValue.length >= 2)
-	}
+	};
 
 
 	var FindCompaniesFormSubmitHandler = function()
@@ -331,7 +331,7 @@ var	companies_i_own_list = (function()
 		if(inputValue.length >= 3)
 		{
 			$.getJSON(
-				'/cgi-bin/company.cgi',
+				"/cgi-bin/company.cgi",
 				{action:"AJAX_getFindCompaniesList", lookForKey:inputValue})
 				.done(function(data) {
 						if(data.status == "success")
@@ -352,16 +352,16 @@ var	companies_i_own_list = (function()
 			// --- tooltip alert
 			$("#companySearchText").attr("title", "Напишите более 2 букв")
 									.attr("data-placement", "top")
-									.tooltip('show');
+									.tooltip("show");
 			window.setTimeout(function()
 				{
-					$("#companySearchText").tooltip('destroy');
+					$("#companySearchText").tooltip("destroy");
 				} 
 				, 3000);
 									// .tooltip('hide');
 			// $("#SearchStringError").modal("show");
 		}
-	}
+	};
 
 	var FindCompaniesOnKeyupHandler = function(event)
 	{
@@ -376,12 +376,12 @@ var	companies_i_own_list = (function()
 			FindCompaniesFormSubmitHandler();
 		}
 
-	}
+	};
 
 
 	return {
 		Init: Init,
 		CompanyManagementButtonClickHandler: CompanyManagementButtonClickHandler
-	}
+	};
 
 })();

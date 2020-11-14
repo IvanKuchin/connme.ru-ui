@@ -50,10 +50,10 @@ edit_group = (function()
 		$(function () 
 		{
 			// Change this to the location of your server-side upload handler:
-			$('#fileupload').fileupload({
-				url: '/cgi-bin/grouplogouploader.cgi?uploadType=groupLogo',
+			$("#fileupload").fileupload({
+				url: "/cgi-bin/grouplogouploader.cgi?uploadType=groupLogo",
 				formData: {groupid:groupProfile.id},
-				dataType: 'json',
+				dataType: "json",
 				maxFileSize: 30 * 1024 * 1024, 
 				acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 
@@ -86,17 +86,17 @@ edit_group = (function()
 				},
 				progressall: function (e, data) {
 					var progress = parseInt(data.loaded / data.total * 100, 10);
-					$('#progress .progress-bar').css(
-						'width',
-						progress + '%'
+					$("#progress .progress-bar").css(
+						"width",
+						progress + "%"
 					);
 				},
 				fail: function (e, data) {
 					alert("ошибка загрузки фаила: " + data.textStatus);
 				}
 
-			}).prop('disabled', !$.support.fileInput)
-				.parent().addClass($.support.fileInput ? undefined : 'disabled');
+			}).prop("disabled", !$.support.fileInput)
+				.parent().addClass($.support.fileInput ? undefined : "disabled");
 		});
 
 	};
@@ -211,7 +211,7 @@ edit_group = (function()
 		{
 			if(keyPressed == 13) AddGroupIndustry("", currentTag.val());
 		}
-	}
+	};
 
 	var	BlockButtonClickHandler = function()
 	{
@@ -228,7 +228,7 @@ edit_group = (function()
 
 		}
 
-		$.getJSON('/cgi-bin/group.cgi?action=' + currTag.data("action"), {id: currTag.data("id"), rand: Math.random() * 1234567890})
+		$.getJSON("/cgi-bin/group.cgi?action=" + currTag.data("action"), {id: currTag.data("id"), rand: Math.random() * 1234567890})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -243,12 +243,12 @@ edit_group = (function()
 				window.setTimeout(function() { $("#groupBlock").button("reset"); }, 500);
 			})
 			.fail(function() {
-				console.error("BlockButtonClickHandler:ERROR: parsing JSON response from server")
+				console.error("BlockButtonClickHandler:ERROR: parsing JSON response from server");
 
 				window.setTimeout(function() { $("#groupBlock").button("reset"); }, 500);
 			});
 
-	}
+	};
 
 	var	RenderBlockButton = function()
 	{
@@ -273,14 +273,14 @@ edit_group = (function()
 						.append(description)
 						.data("action", action)
 						.data("id", groupProfile.id);
-	}
+	};
 
 	var	RenderGroupTitle = function()
 	{
 		$("span#groupTitle").html(groupProfile.title);
 		$("span#groupLink").html(groupProfile.link);
 		$("span#groupFoundationDate").html(system_calls.GetLocalizedDateNoTimeFromSeconds(groupProfile.eventTimestampCreation));
-		$("p#groupDescription").html(groupProfile.description ? groupProfile.description : "(описание отсутствует)")
+		$("p#groupDescription").html(groupProfile.description ? groupProfile.description : "(описание отсутствует)");
 
 		$("div#groupInfo .editableSpan").on("click", editableFuncReplaceSpanToInput);
 		$("div#groupInfo .editableSpan").mouseenter(editableFuncHighlightBgcolor);
@@ -306,8 +306,8 @@ edit_group = (function()
 			$("#AreYouSure #Remove").data(item, currTag.data(item)); 
 		});
 
-		$("#AreYouSure").modal('show');
-	}
+		$("#AreYouSure").modal("show");
+	};
 
 	var	AreYouSureRemoveHandler = function() {
 		var		affectedID = $("#AreYouSure #Remove").data("id");
@@ -317,9 +317,9 @@ edit_group = (function()
 		if((typeof(affectedScript) == "undefined") || (affectedScript == ""))
 			affectedScript = "group.cgi";
 
-		$("#AreYouSure").modal('hide');
+		$("#AreYouSure").modal("hide");
 
-		$.getJSON('/cgi-bin/' + affectedScript + '?action=' + affectedAction, {id: affectedID, rand: Math.random() * 1234567890})
+		$.getJSON("/cgi-bin/" + affectedScript + "?action=" + affectedAction, {id: affectedID, rand: Math.random() * 1234567890})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -422,16 +422,16 @@ edit_group = (function()
 		$(tag).width($(this).width() + 30);
 
 		$(this).replaceWith(tag);
-		$(tag).on('keyup', keyupEventHandler);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).on("keyup", keyupEventHandler);
+		$(tag).removeClass("editable_highlighted_class");
 
 		if($(tag).data("action") == "AJAX_updateGroupLink") 
 		{
-			$(tag).on('blur', editableFuncReplaceInputToSpan);
+			$(tag).on("blur", editableFuncReplaceInputToSpan);
 		}
 		if($(tag).data("action") == "AJAX_updateGroupEmployeeNumber") 
 		{
-			$(tag).on('blur', editableFuncReplaceInputToSpan);
+			$(tag).on("blur", editableFuncReplaceInputToSpan);
 		}
 		if($(tag).data("action") == "AJAX_updateGroupFoundationDate") 
 		{
@@ -612,7 +612,7 @@ edit_group = (function()
 		} // --- if textarea value changed
 		else
 		{
-			console.debug("editableFuncReplaceToParagraphAccept: textarea value hasn't change")
+			console.debug("editableFuncReplaceToParagraphAccept: textarea value hasn't change");
 		}
 
 		editableFuncReplaceToParagraphRenderHTML(currentTag, system_calls.ConvertTextToHTML(currentContent));
@@ -684,10 +684,10 @@ edit_group = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
-		$(tag).on('keyup', keyupEventHandler);
+		$(tag).on("keyup", keyupEventHandler);
 		$(tag).select();
 	};
 
@@ -739,7 +739,7 @@ edit_group = (function()
 		system_calls.groupTypes.forEach(function(item, i , arr)
 		{
 			$(tag).append($("<option>").append(item));
-		})
+		});
 
 		$(tag).val(currentValue); 
 
@@ -770,15 +770,15 @@ edit_group = (function()
 		$(tag).width($(this).width()*2);
 
 		$(this).replaceWith(tag);
-		$(tag).on('keyup', keyupEventHandler);
-		$(tag).on('change', selectChangeHandler);
-		$(tag).on('blur', selectChangeHandler);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).on("keyup", keyupEventHandler);
+		$(tag).on("change", selectChangeHandler);
+		$(tag).on("blur", selectChangeHandler);
+		$(tag).removeClass("editable_highlighted_class");
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
 		}
-	}
+	};
 
 	// --- Replacement Select to Span
 	// --- input: 1) tag

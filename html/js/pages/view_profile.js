@@ -2,7 +2,7 @@ var		view_profile = view_profile || {};
 
 view_profile = (function()
 {
-	'use strict';
+	"use strict";
 
 	var		userProfile;
 	var		addRecommendation = {};
@@ -42,11 +42,11 @@ view_profile = (function()
 		$("button#AppendRecommendationTemplate5").on("click", function() {
 			AddRandonRecommendationTemplateToTextarea();
 		});
-	}
+	};
 
 	var FillinUserProfile = function()
 	{
-		$.getJSON('/cgi-bin/index.cgi?action=JSON_getUserProfile', {id: $("#friendLastName").data("friendid")})
+		$.getJSON("/cgi-bin/index.cgi?action=JSON_getUserProfile", {id: $("#friendLastName").data("friendid")})
 			.done(function(data) 
 				{
 					if(data.result === "success")
@@ -75,11 +75,11 @@ view_profile = (function()
 				})
 			.fail(function() 
 				{
-					system_calls.PopoverError("friendName", "ошибка ответа сервера")
-					console.error("ERROR: error parsing JSON-response from server")
+					system_calls.PopoverError("friendName", "ошибка ответа сервера");
+					console.error("ERROR: error parsing JSON-response from server");
 				});
 
-	}
+	};
 
 	var	DrawFriendAvatar = function (friendImage, friendName, friendLastName)
 	{
@@ -87,11 +87,11 @@ view_profile = (function()
 
 		$("#canvasForAvatar").attr("width", "160")
 							.attr("height", "160")
-							.addClass('canvas-big-avatar');
+							.addClass("canvas-big-avatar");
 		canvasCtx = $("#canvasForAvatar")[0].getContext("2d");
 
 		DrawUserAvatar(canvasCtx, friendImage, friendName, friendLastName);
-	}
+	};
 
 	var DisplaySpecifiedImageModal_Show = function()
 	{
@@ -106,7 +106,7 @@ view_profile = (function()
 
 		$("#ImageDisplayModal").modal("show");
 
-	}
+	};
 
 	var IsCompanyDuplicate = function(array, companyID)
 	{
@@ -172,14 +172,14 @@ view_profile = (function()
 
 			var		user1Canvas = $("<canvas>").attr("width", "80")
 												.attr("height", "80")
-												.addClass('canvas-big-avatar class-tooltip')
+												.addClass("canvas-big-avatar class-tooltip")
 												.data("toggle", "tooltip")
 												.data("placement", "top")
 												.attr("title", data.user1.name + " " + data.user1.nameLast);
 			var		user1CanvasCtx = user1Canvas[0].getContext("2d");
 			var		user2Canvas = $("<canvas>").attr("width", "80")
 												.attr("height", "80")
-												.addClass('canvas-big-avatar class-tooltip')
+												.addClass("canvas-big-avatar class-tooltip")
 												.data("toggle", "tooltip")
 												.data("placement", "top")
 												.attr("title", data.user2.name + " " + data.user2.nameLast);
@@ -204,7 +204,7 @@ view_profile = (function()
 						var		hrefUserLink = $("<a>").attr("href", "/userprofile/" + item.id);
 						var		friendCanvas = $("<canvas>").attr("width", "40")
 															.attr("height", "40")
-															.addClass('canvas-big-avatar class-tooltip');
+															.addClass("canvas-big-avatar class-tooltip");
 						var		friendCanvasCtx = friendCanvas[0].getContext("2d");
 						var		fullName = "", name = "", nameLast = "";
 
@@ -275,14 +275,14 @@ view_profile = (function()
 		{
 			var		user1Canvas = $("<canvas>").attr("width", "80")
 												.attr("height", "80")
-												.addClass('canvas-big-avatar class-tooltip')
+												.addClass("canvas-big-avatar class-tooltip")
 												.data("toggle", "tooltip")
 												.data("placement", "bottom")
 												.attr("title", data.user1.name + " " + data.user1.nameLast);
 			var		user1CanvasCtx = user1Canvas[0].getContext("2d");
 			var		user2Canvas = $("<canvas>").attr("width", "80")
 												.attr("height", "80")
-												.addClass('canvas-big-avatar class-tooltip')
+												.addClass("canvas-big-avatar class-tooltip")
 												.data("toggle", "tooltip")
 												.data("placement", "bottom")
 												.attr("title", data.user2.name + " " + data.user2.nameLast);
@@ -351,7 +351,7 @@ view_profile = (function()
 			}
 		}
 
-		$('.class-tooltip').tooltip();
+		$(".class-tooltip").tooltip();
 
 		console.debug("DrawPathFromUser1ToUser2: end");
 	};
@@ -363,7 +363,7 @@ view_profile = (function()
 
 		if(parseInt(my_user_id) && parseInt(friend_user_id))
 		{
-			$.getJSON('/cgi-bin/index.cgi?action=JSON_getShakeHands', {user1: my_user_id, user2: friend_user_id})
+			$.getJSON("/cgi-bin/index.cgi?action=JSON_getShakeHands", {user1: my_user_id, user2: friend_user_id})
 		 		.done(function(data) 
 		 		{
 					if(data.result == "success")
@@ -611,7 +611,7 @@ view_profile = (function()
 		});
 
 		$("div#CertificationPath").append(result);
-	}
+	};
 
 	var	RenderCoursePath = function()
 	{
@@ -671,14 +671,14 @@ view_profile = (function()
 									{
 										var		id = $(this).data("id");
 
-										$.getJSON('/cgi-bin/index.cgi?action=AJAX_setCourseRating', {id: usersCoursesID, rating: rating, rand: Math.round(Math.random() * 100000000)})
+										$.getJSON("/cgi-bin/index.cgi?action=AJAX_setCourseRating", {id: usersCoursesID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 										.done(function(data) {
 											if(data.result == "success")
 											{	
 											}
 											else
 											{
-											  console.debug("ratingCallback: ERROR: " + data.description)
+											  console.debug("ratingCallback: ERROR: " + data.description);
 											}
 										});
 										
@@ -713,7 +713,7 @@ view_profile = (function()
 
 		$("div#CoursePath").append(result);
 
-	}
+	};
 
 	var	RenderSchoolPath = function()
 	{
@@ -794,7 +794,7 @@ view_profile = (function()
 		});
 
 		$("div#SchoolPath").append(result);
-	}
+	};
 
 	var	RenderUniversityPath = function()
 	{
@@ -882,7 +882,7 @@ view_profile = (function()
 
 		$("p#educationInTitle").html(educationInTitle);
 		$("div#UniversityPath").append(result);
-	}
+	};
 
 	var	RenderLanguagePath = function()
 	{
@@ -952,7 +952,7 @@ view_profile = (function()
 
 		$("div#LanguagePath").append(result);
 
-	}
+	};
 
 	var	RenderSkillPath = function()
 	{
@@ -1051,8 +1051,8 @@ view_profile = (function()
 		$("div#SkillPath [data-toggle=\"tooltip\"]").tooltip({ animation: "animated bounceIn"});
 
 		userCache.AddCallbackRunsAfterCacheUpdate(view_profile.RenderSkillPath);
-		window.setTimeout(userCache.RequestServerToUpdateCache, 1000)
-	}
+		window.setTimeout(userCache.RequestServerToUpdateCache, 1000);
+	};
 
 	var	RenderBookPath = function()
 	{
@@ -1110,14 +1110,14 @@ view_profile = (function()
 									{
 										var		id = $(this).data("id");
 
-										$.getJSON('/cgi-bin/book.cgi?action=AJAX_setBookRating', {bookID: bookID, rating: rating, rand: Math.round(Math.random() * 100000000)})
+										$.getJSON("/cgi-bin/book.cgi?action=AJAX_setBookRating", {bookID: bookID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 										.done(function(data) {
 											if(data.result == "success")
 											{	
 											}
 											else
 											{
-											  console.debug("ratingCallback: ERROR: " + data.description)
+											  console.debug("ratingCallback: ERROR: " + data.description);
 											}
 										});
 										
@@ -1157,7 +1157,7 @@ view_profile = (function()
 		});
 
 		$("div#BookPath").append(result);
-	}
+	};
 
 	var	RenderSubscriptionCompanies = function()
 	{
@@ -1247,7 +1247,7 @@ view_profile = (function()
 		});
 
 		$("div#SubscriptionsCompany").append(result);
-	}
+	};
 
 	var	RenderSubscriptionGroups = function()
 	{
@@ -1337,7 +1337,7 @@ view_profile = (function()
 		});
 
 		$("div#SubscriptionsGroup").append(result);
-	}
+	};
 
 	var	RenderControlButtons = function()
 	{
@@ -1359,7 +1359,7 @@ view_profile = (function()
 		{
 			$("#birthdayDiv").hide();
 		}
-	}
+	};
 
 	var	RenderRecommendationPath = function()
 	{
@@ -1458,8 +1458,8 @@ view_profile = (function()
 		$("div#RecommendationPath .removeRecommendationEntry").on("click", RemoveRecommendationEntry);
 
 		userCache.AddCallbackRunsAfterCacheUpdate(view_profile.RenderRecommendationPath);
-		window.setTimeout(userCache.RequestServerToUpdateCache, 1000)
-	}
+		window.setTimeout(userCache.RequestServerToUpdateCache, 1000);
+	};
 
 	var		SkillConfirmationClickHandler = function(event)
 	{
@@ -1468,7 +1468,7 @@ view_profile = (function()
 		var		currTagID = currTag.data("id");
 		var		myUserID = parseInt($("#myUserID").data("myuserid"));
 
-		$.getJSON('/cgi-bin/index.cgi', {action:currTagAction, id:currTagID})
+		$.getJSON("/cgi-bin/index.cgi", {action:currTagAction, id:currTagID})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1491,7 +1491,7 @@ view_profile = (function()
 						item.skillConfirmed.push(myUserID);	
 					}
 				}
-			})
+			});
 		}
 		if(currTagAction == "viewProfile_SkillReject")
 		{
@@ -1504,28 +1504,28 @@ view_profile = (function()
 						item.skillConfirmed.splice(item.skillConfirmed.indexOf(myUserID), 1);	
 					}
 				}
-			})
+			});
 		}
 
 		RenderSkillPath();
-	}
+	};
 
 	// --- Recommendation
 	var AddRecommendationPathCollapsibleZeroize = function()
 	{
 		$("div#AddRecommendation textarea#AddRecommendationTitle" ).val("").parent().removeClass("has-feedback has-success has-error");
-	}
+	};
 
 	var AddRecommendationPathToggleCollapsible = function()
 	{
 		$("#AddRecommendation").collapse("toggle");
-	}
+	};
 
 	var AddRecommendationPathCollapsibleInit = function()
 	{
 		$("div#AddRecommendation button#AddRecommendationAddButton").on("click", AddRecommendationAddButtonClickHandler);
 		$("div#AddRecommendation button#AddRecommendationCancelButton").on("click", AddRecommendationPathToggleCollapsible);
-	}
+	};
 
 	var AddRecommendationAddButtonClickHandler = function()
 	{
@@ -1556,7 +1556,7 @@ view_profile = (function()
 
 			AddRecommendationPathToggleCollapsible();
 
-			$.post('/cgi-bin/index.cgi?rand=' + Math.floor(Math.random() * 1000000000), 
+			$.post("/cgi-bin/index.cgi?rand=" + Math.floor(Math.random() * 1000000000), 
 							{
 								"action" : "AJAX_addViewProfileAddRecommendation",
 								"title": system_calls.FilterUnsupportedUTF8Symbols(addRecommendation.AddRecommendationTitle),
@@ -1589,7 +1589,7 @@ view_profile = (function()
 				}
 			});
 		}
-	}
+	};
 
 	var		AddRecommendationTemplateToTextarea = function(templateNum)
 	{
@@ -1600,7 +1600,7 @@ view_profile = (function()
 "Сотрудник зарекомендовал себя как квалифицированный специалист, способный принимать решения и нести ответственность за конечный результат. Сотруднику присущи высокая работоспособность, коммуникабельность и доброжелательность. Особенно хочется подчеркнуть его умение ладить с клиентами и бесконфликтно решать возникающие вопросы. Профессиональные навыки и личностные качества сотрудника позволяют рекомендовать его для дальнейшей работы на аналогичной должности. Мы надеемся, что приобретенный опыт работы позволит сотруднику быть востребованным специалистом и желаем ему дальнейших успехов в профессиональной сфере."
 		];
 		$("#AddRecommendationTitle").val("Уважаемый " + $("#friendName").text() + "!\n\n" + templates[templateNum - 1]);
-	}
+	};
 
 	var		AddRandonRecommendationTemplateToTextarea = function()
 	{
@@ -1635,7 +1635,7 @@ view_profile = (function()
 "Милый, я тебе клянусь,\nОт любви к тебе рехнусь!",
 		];
 		$("#AddRecommendationTitle").val("Уважаемый " + $("#friendName").text() + "!\n\n" + templates[Math.floor(Math.random() * templates.length)]);
-	}
+	};
 
 
 
@@ -1655,16 +1655,16 @@ view_profile = (function()
 		$("#AreYouSure #Remove").data("action", affectedAction);
 
 
-		$("#AreYouSure").modal('show');
+		$("#AreYouSure").modal("show");
 	};
 
 	var	AreYouSureRemoveHandler = function() {
 		var		affectedID = $("#AreYouSure #Remove").data("id");
 		var		affectedAction = $("#AreYouSure #Remove").data("action");
 
-		$("#AreYouSure").modal('hide');
+		$("#AreYouSure").modal("hide");
 
-		$.getJSON('/cgi-bin/index.cgi?action=' + affectedAction, {id: affectedID})
+		$.getJSON("/cgi-bin/index.cgi?action=" + affectedAction, {id: affectedID})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1732,7 +1732,7 @@ view_profile = (function()
 				{
 					if(currentContent === "") {	currentContent = "Опишите круг своих обязанностей работы в компании.";	}
 
-					$.post('/cgi-bin/index.cgi?rand=' + Math.floor(Math.random() * 1000000000), 
+					$.post("/cgi-bin/index.cgi?rand=" + Math.floor(Math.random() * 1000000000), 
 						{
 							id: $(currentTag).data("id"), content: system_calls.FilterUnsupportedUTF8Symbols($(currentTag).val()),
 							action: "AJAX_updateRecommendationTitle",
@@ -1776,7 +1776,7 @@ view_profile = (function()
 		currentTag.replaceWith(newTag);
 		$("#" + currentID + "ButtonAccept").remove();
 		$("#" + currentID + "ButtonReject").remove();
-		$(newTag).on('click', editableFuncReplaceToTextarea);
+		$(newTag).on("click", editableFuncReplaceToTextarea);
 		$(newTag).mouseenter(editableFuncHighlightBgcolor);
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 	};
@@ -1840,10 +1840,10 @@ view_profile = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
-		$(tag).on('keyup', keyupEventHandler);
+		$(tag).on("keyup", keyupEventHandler);
 		$(tag).select();
 	};
 
@@ -1856,5 +1856,5 @@ view_profile = (function()
 			RenderSkillPath: RenderSkillPath,
 			RenderRecommendationPath: RenderRecommendationPath
 		};
-})() // --- view_profile object
+})(); // --- view_profile object
 

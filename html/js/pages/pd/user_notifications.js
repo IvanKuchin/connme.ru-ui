@@ -21,7 +21,7 @@ var	user_notifications = (function()
 	var	UpdateUserNotificationList = function()
 	{		
 		$.getJSON(
-			'/cgi-bin/index.cgi',
+			"/cgi-bin/index.cgi",
 			{action:"AJAX_getUserNotification"})
 			.done(function(data) {
 					usersNotificationArray = data;
@@ -56,7 +56,7 @@ var	user_notifications = (function()
 		if(((windowPosition + clientHeight) > divPosition) && (! scrollLock))
 		{
 			scrollLock = true;
-			$.getJSON('/cgi-bin/index.cgi?action=AJAX_getUserNotification', {page: ++globalPageCounter})
+			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getUserNotification", {page: ++globalPageCounter})
 			 		.done(function(data) {
 						usersNotificationArray = usersNotificationArray.concat(data);
 						BuildUserNotificationList(data);
@@ -99,7 +99,7 @@ var	user_notifications = (function()
 						.addClass("UnreadChatListHrefLineHeigh")
 						.append(item.notificationFriendUserName + " " + item.notificationFriendUserNameLast);
 
-			canvasAvatar.addClass('canvas-big-avatar');
+			canvasAvatar.addClass("canvas-big-avatar");
 			DrawUserAvatar(canvasAvatar[0].getContext("2d"), friendAvatar, item.notificationFriendUserName, item.notificationFriendUserNameLast);
 
 		}
@@ -114,7 +114,7 @@ var	user_notifications = (function()
 			if(item.notificationFromCompany[0].logo_folder.length && item.notificationFromCompany[0].logo_filename.length)
 				avatarPath = "/images/companies/" + item.notificationFromCompany[0].logo_folder + "/" + item.notificationFromCompany[0].logo_filename;
 
-			canvasAvatar.addClass('canvas-big-avatar-corners');
+			canvasAvatar.addClass("canvas-big-avatar-corners");
 			DrawCompanyAvatar(canvasAvatar[0].getContext("2d"), avatarPath, item.notificationFromCompany[0].name, "");
 		}
 
@@ -154,23 +154,23 @@ var	user_notifications = (function()
 				{
 					if((typeof(item.notificationMessageMediaType) != "undefined") && (item.notificationMessageMediaType == "image"))
 					{
-						messageImg.attr("src", "/images/feed/" + item.notificationMessageImageFolder + "/" + item.notificationMessageImageName)
+						messageImg.attr("src", "/images/feed/" + item.notificationMessageImageFolder + "/" + item.notificationMessageImageName);
 						spanImg.append(messageImg);
 					}
 					if((typeof(item.notificationMessageMediaType) != "undefined") && (item.notificationMessageMediaType == "video"))
 					{
-						messageVideo.attr("src", "/video/feed/" + item.notificationMessageImageFolder + "/" + item.notificationMessageImageName)
+						messageVideo.attr("src", "/video/feed/" + item.notificationMessageImageFolder + "/" + item.notificationMessageImageName);
 						spanImg.append(messageVideo);
 					}
 					if((typeof(item.notificationMessageMediaType) != "undefined") && (item.notificationMessageMediaType == "youtube_video"))
 					{
-						messageYoutubeVideo.attr("src", item.notificationMessageImageName)
+						messageYoutubeVideo.attr("src", item.notificationMessageImageName);
 						spanImg.append(messageYoutubeVideo);
 					}
 				}
 				else
 				{
-					messageImg.attr("src", "/images/pages/common/empty.png")
+					messageImg.attr("src", "/images/pages/common/empty.png");
 					spanImg.append(messageImg);
 				}
 
@@ -181,11 +181,11 @@ var	user_notifications = (function()
 				var		isbns = "";
 
 				if((typeof(item.notificationBookISBN10) != "undefined") && item.notificationBookISBN10.length)
-					isbns += item.notificationBookISBN10
+					isbns += item.notificationBookISBN10;
 				if((typeof(item.notificationBookISBN13) != "undefined") && item.notificationBookISBN13.length)
 				{
 					if(isbns.length) isbns += " / ";
-					isbns += item.notificationBookISBN13
+					isbns += item.notificationBookISBN13;
 				}
 				if(isbns.length) isbns = "ISBN: " + isbns;
 
@@ -532,7 +532,7 @@ var	user_notifications = (function()
 		}
 
 		$("#AreYouSure").modal("show");
-	}
+	};
 
 	var ModalActionConfirmedClickHandler = function()
 	{
@@ -545,7 +545,7 @@ var	user_notifications = (function()
 			currTag.button("loading");
 
 			$.getJSON(
-				'/cgi-bin/' + script,
+				"/cgi-bin/" + script,
 				{ action:action, id:currTag.data("id") })
 				.done(function(data) {
 						if(data.result == "success")
@@ -571,11 +571,11 @@ var	user_notifications = (function()
 
 		}
 
-	}
+	};
 
 	return {
 		Init: Init,
 		BuildUserNotificationList:BuildUserNotificationList
-	}
+	};
 
 })();

@@ -2,7 +2,7 @@ var		view_group_profile = view_group_profile || {};
 
 view_group_profile = (function()
 {
-	'use strict';
+	"use strict";
 
 	var		groupProfile;
 	var		myUserProfile;
@@ -27,7 +27,7 @@ view_group_profile = (function()
 
 	var FillinGroupProfile = function()
 	{
-		$.getJSON('/cgi-bin/group.cgi?action=AJAX_getGroupProfileAndUser', {link: groupLink})
+		$.getJSON("/cgi-bin/group.cgi?action=AJAX_getGroupProfileAndUser", {link: groupLink})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -88,7 +88,7 @@ view_group_profile = (function()
 		$("#subscribersAvatarList").append(system_calls.GetAvatarsList(groupProfile.subscribers));
 		if(groupProfile.numberOfMembers > groupProfile.subscribers.length)
 		{
-			$("#subscribersAvatarList").append("...")
+			$("#subscribersAvatarList").append("...");
 		}
 	};
 
@@ -146,7 +146,7 @@ view_group_profile = (function()
 
 			currTag.button("loading");
 
-			$.getJSON('/cgi-bin/' + script + '?action=' + action, {id: currTag.data("id")})
+			$.getJSON("/cgi-bin/" + script + "?action=" + action, {id: currTag.data("id")})
 				.done(function(data) 
 				{
 					if(data.result === "success")
@@ -196,9 +196,9 @@ view_group_profile = (function()
 		var		affectedID = $("#AreYouSure #Remove").data("id");
 		var		affectedAction = $("#AreYouSure #Remove").data("action");
 
-		$("#AreYouSure").modal('hide');
+		$("#AreYouSure").modal("hide");
 
-		$.getJSON('/cgi-bin/index.cgi?action=' + affectedAction, {id: affectedID})
+		$.getJSON("/cgi-bin/index.cgi?action=" + affectedAction, {id: affectedID})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -266,7 +266,7 @@ view_group_profile = (function()
 				{
 					if(currentContent === "") {	currentContent = "Опишите круг своих обязанностей работы в компании.";	}
 
-					$.post('/cgi-bin/index.cgi?rand=' + Math.floor(Math.random() * 1000000000), 
+					$.post("/cgi-bin/index.cgi?rand=" + Math.floor(Math.random() * 1000000000), 
 						{
 							id: $(currentTag).data("id"), content: system_calls.FilterUnsupportedUTF8Symbols($(currentTag).val()),
 							action: "AJAX_updateRecommendationTitle",
@@ -310,7 +310,7 @@ view_group_profile = (function()
 		currentTag.replaceWith(newTag);
 		$("#" + currentID + "ButtonAccept").remove();
 		$("#" + currentID + "ButtonReject").remove();
-		$(newTag).on('click', editableFuncReplaceToTextarea);
+		$(newTag).on("click", editableFuncReplaceToTextarea);
 		$(newTag).mouseenter(editableFuncHighlightBgcolor);
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 	};
@@ -374,10 +374,10 @@ view_group_profile = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
-		$(tag).on('keyup', keyupEventHandler);
+		$(tag).on("keyup", keyupEventHandler);
 		$(tag).select();
 	};
 

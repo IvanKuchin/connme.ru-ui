@@ -262,7 +262,7 @@ chat = (function()
 				$("#messageToSend").attr("placeholder", "Нет подключения к серверу. Подождите 1 минуту.");
 				originalLoadingText = $("#MessageListSendButton_1").data("loading-text");
 				$("#MessageListSendButton_1").data("loading-text", "1 мин...");
-				$("#MessageListSendButton_1").button('loading');
+				$("#MessageListSendButton_1").button("loading");
 
 				console.debug("ws.onclose: onclose");
 			};
@@ -488,7 +488,7 @@ chat = (function()
 		} 
 		catch(exception) 
 		{
-			$("#ContactAdministrationButton").attr("data-error", 'Error' + exception);
+			$("#ContactAdministrationButton").attr("data-error", "Error" + exception);
 			$("#ContactAdministrationDialog").modal("show");
 		}
 
@@ -652,8 +652,8 @@ chat = (function()
 												.attr("draggable", "true");
 				var		canvasAvatar	= $("<canvas>")	.attr("width", "40")
 														.attr("height", "40")
-														.addClass('canvas-big-avatar')
-														.addClass('contact_list_avatar')
+														.addClass("canvas-big-avatar")
+														.addClass("contact_list_avatar")
 														.appendTo(divAvatar);
 				var		numberOfUnreadMessages = GetNumberUnreadMessagesForUser(user.id);
 				if(numberOfUnreadMessages === 0) { numberOfUnreadMessages = ""; }
@@ -672,16 +672,16 @@ chat = (function()
 
 	var	MessageSendLoadingLayout = function(messageObj)
 	{
-		$("#MessageListSendButton_1").button('loading');
-		$("#MessageListSendButton_2").button('loading');
+		$("#MessageListSendButton_1").button("loading");
+		$("#MessageListSendButton_2").button("loading");
 	};
 
 	var MessageSendResetLayout = function()
 	{
 		$("#messageToSend").val("")
 							.focus();
-		$("#MessageListSendButton_1").button('reset');
-		$("#MessageListSendButton_2").button('reset');
+		$("#MessageListSendButton_1").button("reset");
+		$("#MessageListSendButton_2").button("reset");
 		$("#MessageTyping").removeClass("message_pane_div_typing_opacity_05");
 		$("#ControlButtons").removeClass("opacity_0");
 	};
@@ -740,13 +740,13 @@ chat = (function()
 													.hover(function() { $(this).addClass("box-shadow--6dp"); }, function() { $(this).removeClass("box-shadow--6dp"); });
 		var		canvasAvatarFromMe		= $("<canvas>").attr("width", "40")
 													.attr("height", "40")
-													.addClass('canvas-big-avatar')
-													.addClass('contact_list_avatar')
+													.addClass("canvas-big-avatar")
+													.addClass("contact_list_avatar")
 													.appendTo(divAvatarFromMe);
 		var		canvasAvatarFromFriend	=   $("<canvas>").attr("width", "40")
 														.attr("height", "40")
-														.addClass('canvas-big-avatar')
-														.addClass('contact_list_avatar')
+														.addClass("canvas-big-avatar")
+														.addClass("contact_list_avatar")
 														.appendTo(divAvatarFromFriend);
 		var		messageText = system_calls.ReplaceTextLinkToURL(ReplaceHTMLSmileySymbolsToImg(messageObj.message));
 		var		messageImg = $("<img>").addClass("message_pane_image_resize");
@@ -994,12 +994,12 @@ chat = (function()
 		});
 		
 		return resultText;
-	}
+	};
 
 	var	ReplaceTwoSymbolsToSubstring = function(srcString, pos, subString)
 	{
-		return "".concat(srcString.substr(0, pos) + subString, srcString.substr(pos+2))
-	}
+		return "".concat(srcString.substr(0, pos) + subString, srcString.substr(pos+2));
+	};
 
 	var	PostMessageToServer = function(event)
 	{
@@ -1088,7 +1088,7 @@ chat = (function()
 				sel.text = myValue;
 			}
 			//MOZILLA and others
-			else if (myField.selectionStart || myField.selectionStart == '0') {
+			else if (myField.selectionStart || myField.selectionStart == "0") {
 				var startPos = myField.selectionStart;
 				var endPos = myField.selectionEnd;
 				myField.value = myField.value.substring(0, startPos)
@@ -1103,7 +1103,7 @@ chat = (function()
 		$("#ControlButtonSmiley").popover("destroy");
 		InsertAtCursor(document.getElementById("messageToSend"), $(this).data("shortcut"));
 
-	}
+	};
 
 	var	ShowSmileyMenu = function()
 	{
@@ -1111,7 +1111,7 @@ chat = (function()
 		$("#ControlButtonSmiley").popover({"content": emojiListHTML, "placement":"top", "container":"body", "html":"true"})
 								.popover("show");
 
-		$('[data-icon="emoji"]').on("click", EmojiClickHandler);
+		$("[data-icon=\"emoji\"]").on("click", EmojiClickHandler);
 /*		setTimeout(function () 
 			{
 				$("#ControlButtonSmiley").popover("destroy");
@@ -1178,7 +1178,7 @@ chat = (function()
 
 				URL.revokeObjectURL(url);
 				img = null;
-			}
+			};
 
 			img.src = url;
 
@@ -1203,7 +1203,7 @@ chat = (function()
 				fReader.readAsDataURL(input.target.files[i]);
 		});
 */
-	}
+	};
 
 	return {
 		Init: Init,
@@ -1218,7 +1218,7 @@ $(document).ready(function()
 	chat.Init();
 
 	$("#ContactAdministrationButton").on("click", function() {
-		window.open('mailto:ivan.kuchin@gmail.com?subject=Issue with chat&body=Chat error [' + $("#ContactAdministrationButton").attr("data-error", 'Error') + "]");
+		window.open("mailto:ivan.kuchin@gmail.com?subject=Issue with chat&body=Chat error [" + $("#ContactAdministrationButton").attr("data-error", "Error") + "]");
 		$("#ContactAdministrationDialog").modal("hide");
 	});
 

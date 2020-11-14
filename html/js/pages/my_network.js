@@ -30,21 +30,21 @@ var	my_network = (function()
 		{
 
 			arrayFriendList.forEach(function(item, i, arr) {
-				tempTag = tempTag.add(system_calls.GlobalBuildFoundFriendSingleBlock(item, i, arr))
+				tempTag = tempTag.add(system_calls.GlobalBuildFoundFriendSingleBlock(item, i, arr));
 			});
 		}
 
 		return tempTag;
-	}
+	};
 
 	var	GetFriendList = function () 
 	{
 		var		JSON_action;
 
-		if(current_action == "my_network") JSON_action = "JSON_getMyNetworkFriendList"
-		if(current_action == "who_watched_on_me") JSON_action = "JSON_getWhoWatchedONMeList"
+		if(current_action == "my_network") JSON_action = "JSON_getMyNetworkFriendList";
+		if(current_action == "who_watched_on_me") JSON_action = "JSON_getWhoWatchedONMeList";
 
-		$.getJSON('/cgi-bin/index.cgi', {action:JSON_action})
+		$.getJSON("/cgi-bin/index.cgi", {action:JSON_action})
 			.done(function(data) {
 					JSON_MyNetworkList = data;
 
@@ -52,11 +52,11 @@ var	my_network = (function()
 				})
 			.fail(function() {
 				console.debug("GetFriendList:ERROR: parsing JSON response from server");
-			})
-	}
+			});
+	};
 
 	return {
 		Init: Init
-	}
+	};
 
 })();

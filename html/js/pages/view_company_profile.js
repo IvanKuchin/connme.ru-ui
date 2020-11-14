@@ -2,7 +2,7 @@ var		view_company_profile = view_company_profile || {};
 
 view_company_profile = (function()
 {
-	'use strict';
+	"use strict";
 
 	var		companyProfile;
 	var		myVacancies = [];
@@ -19,14 +19,14 @@ view_company_profile = (function()
 		$("#AreYouSure #Remove").on("click", AreYouSureRemoveHandler);
 
 		FillinCompanyProfile();
-	}
+	};
 
 	var FillinCompanyProfile = function()
 	{
 		if((typeof(companyID) != "undefined") && companyID)
 		{
 
-			$.getJSON('/cgi-bin/company.cgi?action=JSON_getCompanyProfileAndMyVacancies', {id: companyID})
+			$.getJSON("/cgi-bin/company.cgi?action=JSON_getCompanyProfileAndMyVacancies", {id: companyID})
 				.done(function(data) {
 					if(data.result === "success")
 					{
@@ -54,7 +54,7 @@ view_company_profile = (function()
 			console.error("FillinCompanyProfile: ERROR: company.id(" + companyID + ") is empty or undefined");
 		}
 
-	}
+	};
 
 	var	DrawCompanyLogo = function (companyImageFolder, companyImageFilename, companyName)
 	{
@@ -69,7 +69,7 @@ view_company_profile = (function()
 		else
 			DrawCompanyAvatar(canvasCtx, "", companyName, "");
 
-	}
+	};
 
 	var	RenderCommonInfo = function()
 	{
@@ -129,7 +129,7 @@ view_company_profile = (function()
 		$("#companyIndustries").append(industriesArr.join());
 
 
-	}
+	};
 
 	var	amIAppliedToVacancy = function(vacancyID)
 	{
@@ -141,7 +141,7 @@ view_company_profile = (function()
 			});
 
 		return result;
-	}
+	};
 
 	var	amISuspendedOnVacancy = function(vacancyID)
 	{
@@ -153,7 +153,7 @@ view_company_profile = (function()
 			});
 
 		return result;
-	}
+	};
 
 	var	amIRejectedFromVacancy = function(vacancyID)
 	{
@@ -165,7 +165,7 @@ view_company_profile = (function()
 			});
 
 		return result;
-	}
+	};
 
 	var amICapableWithLanguage = function(languageTitle)
 	{
@@ -180,7 +180,7 @@ view_company_profile = (function()
 		}
 
 		return result;
-	}
+	};
 
 	var amICapableWithSkill = function(skillTitle)
 	{
@@ -195,7 +195,7 @@ view_company_profile = (function()
 		}
 
 		return result;
-	}
+	};
 
 	var	amISubscribedToCompany = function(companyID)
 	{
@@ -211,13 +211,13 @@ view_company_profile = (function()
 		}
 
 		return result;
-	}
+	};
 
 	var	RenderPostButton = function()
 	{
 		if(companyProfile.isMine == "1")
 			$("#NewsFeedNewMessageContainer").removeClass("hidden");
-	}
+	};
 
 	var	RenderFollowButton = function()
 	{
@@ -244,7 +244,7 @@ view_company_profile = (function()
 		}
 
 		$("#companyFollowButton").empty().append(followButton);
-	}
+	};
 
 	var	RenderOpenVacancies = function()
 	{
@@ -411,7 +411,7 @@ view_company_profile = (function()
 		$("#companyVacancies").empty().append(result);
 		$("div#companyVacancies [data-toggle=\"tooltip\"]").tooltip({ animation: "animated bounceIn"});
 
-	}
+	};
 
 	// --- Rendering vacancy collapsible immediately after page loading.
 	var InitAppliedCandidatesToVacancy = function(openVacancy)
@@ -419,13 +419,13 @@ view_company_profile = (function()
 		var		id = openVacancy.id;
 		var		divRowCollapsible	= $("<div>").addClass("collapse form-group")
 												.attr("id", "OpenVacancy" + id + "CandidatesCollapsible");
-		var		divRowTop			= $("<div>")	.addClass("row form-group")
+		var		divRowTop			= $("<div>")	.addClass("row form-group");
 		var		divColTop			= $("<div>")	.addClass("col-xs-12 collapse-top-shadow form-group")
 													.append($("<p>"));
 
 		var		divCandidate		= $("<div>")	.attr("id", "OpenVacancy" + id + "Candidates");
 
-		var		divRowBottom		= $("<div>")	.addClass("row")
+		var		divRowBottom		= $("<div>")	.addClass("row");
 		var		divColBottom		= $("<div>")	.addClass("col-xs-12 collapse-bottom-shadow")
 													.append($("<p>"));
 		divRowTop				.append(divColTop);
@@ -436,14 +436,14 @@ view_company_profile = (function()
 		divRowCollapsible.append(divRowBottom);
 
 		return divRowCollapsible;
-	}
+	};
 
 	var ApplyToVacancyClickHandler = function(openVacancyID)
 	{
 		$("button[data-group='OpenVacancy" + openVacancyID + "CandidatesButtons']").button("loading");
 
 
-		$.getJSON('/cgi-bin/company.cgi?action=AJAX_amIAppliedToVacancy', {id: openVacancyID})
+		$.getJSON("/cgi-bin/company.cgi?action=AJAX_amIAppliedToVacancy", {id: openVacancyID})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -472,7 +472,7 @@ view_company_profile = (function()
 				console.debug("ApplyToVacancyClickHandler: ERROR: parse JSON response from server");
 				setTimeout(function() {$("button[data-group='OpenVacancy" + openVacancyID + "CandidatesButtons']").button("reset"); }, 500); // --- wait for animation
 			});
-	}
+	};
 
 	// --- Rendering open vacancy collapsible for applying
 	var RenderSingleVacancyCollapsible = function(openVacancy, appliedAnswers, userProfile)
@@ -779,9 +779,9 @@ view_company_profile = (function()
 								.append(divColAnswer33);
 
 		if(openVacancy.language1_title.length)								
-			divRowLanguage.append(divColLanguage1.append(inputLanguage1).append(" " + openVacancy.language1_title))
+			divRowLanguage.append(divColLanguage1.append(inputLanguage1).append(" " + openVacancy.language1_title));
 		if(openVacancy.language2_title.length)		
-			divRowLanguage.append(divColLanguage2.append(inputLanguage2).append(" " + openVacancy.language2_title))
+			divRowLanguage.append(divColLanguage2.append(inputLanguage2).append(" " + openVacancy.language2_title));
 		if(openVacancy.language3_title.length)		
 			divRowLanguage.append(divColLanguage3.append(inputLanguage3).append(" " + openVacancy.language3_title));
 
@@ -819,7 +819,7 @@ view_company_profile = (function()
 
 
 		return divRowCollapsible;
-	}
+	};
 
 	var	ApplyToOpenVacancyClickHandler = function(id)
 	{
@@ -842,7 +842,7 @@ view_company_profile = (function()
 		{
 			$("#EditOpenVacancy" + id + "SubmitButton").button("loading");
 
-			$.post('/cgi-bin/company.cgi', 
+			$.post("/cgi-bin/company.cgi", 
 				{
 					action: "AJAX_applyToVacancy",
 					id: id,
@@ -897,7 +897,7 @@ view_company_profile = (function()
 					setTimeout(function() {$("#EditOpenVacancy" + id + "SubmitButton").button("reset"); }, 500); // --- wait for animation
 				});
 		}
-	}
+	};
 
 	var	CompanySubscriptionClickHandler = function(e)
 	{
@@ -910,7 +910,7 @@ view_company_profile = (function()
 
 			currTag.button("loading");
 
-			$.getJSON('/cgi-bin/' + script + '?action=' + action, {id: currTag.data("id")})
+			$.getJSON("/cgi-bin/" + script + "?action=" + action, {id: currTag.data("id")})
 				.done(function(data) 
 				{
 					if(data.result === "success")
@@ -938,7 +938,7 @@ view_company_profile = (function()
 			console.debug("CompanySubscriptionClickHandler: ERROR: action doesn't defined");
 		}
 
-	}
+	};
 
 	// --- additional modals
 	var DisplaySpecifiedImageModal_Show = function()
@@ -954,15 +954,15 @@ view_company_profile = (function()
 
 		$("#ImageDisplayModal").modal("show");
 
-	}
+	};
 
 	var	AreYouSureRemoveHandler = function() {
 		var		affectedID = $("#AreYouSure #Remove").data("id");
 		var		affectedAction = $("#AreYouSure #Remove").data("action");
 
-		$("#AreYouSure").modal('hide');
+		$("#AreYouSure").modal("hide");
 
-		$.getJSON('/cgi-bin/index.cgi?action=' + affectedAction, {id: affectedID})
+		$.getJSON("/cgi-bin/index.cgi?action=" + affectedAction, {id: affectedID})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1030,7 +1030,7 @@ view_company_profile = (function()
 				{
 					if(currentContent === "") {	currentContent = "Опишите круг своих обязанностей работы в компании.";	}
 
-					$.post('/cgi-bin/index.cgi?rand=' + Math.floor(Math.random() * 1000000000), 
+					$.post("/cgi-bin/index.cgi?rand=" + Math.floor(Math.random() * 1000000000), 
 						{
 							id: $(currentTag).data("id"), content: system_calls.FilterUnsupportedUTF8Symbols($(currentTag).val()),
 							action: "AJAX_updateRecommendationTitle",
@@ -1074,7 +1074,7 @@ view_company_profile = (function()
 		currentTag.replaceWith(newTag);
 		$("#" + currentID + "ButtonAccept").remove();
 		$("#" + currentID + "ButtonReject").remove();
-		$(newTag).on('click', editableFuncReplaceToTextarea);
+		$(newTag).on("click", editableFuncReplaceToTextarea);
 		$(newTag).mouseenter(editableFuncHighlightBgcolor);
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 	};
@@ -1138,10 +1138,10 @@ view_company_profile = (function()
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
-		$(tag).on('keyup', keyupEventHandler);
+		$(tag).on("keyup", keyupEventHandler);
 		$(tag).select();
 	};
 
@@ -1150,5 +1150,5 @@ view_company_profile = (function()
 	return {
 			Init: Init
 		};
-})() // --- view_company_profile object
+})(); // --- view_company_profile object
 

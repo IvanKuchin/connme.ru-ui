@@ -2,7 +2,7 @@ var		main_page = main_page || {};
 
 main_page = (function() 
 {
-	'use strict';
+	"use strict";
 	var loadingModalState = "hidden";
 	var	typingAlarmFlagActive = false;
 

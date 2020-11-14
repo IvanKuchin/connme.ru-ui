@@ -1,17 +1,8 @@
 /*jslint devel: true, indent: 4, maxerr: 50*/ 
-/*globals localStorage:off*/
-/*globals location: off*/
-/*globals localStorage:false*/
-/*globals location:false*/
-/*globals document:false*/
-/*globals window:false*/
-/*globals Image:false*/
-/*globals jQuery:false*/
-/*globals Notification:false*/
-/*globals setTimeout:false*/
-/*globals navigator:false*/
-/*globals module:false*/
-/*globals define:false*/
+/*global module, define*/
+/*global DrawUserAvatar:off*/
+/*global DrawCompanyAvatar:off*/
+/*global userCache:off*/
 
 // --- change it in (chat.js, common.js, localy.h)
 var FREQUENCY_ECHO_REQUEST = 60;
@@ -22,10 +13,7 @@ var FREQUENCY_RANDOM_FACTOR = 10;
 var	navMenu_search = navMenu_search || {};
 var	navMenu_chat = navMenu_chat || {};
 var navMenu_userNotification = navMenu_userNotification || {};
-var	system_calls = system_calls || {};
-var	system_notifications = system_notifications || {};
 var userRequestList; 
-var	userCache = userCache || {};
 
 system_calls = (function()
 {
@@ -34,6 +22,7 @@ system_calls = (function()
 	var	firstRun = true; // --- used to fire one time running func depends on userSignedIn
 	var	companyTypes = ["___","ООО","ОАО","ПАО","ЗАО","Группа","ИП","ЧОП","Концерн","Конгломерат","Кооператив","ТСЖ","Холдинг","Корпорация","НИИ"].sort();
 
+	var	current_script_global = "index.cgi";
 	var	globalScrollPrevOffset = -1;
 
 	var Init = function() 
@@ -106,7 +95,7 @@ system_calls = (function()
 
 	var	GetUUID = function()
 	{
-		return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);return v.toString(16);});
+		return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {var r = Math.random()*16|0, v = c == "x" ? r : (r&0x3|0x8);return v.toString(16);});
 	};
 
 	var	isUserSignedin = function()
@@ -130,8 +119,8 @@ system_calls = (function()
 	};
 
 	function isTouchBasedUA() {
-	  try{ document.createEvent("TouchEvent"); return true; }
-	  catch(e){ return false; }
+		try{ document.createEvent("TouchEvent"); return true; }
+		catch(e){ return false; }
 	}
 
 	function isOrientationPortrait()
@@ -154,12 +143,12 @@ system_calls = (function()
 
 	var CutLongMessages = function(message)
 	{
-	 	if(message.length > 19)
+		if(message.length > 19)
 		{
-	 		return message.substr(0, 19) + "...";
+			return message.substr(0, 19) + "...";
 		}
 
-	 	return message;
+		return message;
 	};
 
 	var	PopoverError = function(tagID, message, placement)
@@ -171,7 +160,7 @@ system_calls = (function()
 		var		original_tag = tagID;
 		var		display_timeout = Math.min(Math.max(30, message.length) * 100, 10000);
 
-		if(placement) {} else { placement = "top"; }
+		if(placement) { /* no action neede */ } else { placement = "top"; }
 
 		if(typeof(tagID) == "string") 		{ alarm_tag = $("#" + tagID); attr_id = tagID; }
 		else if(typeof(tagID) == "object")	{ alarm_tag = tagID; attr_id = tagID.attr("id"); }
@@ -235,7 +224,7 @@ system_calls = (function()
 		var		original_tag = tagID;
 		var		display_timeout = Math.min(Math.max(30, message.length) * 100, 10000);
 
-		if(html) {} else { html = false; }
+		if(html) { /* no action needed */ } else { html = false; }
 
 		if(typeof(tagID) == "string") 		{ alarm_tag = $("#" + tagID); }
 		else if(typeof(tagID) == "object")	{ alarm_tag = tagID; }
@@ -292,10 +281,10 @@ system_calls = (function()
 
 		result = result.replace(/–/img, "-");
 		result = result.replace(/•/img, "*");
-		result = result.replace(/\"/img, "&quot;");
+		result = result.replace(/"/img, "&quot;");
 		result = result.replace(/\\/img, "&#92;");
-		result = result.replace(/^\s+/, '');
-		result = result.replace(/\s+$/, '');
+		result = result.replace(/^\s+/, "");
+		result = result.replace(/\s+$/, "");
 
 		return result;
 	};
@@ -321,8 +310,8 @@ system_calls = (function()
 		result = result.replace(/&quot;/img, "\"");
 		result = result.replace(/&#92;/img, "\\");
 		result = result.replace(/&#39;/img, "'");
-		result = result.replace(/^\s+/, '');
-		result = result.replace(/\s+$/, '');
+		result = result.replace(/^\s+/, "");
+		result = result.replace(/\s+$/, "");
 
 		return result;
 	};
@@ -336,8 +325,8 @@ system_calls = (function()
 		result = result.replace(/>/img, "&gt;");
 		result = result.replace(/\n/img, "<br>");
 		result = result.replace(/•/img, "*");
-		result = result.replace(/^\s+/, '');
-		result = result.replace(/\s+$/, '');
+		result = result.replace(/^\s+/, "");
+		result = result.replace(/\s+$/, "");
 
 		return result;
 	};
@@ -488,18 +477,6 @@ system_calls = (function()
 	// --- output: example: 2 Май 2017
 	var	GetLocalizedDateNoTimeFromSeconds = function(seconds)
 	{
-		// TODO: 2delete @ June 1, 2017
-/*
-		var		timestamp1970 = new Date(1970, 0, 1);
-		var		timestampEvent = new Date(timestamp1970.getTime() + ((typeof(seconds) == "string") ? parseInt(seconds) : seconds) * 1000);
-
-		// --- DST fixing
-		// --- Explanation:
-		// --- JavaScript returning timedifference taking DST into consideration
-		// --- MySQL  returning timedifference doesn't taking DST into consideration
-		// --- discrepancy appears between MySQL and JavaScript 
-		timestampEvent -= GetDSTOffsetNow() * 60 * 1000;
-*/
 		var		timestampEvent = new Date(GetMsecSinceEpoch(seconds));
 		return GetLocalizedDateNoTimeFromTimestamp(timestampEvent);
 	};
@@ -508,18 +485,6 @@ system_calls = (function()
 	// --- output: example: 13:34:01 2 Май 2017
 	var	GetLocalizedDateFromSeconds = function(seconds)
 	{
-		// TODO: 2delete @ June 1, 2017
-/*
-		var		timestamp1970 = new Date(1970, 0, 1);
-		var		timestampEvent = new Date(timestamp1970.getTime() + ((typeof(seconds) == "string") ? parseInt(seconds) : seconds) * 1000);
-
-		// --- DST fixing
-		// --- Explanation:
-		// --- JavaScript returning timedifference taking DST into consideration
-		// --- MySQL  returning timedifference doesn't taking DST into consideration
-		// --- discrepancy appears between MySQL and JavaScript 
-		timestampEvent -= GetDSTOffsetNow() * 60 * 1000;
-*/
 		var		timestampEvent = new Date(GetMsecSinceEpoch(seconds));
 
 		return GetLocalizedDateFromTimestamp(timestampEvent);
@@ -537,18 +502,6 @@ system_calls = (function()
 
 	var	GetSQLFormatedDateNoTimeFromSeconds = function(seconds)
 	{
-		// TODO: 2delete @ June 1, 2017
-/*
-		var		timestamp1970 = new Date(1970, 0, 1);
-		var		timestampEvent = new Date(timestamp1970.getTime() + ((typeof(seconds) == "string") ? parseInt(seconds) : seconds) * 1000);
-
-		// --- DST fixing
-		// --- Explanation:
-		// --- JavaScript returning timedifference taking DST into consideration
-		// --- MySQL  returning timedifference doesn't taking DST into consideration
-		// --- discrepancy appears between MySQL and JavaScript 
-		timestampEvent -= GetDSTOffsetNow() * 60 * 1000;
-*/
 		var		timestampEvent = new Date(GetMsecSinceEpoch(seconds));
 
 		return GetSQLFormatedDateNoTimeFromTimestamp(timestampEvent);
@@ -639,73 +592,10 @@ system_calls = (function()
 		return new Date().getFullYear();
 	};
 
-	var	GetLocalizedDateFromSecondsHumanFormat = function(seconds)
-	{
-		// TODO: 2delete @ June 1, 2017
-/*
-		var		timestamp1970 = new Date(1970, 0, 1);
-		var		timestampEvent = new Date(timestamp1970.getTime() + ((typeof(seconds) == "string") ? parseInt(seconds) : seconds) * 1000);
-*/
-		var		timestampEvent = new Date(GetMsecSinceEpoch());
-		var		timestampNow = new Date();
-		var		diffYears = timestampNow.getFullYear() - timestampEvent.getFullYear();
-		var		diffMonths = timestampNow.getMonth() - timestampEvent.getMonth();
-		var		diffDays = timestampNow.getDate() - timestampEvent.getDate();
-		var		diffHours = timestampNow.getHours() - timestampEvent.getHours();
-		var		diffMins = timestampNow.getMinutes() - timestampEvent.getMinutes();
-		var		months;
-
-		var		result = "";
-
-		if((diffYears > 1) || ((diffYears == 1) && (diffMonths >= 0)))
-		{
-			result = timestampEvent.getDate() + " " + GetSpellingMonthName(timestampEvent.getMonth() + 1) + " " + timestampEvent.getFullYear();
-		}
-		else if((diffYears == 1) && (diffMonths < 0))
-		{
-			months = 12 - (timestampEvent.getMonth() + 1) + (timestampNow.getMonth() + 1);
-
-			if(months == 1) { result = "прошлый месяц"; }
-			else if(months == 2) { result = "позапрошлый месяц"; }
-			else if(months == 6) { result = "пол года назад"; }
-			else { result  = months + " " + GetMonthsSpelling(months) + " назад"; }
-		} 
-		else if(diffMonths)
-		{
-			months = (timestampNow.getMonth() + 1) - (timestampEvent.getMonth() + 1);
-
-			if(months == 1) { result = "прошлый месяц"; }
-			else if(months == 2) { result = "позапрошлый месяц"; }
-			else if(months == 6) { result = "пол года назад"; }
-			else { result  = months + " " + GetMonthsSpelling(months) + " назад"; }
-		}
-
-		result = result + " назад";
-
-		return result;
-	};
-
-	// --- returns DST offset in minutes between NOW() and Jan 1
-	var GetDSTOffsetNow = function()
-	{
-		var tsNow = new Date();
-		var tsJan = new Date(tsNow.getFullYear(), 0, 1);
-
-		return tsJan.getTimezoneOffset() - tsNow.getTimezoneOffset();
-	};
-
-
 	// --- private !!! don't use it from outside classes
 	var	GetMsecSinceEpoch = function(seconds)
 	{
 		var		result = ((typeof(seconds) == "string") ? parseInt(seconds) : seconds) * 1000;
-
-		// --- DST fixing
-		// --- Explanation:
-		// --- JavaScript returning timedifference taking DST into consideration
-		// --- MySQL  returning timedifference doesn't taking DST into consideration
-		// --- discrepancy appears between MySQL and JavaScript 
-		// result -= GetDSTOffsetNow() * 60 * 1000;
 
 		return 	result;
 	};
@@ -799,7 +689,7 @@ system_calls = (function()
 	// --- 			2 месяца 
 	// --- 			1 год 2 месяца 
 	// --- 			3 года 11 месяцев 
-	// ---						   ^^^^^^ (no days, no hours, no minutes)	
+	// ---							 ^^^^^^ (no days, no hours, no minutes)	
 	var	GetLocalizedWorkDurationFromDelta = function(seconds)
 	{
 		var		result = "";
@@ -877,7 +767,7 @@ system_calls = (function()
 	{
 		// console.debug('system_calls.SendEchoRequest: start');
 		$.getJSON(
-			'/cgi-bin/system.cgi',
+			"/cgi-bin/system.cgi",
 			{action:"EchoRequest"})
 			.done(function(data) 
 				{
@@ -946,7 +836,7 @@ system_calls = (function()
 		if(isUserSignedin())
 		{
 			$.getJSON(
-				'/cgi-bin/system.cgi',
+				"/cgi-bin/system.cgi",
 				{action:"GetUserRequestNotifications"})
 				.done(function(data) 
 					{
@@ -974,6 +864,7 @@ system_calls = (function()
 
 									if(data.userNotificationsArray.length > 0)
 									{
+										// --- no update required
 									}
 									else
 										navMenu_userNotification.BadgeUpdate();
@@ -1045,7 +936,6 @@ system_calls = (function()
 		var		__GetTagValue = function(__tag)
 		{
 			var	curr_value = "";
-			var	input_tag; 
 
 			if(__tag[0].tagName == "LABEL") 
 			{
@@ -1090,7 +980,7 @@ system_calls = (function()
 					curr_value = __GetTagValue(curr_tag);
 					
 					$.getJSON(
-						'/cgi-bin/' + current_script,
+						"/cgi-bin/" + current_script,
 						{
 							action: curr_tag.data("action"),
 							id: curr_tag.attr("data-id") || curr_tag.data("id"), // --- prefer attr(data_id) over jQuery.data(id), because jQuery.data doesn't updates properly
@@ -1113,12 +1003,12 @@ system_calls = (function()
 								system_calls.PopoverError(curr_tag, "Ошибка: " + data.description);
 							}
 						})
-						.fail(function(e)
+						.fail(function()
 						{
 							__Revert_To_Prev_Value();
 							system_calls.PopoverError(curr_tag, "Ошибка ответа сервера");
 						})
-						.always(function(e)
+						.always(function()
 						{
 							curr_tag.removeAttr("disabled");
 						});
@@ -1141,9 +1031,9 @@ system_calls = (function()
 		if($(elementID).length)
 		{
 			var	elementOffset 			= $(elementID).offset().top;
-			var	elementClientHeight 	= $(elementID)[0].clientHeight;
+			// var	elementClientHeight 	= $(elementID)[0].clientHeight;
 			var	windowScrollTop			= $(window).scrollTop();
-			var	windowHeight			= $(window).height();
+			// var	windowHeight			= $(window).height();
 
 			console.debug("ScrollWindowToElementID: prevOffset[" + globalScrollPrevOffset + "] == scroll len to elem = " + (elementOffset - windowScrollTop));
 
@@ -1156,7 +1046,7 @@ system_calls = (function()
 				globalScrollPrevOffset = elementOffset - windowScrollTop;
 
 				$("body").animate({scrollTop: elementOffset }, 400);
-				$('html').animate({scrollTop: elementOffset }, 400);
+				$("html").animate({scrollTop: elementOffset }, 400);
 
 				setTimeout(function() { ScrollWindowToElementID(elementID); }, 600);
 			}
@@ -1170,7 +1060,7 @@ system_calls = (function()
 	var	GetParamFromURL = function(paramName)
 	{
 		var result = ""; 
-		var	tmp = new RegExp('[\?&]' + paramName + '=([^&#]*)').exec(window.location.href);
+		var	tmp = new RegExp("[?&]" + paramName + "=([^&#]*)").exec(window.location.href);
 
 		if(tmp && tmp.length) result = tmp[1];
 
@@ -1186,7 +1076,7 @@ system_calls = (function()
 		var		buttonCompany1;
 
 		buttonCompany1 = $("<button/>").data("action", "");
-		Object.keys(companyInfo).forEach(function(itemChild, i, arr) {
+		Object.keys(companyInfo).forEach(function(itemChild) {
 			buttonCompany1.data(itemChild, companyInfo[itemChild]);
 		});
 
@@ -1237,7 +1127,7 @@ system_calls = (function()
 		var		buttonGroup1;
 
 		buttonGroup1 = $("<button/>").data("action", "");
-		Object.keys(groupInfo).forEach(function(itemChild, i, arr) {
+		Object.keys(groupInfo).forEach(function(itemChild) {
 			buttonGroup1.data(itemChild, groupInfo[itemChild]);
 		});
 
@@ -1261,9 +1151,7 @@ system_calls = (function()
 	//			callbackFunc - function called on click event
 	var	BuildCompanySingleBlock = function(item, i, arr, callbackFunc)
 	{
-		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3, tagUl5;
-		var		tagButtonFriend1;
-		var		tagButtonFriend2;
+		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3;
 		var		divRowXSButtons, divColXSButtons;
 
 		divContainer= $("<div/>").addClass("container");
@@ -1274,7 +1162,7 @@ system_calls = (function()
 		//						 .attr("height", "80");
 		tagCanvas3	= $("<canvas>").attr("width", "80")
 									.attr("height", "80")
-									.addClass('canvas-big-logo');
+									.addClass("canvas-big-logo");
 		divInfo 		= $("<div/>").addClass("col-sm-10 col-xs-12 single_block box-shadow--6dp");
 		tagA5   		= $("<a>").attr("href", "/company/" + item.link + "?rand=" + Math.random() * 1234567890);
 		spanSMButton	= $("<span>").addClass("hidden-xs pull-right");
@@ -1306,9 +1194,7 @@ system_calls = (function()
 	//			callbackFunc - function called on click event
 	var	BuildGroupSingleBlock = function(item, i, arr, callbackFunc)
 	{
-		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3, tagUl5;
-		var		tagButtonFriend1;
-		var		tagButtonFriend2;
+		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3;
 		var		divRowXSButtons, divColXSButtons;
 
 		divContainer= $("<div/>").addClass("container");
@@ -1319,7 +1205,7 @@ system_calls = (function()
 		//						 .attr("height", "80");
 		tagCanvas3	= $("<canvas>").attr("width", "80")
 									.attr("height", "80")
-									.addClass('canvas-big-logo');
+									.addClass("canvas-big-logo");
 		divInfo 		= $("<div/>").addClass("col-sm-10 col-xs-12 single_block box-shadow--6dp");
 		tagA5   		= $("<a>").attr("href", "/group/" + item.link + "?rand=" + GetUUID());
 		spanSMButton	= $("<span>").addClass("hidden-xs pull-right");
@@ -1356,7 +1242,7 @@ system_calls = (function()
 
 		if($("#myUserID").data("myuserid"))
 		{
-			Object.keys(friendInfo).forEach(function(itemChild, i, arr) {
+			Object.keys(friendInfo).forEach(function(itemChild) {
 				tagButtonFriend1.data(itemChild, friendInfo[itemChild]);
 				tagButtonFriend2.data(itemChild, friendInfo[itemChild]);
 			});
@@ -1406,7 +1292,7 @@ system_calls = (function()
 				tagButtonFriend1.addClass("btn btn-primary")
 								.append("Добавить в друзья")
 								.data("action", "requested");
-				console.debug("BuildFoundFriendSingleBlock: ERROR: unknown friendship status [" + item.userFriendship + "]");
+				console.debug("BuildFoundFriendSingleBlock: ERROR: unknown friendship status [" + friendInfo.userFriendship + "]");
 			}
 
 			tagButtonFriend1.on("click", FriendshipButtonClickHandler);
@@ -1423,11 +1309,9 @@ system_calls = (function()
 	}; // --- RenderFriendshipButtons
 
 
-	var GlobalBuildFoundFriendSingleBlock = function(item, i, arr)
+	var GlobalBuildFoundFriendSingleBlock = function(item)
 	{
 		var 	tagDiv1, tagDiv2, tagDiv3, tagA3, tagImg3, tagDiv4, tagA5, tagSpan5, tagCanvas3, tagUl5;
-		var		tagButtonFriend1;
-		var		tagButtonFriend2;
 		var		tagDivButtons;
 
 		tagDiv1 	= $("<div/>").addClass("container");
@@ -1438,7 +1322,7 @@ system_calls = (function()
 		//						 .attr("height", "80");
 		tagCanvas3	= $("<canvas>").attr("width", "80")
 									.attr("height", "80")
-									.addClass('canvas-big-avatar');
+									.addClass("canvas-big-avatar");
 		tagDiv4 	= $("<div/>").addClass("col-md-10 col-xs-12  single_block box-shadow--6dp padding_top_bottom_5px");
 		tagA5   	= $("<a>").attr("href", "/userprofile/" + item.id);
 		tagSpan5	= $("<span>").addClass("hidden-xs float_right");
@@ -1475,7 +1359,7 @@ system_calls = (function()
 
 	var DrawCompanyImage = function(context, imageURL, avatarSize)
 	{
-		var x1 = 0, x2 = avatarSize, y1 = 0, y2 = avatarSize, radius = avatarSize / 8;
+		var x2 = avatarSize, y2 = avatarSize, radius = avatarSize / 8;
 		var		pic = new Image();
 
 		pic.onload = function() { 
@@ -1562,7 +1446,7 @@ system_calls = (function()
 	// --- output: DOMmodel
 	var	RenderRating = function(additionalClass, initValue, callbackFunc)
 	{
-		var		RatingSelectionItem = function(e)
+		var		RatingSelectionItem = function()
 		{
 			var		currTag = $(this);
 			var		currRating = currTag.data("rating");
@@ -1643,7 +1527,7 @@ system_calls = (function()
 
 			if(url.length > 32) urlText = url.substring(0, 32) + " ...";
 
-			return '<a href="' + url + '" target="blank">' + urlText + '</a>'; 
+			return "<a href=\"" + url + "\" target=\"blank\">" + urlText + "</a>"; 
 		});
 
 		return resultText;
@@ -1659,7 +1543,7 @@ system_calls = (function()
 		text = text.replace(/https?:\/\/[^\s<]+/g, "");
 		wordsArr = text.match(/[^\s]+/g) || [""];
 
-		wordsArr.forEach(function (item, i, arr) { if(item.length >= lenghtyWord.length) { lenghtyWord = item; lenghtyWordIdx = i; } });
+		wordsArr.forEach(function (item, i) { if(item.length >= lenghtyWord.length) { lenghtyWord = item; lenghtyWordIdx = i; } });
 
 		return wordsArr[lenghtyWordIdx];
 	};
@@ -1777,7 +1661,7 @@ var userCache = (function()
 	{
 		var		updatedFlag = false;
 		
-		cache.forEach(function(item, i, arr)
+		cache.forEach(function(item, i)
 			{
 				if(cache[i].id == userObj.id)
 				{
@@ -1793,7 +1677,7 @@ var userCache = (function()
 	{
 		var		result = {};
 
-		cache.forEach(function(item, i, arr)
+		cache.forEach(function(item)
 			{
 				if(item.id == userID)
 				{
@@ -1808,7 +1692,7 @@ var userCache = (function()
 	{
 		var		result = false;
 
-		cache.forEach(function(item, i, arr)
+		cache.forEach(function(item)
 			{
 				if(item.id == userID)
 				{
@@ -1854,18 +1738,18 @@ var userCache = (function()
 
 			if(param1.length)
 			{
-				$.getJSON('/cgi-bin/system.cgi', { action: 'GetUserInfo', userID: param1 })
+				$.getJSON("/cgi-bin/system.cgi", { action: "GetUserInfo", userID: param1 })
 					.done(
 						function(result)
 						{
 							if((result.session == "true") && (result.user == "true") && (result.type == "UserInfo"))
 							{
-								result.userArray.forEach(function(item, i, arr)
+								result.userArray.forEach(function(item)
 								{
 									UpdateWithUser(item);
 								});
 
-								callbackRunAfterUpdateArr.forEach(function(item, i, arr)
+								callbackRunAfterUpdateArr.forEach(function(item)
 								{
 									item();
 								});
@@ -1878,7 +1762,7 @@ var userCache = (function()
 			}
 			else
 			{
-				callbackRunAfterUpdateArr.forEach(function(item, i, arr)
+				callbackRunAfterUpdateArr.forEach(function(item)
 				{
 					item();
 				});
@@ -1910,7 +1794,7 @@ var RenderChatButton = function(friendInfo, housingTag)
 	var		buttonChat = $("<button>").append($("<span>").addClass("fa fa-comment-o fa-lg width_18"))
 										.addClass("btn btn-primary");
 
-	Object.keys(friendInfo).forEach(function(itemChild, i, arr) {
+	Object.keys(friendInfo).forEach(function(itemChild) {
 		buttonChat.data(itemChild, friendInfo[itemChild]);
 	});
 
@@ -1919,7 +1803,7 @@ var RenderChatButton = function(friendInfo, housingTag)
 	housingTag.append(buttonChat);
 };
 
-var ChatButtonClickHandler = function(e)
+var ChatButtonClickHandler = function()
 {
 	"use strict";
 	var		button = $(this);
@@ -1933,11 +1817,11 @@ var	ButtonFriendshipRemovalYesHandler = function()
 	"use strict";
 	var clickedButton = $(this).data("clickedButton");
 	clickedButton.data("action", "disconnect");
-	$("#DialogFriendshipRemovalYesNo").modal('hide');
+	$("#DialogFriendshipRemovalYesNo").modal("hide");
 	clickedButton.click();
 };
 
-var FriendshipButtonClickHandler = function(e) 
+var FriendshipButtonClickHandler = function() 
 {
 	"use strict";
 	var		handlerButton = $(this);
@@ -1945,7 +1829,7 @@ var FriendshipButtonClickHandler = function(e)
 	if(handlerButton.data("action") == "disconnectDialog")
 	{
 		$("#ButtonFriendshipRemovalYes").data("clickedButton", handlerButton);
-		$("#DialogFriendshipRemovalYesNo").modal('show');
+		$("#DialogFriendshipRemovalYesNo").modal("show");
 	}
 	else
 	{
@@ -1953,7 +1837,7 @@ var FriendshipButtonClickHandler = function(e)
 		handlerButton.text("Ожидайте ...");
 
 		$.getJSON(
-			'/cgi-bin/index.cgi',
+			"/cgi-bin/index.cgi",
 			{action:"AJAX_setFindFriend_FriendshipStatus", friendID:handlerButton.data("id"), status:handlerButton.data("action")})
 			.done(function(data) {
 					console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
@@ -2007,10 +1891,10 @@ var FriendshipButtonClickHandler = function(e)
 					{
 						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): " + data.result + " [" + data.description + "]");
 
-						handlerButton.text("Ошибка");
-						handlerButton.removeClass("btn-default")
-									 .removeClass("btn-primary")
-									 .addClass("btn-danger", 300);
+						handlerButton	.text("Ошибка");
+						handlerButton	.removeClass("btn-default")
+										.removeClass("btn-primary")
+										.addClass("btn-danger", 300);
 						
 						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): need to notify the Requester");
 					}
@@ -2075,16 +1959,11 @@ var DrawTextLogo = function(context, userInitials, size)
 	context.fillText(userInitials, avatarSize/2,avatarSize*21/32);
 };
 
-var	HandlerDrawPictureAvatar = function()
-{
-	"use strict";
-};
-
 var DrawPictureAvatar = function(context, imageURL, avatarSize)
 {
 	"use strict";
 
-	var x1 = 0, x2 = avatarSize, y1 = 0, y2 = avatarSize, radius = avatarSize / 8;
+	var x2 = avatarSize, y2 = avatarSize, radius = avatarSize / 8;
 	var		pic = new Image();
 
 	pic.src = imageURL;
@@ -2115,7 +1994,6 @@ var	DrawCompanyLogoAvatar = function(context, imageURL, avatarSize)
 {
 	"use strict";
 
-	var x1 = 0, x2 = avatarSize, y1 = 0, y2 = avatarSize, radius = avatarSize / 8;
 	var		pic = new Image();
 
 	pic.src = imageURL;
@@ -2193,12 +2071,12 @@ var BuildUserRequestList = function()
 
 	var CutUserName19Symbols = function(userName)
 	{
-	 	if(userName.length > 19)
-	 	{
-	 		return userName.substr(0, 19) + "...";
-	 	}
+		if(userName.length > 19)
+		{
+			return userName.substr(0, 19) + "...";
+		}
 
-	 	return userName;
+		return userName;
 	};
 
 
@@ -2208,10 +2086,9 @@ var BuildUserRequestList = function()
 		function(item, i, arr)
 		{
 
-			$.getJSON
-			(
-				'/cgi-bin/system.cgi',
-				{ action: 'GetUserInfo', userID: item.friendID }
+			$.getJSON(
+				"/cgi-bin/system.cgi",
+				{ action: "GetUserInfo", userID: item.friendID }
 			)
 			.done(
 				function(result)
@@ -2229,7 +2106,7 @@ var BuildUserRequestList = function()
 														.data("action", "disconnect");
 					var		canvasAvatar = $("<canvas/>")	.attr("width", "30")
 															.attr("height", "30")
-															.addClass('canvas-big-avatar')
+															.addClass("canvas-big-avatar")
 															.addClass("RequestUserListOverrideCanvasSize");
 
 					// --- update cache with this user
@@ -2240,7 +2117,7 @@ var BuildUserRequestList = function()
 					// --- secondly for user #1
 					userCounter++;
 
-					Object.keys(userInfo).forEach(function(itemChild, i, arr) {
+					Object.keys(userInfo).forEach(function(itemChild) {
 						buttonReject.data(itemChild, userInfo[itemChild]);
 						buttonAccept.data(itemChild, userInfo[itemChild]);
 					});
@@ -2289,12 +2166,9 @@ navMenu_search = (function()
 {
 	"use strict";
 
-	var AutocompleteList = [];
-
 	var	AutocompleteSelectHandler = function(event, ui)
 	{
 		var	selectedID = ui.item.id;
-		var selectedLabel = ui.item.label;
 
 		window.location.href = "/userprofile/" + selectedID;
 	};
@@ -2310,7 +2184,7 @@ navMenu_search = (function()
 		}
 	};
 
-	var OnSubmitClickHandler = function(event)
+	var OnSubmitClickHandler = function()
 	{
 		var		searchText = $("#navMenuSearchText").val();
 
@@ -2318,10 +2192,10 @@ navMenu_search = (function()
 		{
 			$("#navMenuSearchText").attr("title", "Напишите более 2 букв")
 									.attr("data-placement", "bottom")
-									.tooltip('show');
+									.tooltip("show");
 			window.setTimeout(function()
 				{
-					$("#navMenuSearchText").tooltip('destroy');
+					$("#navMenuSearchText").tooltip("destroy");
 				}, 3000);
 			return false;
 		}
@@ -2339,7 +2213,6 @@ navMenu_chat = (function()
 {
 	"use strict";
 
-	var	chatUserList;
 	var	userArray = [];
 	var	unreadMessagesArray = [];
 
@@ -2348,11 +2221,6 @@ navMenu_chat = (function()
 		console.debug("navMenu_chat.UnreadMessageButtonClickHandler: start");
 
 		console.debug("navMenu_chat.UnreadMessageButtonClickHandler: start");
-	};
-
-	var	GetUserInfoByID = function(messageID)
-	{
-
 	};
 
 	var CutLongMultilineMessages = function(message)
@@ -2367,10 +2235,10 @@ navMenu_chat = (function()
 		lineList = lineList.replace(/&Ishort;/g, "Й");
 		lineList = lineList.replace(/&Euml;/g, "Ё");
 		lineList = lineList.replace(/&Zsimple;/g, "З");
-		lineList = lineList.replace(/&Norder\;/g, "№");
+		lineList = lineList.replace(/&Norder;/g, "№");
 		lineList = lineList.replace(/<br>/g, "\n").replace(/\r/g, "").split("\n");
 
-		lineList.forEach(function(item, i, arr)
+		lineList.forEach(function(item, i)
 			{
 				if(i < 3) 
 				{
@@ -2403,7 +2271,7 @@ navMenu_chat = (function()
 				{
 
 					var		messageInfo = item;
-					var		userInfo = jQuery.grep(userArray, function(n, i) { return (n.id == messageInfo.fromID); });
+					var		userInfo = jQuery.grep(userArray, function(n) { return (n.id == messageInfo.fromID); });
 							userInfo = userInfo[0];
 					var		userSpan = $("<div/>").addClass("UnreadChatListSpan");
 					var		buttonSpan = $("<span/>").addClass("UnreadChatListButtonSpan");
@@ -2424,7 +2292,7 @@ navMenu_chat = (function()
 														.data("action", "markAsRead")
 														.on("click", function(e) 
 															{
-																$.getJSON('/cgi-bin/index.cgi', {action:"AJAX_chatMarkMessageReadByMessageID", messageid:messageInfo.id})
+																$.getJSON("/cgi-bin/index.cgi", {action:"AJAX_chatMarkMessageReadByMessageID", messageid:messageInfo.id})
 																			.done(function(data) 
 																				{
 																					if(data.result == "success")
@@ -2441,7 +2309,7 @@ navMenu_chat = (function()
 															});
 					var		canvasAvatar = $("<canvas/>")	.attr("width", "30")
 															.attr("height", "30")
-															.addClass('canvas-big-avatar')
+															.addClass("canvas-big-avatar")
 															.addClass("UnreadChatListOverrideCanvasSize");
 					var		messageBody = $("<div>").addClass("UnreadChatListMessage")
 														.on("click", function(e) 
@@ -2452,7 +2320,7 @@ navMenu_chat = (function()
 
 					messageCounter++;
 
-					Object.keys(messageInfo).forEach(function(itemChild, i, arr) {
+					Object.keys(messageInfo).forEach(function(itemChild) {
 						buttonClose.data(itemChild, messageInfo[itemChild]);
 						buttonReply.data(itemChild, messageInfo[itemChild]);
 					});
@@ -2512,7 +2380,7 @@ navMenu_chat = (function()
 		if(system_calls.isUserSignedin())
 		{
 			$.getJSON(
-				'/cgi-bin/system.cgi',
+				"/cgi-bin/system.cgi",
 				{action:"GetNavMenuChatStatus"})
 				.done(function(data) 
 					{
@@ -2537,8 +2405,6 @@ navMenu_chat = (function()
 
 									$("#user-chat-ahref .badge").remove();
 									$("#user-chat-ahref").append(badgeSpan);
-
-									chatUserList = data;
 
 									BuildUnreadMessageList();
 								}
@@ -2600,14 +2466,6 @@ navMenu_userNotification = (function()
 		userNotificationsArray = data;
 	};
 
-	var	DeleteButtonClickHandler = function()
-	{
-		console.debug("navMenu_chat.UnreadMessageButtonClickHandler: start");
-
-		console.debug("navMenu_chat.UnreadMessageButtonClickHandler: start");
-	};
-
-
 	var	ReplaceUserIDTagsToUserName = function(src)
 	{
 		var		result = src;
@@ -2634,9 +2492,9 @@ navMenu_userNotification = (function()
 				});
 		}
 
-		Object.keys(userArray).forEach(function(item)
+		Object.keys(userArray).forEach(function()
 		{
-			function convert(str, match, offset, s)
+			function convert(str, match)
 			{
 				return "<i>" + userArray[match] + "</i>";
 			}
@@ -2715,11 +2573,12 @@ navMenu_userNotification = (function()
 															.addClass("btn btn-link")
 															.on("click", function(e) 
 																{
-																	$.getJSON('/cgi-bin/index.cgi', {action:"AJAX_notificationMarkMessageReadByMessageID", notificationID:item.notificationID})
+																	$.getJSON("/cgi-bin/index.cgi", {action:"AJAX_notificationMarkMessageReadByMessageID", notificationID:item.notificationID})
 																				.done(function(data)
 																					{
 																						if(data.result == "success")
 																						{
+																							// --- good2go
 																						}
 																						else
 																						{
@@ -2727,7 +2586,7 @@ navMenu_userNotification = (function()
 																						}
 																					});
 
-																	userNotificationsArray.forEach(function(item2, i2, arr2) 
+																	userNotificationsArray.forEach(function(item2, i2) 
 																		{
 																			if(userNotificationsArray[i2].notificationID == item.notificationID)
 																			{
@@ -2740,7 +2599,7 @@ navMenu_userNotification = (function()
 																});
 						var		canvasAvatar = $("<canvas/>")	.attr("width", "30")
 																.attr("height", "30")
-																.addClass('canvas-big-avatar')
+																.addClass("canvas-big-avatar")
 																.addClass("UnreadChatListOverrideCanvasSize");
 						var		messageBody = $("<div>").addClass("UnreadChatListMessage")
 															.on("click", function(e) 
@@ -2755,7 +2614,7 @@ navMenu_userNotification = (function()
 						{
 							var		notificationBody = "";
 
-							Object.keys(notificationInfo).forEach(function(itemChild, i, arr) {
+							Object.keys(notificationInfo).forEach(function(itemChild) {
 								buttonClose.data(itemChild, notificationInfo[itemChild]);
 								buttonReply.data(itemChild, notificationInfo[itemChild]);
 							});
@@ -3085,43 +2944,43 @@ troubleshooting = (function ()
 (function (global) {
 
 	var apple_phone		 = /iPhone/i,
-		apple_ipod		  = /iPod/i,
+		apple_ipod			= /iPod/i,
 		apple_tablet		= /iPad/i,
-		android_phone	   = /(?=.*\bAndroid\b)(?=.*\bMobile\b)/i, // Match 'Android' AND 'Mobile'
-		android_tablet	  = /Android/i,
+		android_phone		 = /(?=.*\bAndroid\b)(?=.*\bMobile\b)/i, // Match 'Android' AND 'Mobile'
+		android_tablet		= /Android/i,
 		amazon_phone		= /(?=.*\bAndroid\b)(?=.*\bSD4930UR\b)/i,
-		amazon_tablet	   = /(?=.*\bAndroid\b)(?=.*\b(?:KFOT|KFTT|KFJWI|KFJWA|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|KFARWI|KFASWI|KFSAWI|KFSAWA)\b)/i,
-		windows_phone	   = /Windows Phone/i,
-		windows_tablet	  = /(?=.*\bWindows\b)(?=.*\bARM\b)/i, // Match 'Windows' AND 'ARM'
+		amazon_tablet		 = /(?=.*\bAndroid\b)(?=.*\b(?:KFOT|KFTT|KFJWI|KFJWA|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|KFARWI|KFASWI|KFSAWI|KFSAWA)\b)/i,
+		windows_phone		 = /Windows Phone/i,
+		windows_tablet		= /(?=.*\bWindows\b)(?=.*\bARM\b)/i, // Match 'Windows' AND 'ARM'
 		other_blackberry	= /BlackBerry/i,
 		other_blackberry_10 = /BB10/i,
 		other_opera		 = /Opera Mini/i,
 		other_chrome		= /(CriOS|Chrome)(?=.*\bMobile\b)/i,
-		other_firefox	   = /(?=.*\bFirefox\b)(?=.*\bMobile\b)/i, // Match 'Firefox' AND 'Mobile'
+		other_firefox		 = /(?=.*\bFirefox\b)(?=.*\bMobile\b)/i, // Match 'Firefox' AND 'Mobile'
 		seven_inch = new RegExp(
 			"(?:" +		 // Non-capturing group
 
 			"Nexus 7" +	 // Nexus 7
 
-			"|" +		   // OR
+			"|" +			 // OR
 
 			"BNTV250" +	 // B&N Nook Tablet 7 inch
 
-			"|" +		   // OR
+			"|" +			 // OR
 
 			"Kindle Fire" + // Kindle Fire
 
-			"|" +		   // OR
+			"|" +			 // OR
 
 			"Silk" +		// Kindle Fire, Silk Accelerated
 
-			"|" +		   // OR
+			"|" +			 // OR
 
 			"GT-P1000" +	// Galaxy Tab 7 inch
 
 			")",			// End non-capturing group
 
-			"i");		   // Case-insensitive matching
+			"i");			 // Case-insensitive matching
 
 	var match = function(regex, userAgent) {
 		return regex.test(userAgent);
@@ -3140,7 +2999,7 @@ troubleshooting = (function ()
 		// Twitter mobile app's integrated browser on iPad adds a "Twitter for
 		// iPhone" string. Same probable happens on other tablet platforms.
 		// This will confuse detection so strip it out if it exists.
-		tmp = ua.split('Twitter');
+		tmp = ua.split("Twitter");
 		if (typeof tmp[1] !== "undefined") {
 			ua = tmp[0];
 		}
@@ -3170,9 +3029,9 @@ troubleshooting = (function ()
 			blackberry:   match(other_blackberry, ua),
 			blackberry10: match(other_blackberry_10, ua),
 			opera:		match(other_opera, ua),
-			firefox:	  match(other_firefox, ua),
-			chrome:	   match(other_chrome, ua),
-			device:	   match(other_blackberry, ua) || match(other_blackberry_10, ua) || match(other_opera, ua) || match(other_firefox, ua) || match(other_chrome, ua)
+			firefox:		match(other_firefox, ua),
+			chrome:		 match(other_chrome, ua),
+			device:		 match(other_blackberry, ua) || match(other_blackberry_10, ua) || match(other_opera, ua) || match(other_firefox, ua) || match(other_chrome, ua)
 		};
 		this.seven_inch = match(seven_inch, ua);
 		this.any = this.apple.device || this.android.device || this.windows.device || this.other.device || this.seven_inch;
@@ -3200,9 +3059,9 @@ troubleshooting = (function ()
 	} else if (typeof module !== "undefined" && module.exports && typeof window !== "undefined") {
 		//browserify
 		module.exports = instantiate();
-	} else if (typeof define === 'function' && define.amd) {
+	} else if (typeof define === "function" && define.amd) {
 		//AMD
-		define('isMobile', [], global.isMobile = instantiate());
+		define("isMobile", [], global.isMobile = instantiate());
 	} else {
 		global.isMobile = instantiate();
 	}
@@ -3234,20 +3093,20 @@ String.prototype.trim = function(charlist) {
 };
 
 $.fn.selectRange = function(start, end) {
-	var e = document.getElementById($(this).attr('id')); // I don't know why... but $(this) don't want to work today :-/
+	var e = document.getElementById($(this).attr("id")); // I don't know why... but $(this) don't want to work today :-/
 	if (!e) return;
 	else if (e.setSelectionRange) { e.focus(); e.setSelectionRange(start, end); } /* WebKit */ 
-	else if (e.createTextRange) { var range = e.createTextRange(); range.collapse(true); range.moveEnd('character', end); range.moveStart('character', start); range.select(); } /* IE */
+	else if (e.createTextRange) { var range = e.createTextRange(); range.collapse(true); range.moveEnd("character", end); range.moveStart("character", start); range.select(); } /* IE */
 	else if (e.selectionStart) { e.selectionStart = start; e.selectionEnd = end; }
 };
 
 $.urlParam = function(name)
 {
-	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	var results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
 	if (results === null){
-	   return "";
+		return "";
 	}
 	else{
-	   return decodeURI(results[1]) || "";
+		return decodeURI(results[1]) || "";
 	}
 };

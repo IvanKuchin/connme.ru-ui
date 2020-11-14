@@ -100,7 +100,7 @@ var	Init = function()
 					});
 
 			// --- AJAX jobTitle download 
-			$.getJSON('/cgi-bin/index.cgi?action=AJAX_getCertificationTracks', {param1: ""})
+			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getCertificationTracks", {param1: ""})
 					.done(function(data) {
 						data.forEach(function(item, i, arr)
 						{
@@ -312,9 +312,9 @@ var	Init = function()
 	// --- Image uploader
 	$(function () {
 		// Change this to the location of your server-side upload handler:
-		$('#fileupload').fileupload({
-			url: '/cgi-bin/avataruploader.cgi',
-			dataType: 'json',
+		$("#fileupload").fileupload({
+			url: "/cgi-bin/avataruploader.cgi",
+			dataType: "json",
 			maxFileSize: 30 * 1024 * 1024, 
 			acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 
@@ -340,13 +340,13 @@ var	Init = function()
 						}
 
 						// --- reset progress bar
-						setTimeout(function() { $('#progress .progress-bar').css("width", "0%"); }, 500);
+						setTimeout(function() { $("#progress .progress-bar").css("width", "0%"); }, 500);
 					});
 
 			},
 			progressall: function (e, data) {
 				var progress = parseInt(data.loaded / data.total * 100, 10);
-				$('#progress .progress-bar').css("width", progress + "%");
+				$("#progress .progress-bar").css("width", progress + "%");
 			},
 			fail: function (e, data) {
 				alert("ошибка загрузки фаила: " + data.textStatus);
@@ -464,37 +464,37 @@ var AddLanguagePathCollapsibleZeroize = function()
 
 	$("div#AddLanguage select#AddLanguageLevel").val("").parent().removeClass("has-feedback has-success has-error");
 	// $("div#AddLanguage select#AddLanguageLevel").attr("disabled", "");
-}
+};
 
 var AddSkillPathCollapsibleZeroize = function()
 {
 	$("div#AddSkill input#AddSkillTitle").val("").parent().removeClass("has-feedback has-success has-error");
-}
+};
 
 
 var AddCertificationPathCollapsibleInit = function()
 {
 	$("div#AddCertification button#AddCertificationAddButton").on("click", AddCertificationAddButtonClickHandler);
 	$("div#AddCertification button#AddCertificationCancelButton").on("click", AddCertificationPathToggleCollapsible);
-}
+};
 
 var AddCoursePathCollapsibleInit = function()
 {
 	$("div#AddCourse button#AddCourseAddButton").on("click", AddCourseAddButtonClickHandler);
 	$("div#AddCourse button#AddCourseCancelButton").on("click", AddCoursePathToggleCollapsible);
-}
+};
 
 var AddSchoolPathCollapsibleInit = function()
 {
 	$("div#AddSchool button#AddSchoolAddButton").on("click", AddSchoolAddButtonClickHandler);
 	$("div#AddSchool button#AddSchoolCancelButton").on("click", AddSchoolPathToggleCollapsible);
-}
+};
 
 var AddUniversityPathCollapsibleInit = function()
 {
 	$("div#AddUniversity button#AddUniversityAddButton").on("click", AddUniversityAddButtonClickHandler);
 	$("div#AddUniversity button#AddUniversityCancelButton").on("click", AddUniversityPathToggleCollapsible);
-}
+};
 
 var AddLanguagePathCollapsibleInit = function()
 {
@@ -553,11 +553,11 @@ var AddCarrierPathCollapsibleInit = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 
 		});
@@ -579,15 +579,15 @@ var AddCarrierPathCollapsibleInit = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		});
 	// --- end AddCarrierPath
-}
+};
 
 var AddCarrierPathCollapsibleInitJobTitle = function()
 {
@@ -600,11 +600,11 @@ var AddCarrierPathCollapsibleInitJobTitle = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
 		close: function (event, ui) 
@@ -631,7 +631,7 @@ var AddCarrierPathCollapsibleInitJobTitle = function()
 			});
 		}
 	});
-}
+};
 
 var AddCertificationPathCollapsibleInitVendorTitle = function()
 {
@@ -644,7 +644,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 				// $("input#AddCertificationTitle").val("").attr("disabled", "");
 				$("input#AddCertificationTitle").parent().removeClass("has-error has-feedback has-success");
 				// $("input#AddCertificationNumber").val("").attr("disabled", "");
@@ -652,7 +652,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 				// $("input#AddCertificationTitle").removeAttr("disabled");
 			}
 		},
@@ -690,13 +690,13 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 				// $("input#AddCourseTitle").val("").attr("disabled", "");
 				$("input#AddCourseTitle").parent().removeClass("has-error has-feedback has-success");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 				// $("input#AddCourseTitle").removeAttr("disabled");
 			}
 		},
@@ -724,7 +724,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 			});
 		}
 	});
-}
+};
 
 var AddCertificationPathCollapsibleInitTracksTitle = function()
 {
@@ -782,11 +782,11 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
 		close: function (event, ui) 
@@ -814,7 +814,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 			});
 		}
 	});
-}
+};
 
 var AddDataForProfileCollapsibleInit = function()
 {
@@ -883,11 +883,11 @@ var AddDataForProfileCollapsibleInit = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
 		close: function (event, ui) 
@@ -924,11 +924,11 @@ var AddDataForProfileCollapsibleInit = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
 		close: function (event, ui) 
@@ -1017,13 +1017,13 @@ var AddDataForProfileCollapsibleInit = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 				// $("select#AddLanguageLevel").val("").attr("disabled", "");
 				$("select#AddLanguageLevel").parent().removeClass("has-error has-feedback has-success");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 				// $("select#AddLanguageLevel").removeAttr("disabled");
 			}
 		},
@@ -1061,11 +1061,11 @@ var AddDataForProfileCollapsibleInit = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
 		close: function (event, ui) 
@@ -1094,7 +1094,7 @@ var AddDataForProfileCollapsibleInit = function()
 	});
 
 
-}
+};
 
 var AddCarrierPathCollapsibleInitCompany = function()
 {
@@ -1107,11 +1107,11 @@ var AddCarrierPathCollapsibleInitCompany = function()
 
 			if($(this).val() == "")
 			{
-				$(this).parent().removeClass("has-success").addClass("has-feedback has-error")
+				$(this).parent().removeClass("has-success").addClass("has-feedback has-error");
 			}
 			else
 			{
-				$(this).parent().removeClass("has-error").addClass("has-feedback has-success")
+				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
 		close: function (event, ui) 
@@ -1138,7 +1138,7 @@ var AddCarrierPathCollapsibleInitCompany = function()
 			});
 		}
 	});
-}
+};
 
 var	GetRegionNameByID = function(regionID)
 {
@@ -1150,7 +1150,7 @@ var	GetRegionNameByID = function(regionID)
 		});
 
 	return regionName;
-}
+};
 
 var AddUniversityUpdateRadioSelect = function()
 {
@@ -1187,58 +1187,58 @@ var AddUniversityUpdateRadioSelect = function()
 										.attr("value", "Другое");
 
 			$("div#AddUniversityRegionRadioButtons").append(divTag.append(labelTag.append(inputTag).append("Другое")));
-		};
+		}
 	}
-}
+};
 
 var AddCarrierPathToggleCollapsible = function()
 {
 	$("#AddCarrierCompany").collapse("toggle");
 	$("#AddCarrierCompanyTitle").focus();
-}
+};
 
 var AddCertificationPathToggleCollapsible = function()
 {
 	$("#AddCertification").collapse("toggle");
 	$("#AddCertificationTitle").focus();
-}
+};
 
 var AddCoursePathToggleCollapsible = function()
 {
 	$("#AddCourse").collapse("toggle");
 	$("#AddCourseTitle").focus();
-}
+};
 
 var AddSchoolPathToggleCollapsible = function()
 {
 	$("#AddSchool").collapse("toggle");
 	$("#AddSchoolLocality").focus();
-}
+};
 
 var AddUniversityPathToggleCollapsible = function()
 {
 	$("#AddUniversity").collapse("toggle");
 	$("#AddUniversityTitle").focus();
-}
+};
 
 var AddLanguagePathToggleCollapsible = function()
 {
 	$("#AddLanguage").collapse("toggle");
 	$("#AddLanguageTitle").focus();
-}
+};
 
 var AddSkillPathToggleCollapsible = function()
 {
 	$("#AddSkill").collapse("toggle");
 	$("#AddSkillTitle").focus();
-}
+};
 
 var AddBookPathToggleCollapsible = function()
 {
 	$("#AddBook").collapse("toggle");
 	$("#AddBookTitle").focus();
 	AddBookAllFieldsReset();
-}
+};
 
 var	AddBookAllFieldsLoading = function()
 {
@@ -1253,7 +1253,7 @@ var	AddBookAllFieldsLoading = function()
 
 	$("#AddBookAddButton").button("loading");
 	$("#AddBookCancelButton").button("loading");
-}
+};
 
 var	AddBookAllFieldsReset = function()
 {
@@ -1268,7 +1268,7 @@ var	AddBookAllFieldsReset = function()
 
 	$("#AddBookAddButton").button("reset");
 	$("#AddBookCancelButton").button("reset");
-}
+};
 
 var	AddBookPathFindBookByISBN10 = function()
 {
@@ -1278,7 +1278,7 @@ var	AddBookPathFindBookByISBN10 = function()
 	{
 		AddBookAllFieldsLoading();
 
-		$.getJSON('/cgi-bin/book.cgi?action=JSON_getBookByISBN10', {id: isbn10})
+		$.getJSON("/cgi-bin/book.cgi?action=JSON_getBookByISBN10", {id: isbn10})
 			.done(function(data) {
 
 				if(data.result === "success")
@@ -1314,11 +1314,11 @@ var	AddBookPathFindBookByISBN10 = function()
 				console.debug("Init: ERROR: " + data.description);
 				system_calls.PopoverError("AddBookISBN10", "Ошибка ответа сервера");
 				AddBookAllFieldsReset();
-			})
+			});
 	}
 	else
 		system_calls.PopoverError("AddBookISBN10", "Напишите ISBN10 для поиска по этому идентификатору.");
-}
+};
 
 var AddCertificationPathPrefillByTitle = function()
 {
@@ -1326,7 +1326,7 @@ var AddCertificationPathPrefillByTitle = function()
 
 	if(certificationTitle.length)
 	{
-		$.getJSON('/cgi-bin/index.cgi?action=JSON_getCertificationDetailsByTitle', {certificationTitle: certificationTitle})
+		$.getJSON("/cgi-bin/index.cgi?action=JSON_getCertificationDetailsByTitle", {certificationTitle: certificationTitle})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1347,7 +1347,7 @@ var AddCertificationPathPrefillByTitle = function()
 				// system_calls.PopoverError("AddCertificationTitle", "Ошибка ответа сервера");
 			});
 	}
-}
+};
 
 var AddCoursePathPrefillByTitle = function()
 {
@@ -1355,7 +1355,7 @@ var AddCoursePathPrefillByTitle = function()
 
 	if(courseTitle.length)
 	{
-		$.getJSON('/cgi-bin/index.cgi?action=JSON_getCourseDetailsByTitle', {courseTitle: courseTitle})
+		$.getJSON("/cgi-bin/index.cgi?action=JSON_getCourseDetailsByTitle", {courseTitle: courseTitle})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1376,7 +1376,7 @@ var AddCoursePathPrefillByTitle = function()
 				// system_calls.PopoverError("AddCourseTitle", "Ошибка ответа сервера");
 			});
 	}
-}
+};
 
 var AddBookPathPrefillISBNs = function()
 {
@@ -1385,7 +1385,7 @@ var AddBookPathPrefillISBNs = function()
 
 	if(bookTitle.length && bookAuthor.length)
 	{
-		$.getJSON('/cgi-bin/book.cgi?action=JSON_getBookISBNsByAuthorAndTitle', {bookTitle: bookTitle, bookAuthor: bookAuthor})
+		$.getJSON("/cgi-bin/book.cgi?action=JSON_getBookISBNsByAuthorAndTitle", {bookTitle: bookTitle, bookAuthor: bookAuthor})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1406,7 +1406,7 @@ var AddBookPathPrefillISBNs = function()
 	}
 	else if(bookTitle.length)
 	{
-		$.getJSON('/cgi-bin/book.cgi?action=JSON_getBookDetailsByTitle', {bookTitle: bookTitle})
+		$.getJSON("/cgi-bin/book.cgi?action=JSON_getBookDetailsByTitle", {bookTitle: bookTitle})
 			.done(function(data) {
 				if(data.result === "success")
 				{
@@ -1427,7 +1427,7 @@ var AddBookPathPrefillISBNs = function()
 				system_calls.PopoverError("AddBookPathPrefillISBNs", "Ошибка ответа сервера");
 			});
 	}
-}
+};
 
 var	AddBookPathFindBookByISBN13 = function()
 {
@@ -1437,7 +1437,7 @@ var	AddBookPathFindBookByISBN13 = function()
 	{
 		AddBookAllFieldsLoading();
 
-		$.getJSON('/cgi-bin/book.cgi?action=JSON_getBookByISBN10', {id: isbn13})
+		$.getJSON("/cgi-bin/book.cgi?action=JSON_getBookByISBN10", {id: isbn13})
 			.done(function(data) {
 
 				if(data.result === "success")
@@ -1477,7 +1477,7 @@ var	AddBookPathFindBookByISBN13 = function()
 	}
 	else
 		system_calls.PopoverError("AddBookISBN13", "Напишите ISBN13 для поиска по этому идентификатору.");
-}
+};
 
 var AddCarrierCompanyAddButtonClickHandler = function()
 {
@@ -1824,7 +1824,7 @@ var AddCourseAddButtonClickHandler = function()
 		}) // --- .always()
 		;
 	}
-}
+};
 
 var AddSchoolAddButtonClickHandler = function()
 {
@@ -1976,7 +1976,7 @@ var AddSchoolAddButtonClickHandler = function()
 		}) // --- .always()
 		;
 	}
-}
+};
 
 var AddUniversityAddButtonClickHandler = function()
 {
@@ -2162,7 +2162,7 @@ var AddUniversityAddButtonClickHandler = function()
 		}) // --- .always()
 		;
 	}
-}
+};
 
 var AddLanguageAddButtonClickHandler = function()
 {
@@ -2249,7 +2249,7 @@ var AddLanguageAddButtonClickHandler = function()
 		}) // --- .always()
 		;
 	}
-}
+};
 
 var AddSkillAddButtonClickHandler = function()
 {
@@ -2314,7 +2314,7 @@ var AddSkillAddButtonClickHandler = function()
 		}) // --- .always()
 		;
 	}
-}
+};
 
 var	AddBookComplainSubmitClickHandler = function(e)
 {
@@ -2327,7 +2327,7 @@ var	AddBookComplainSubmitClickHandler = function(e)
 
 	$("#BookComplainModal").modal("hide");
 
-	$.getJSON('/cgi-bin/book.cgi?action=AJAX_complainBook', {complainBookAuthor: complainBookAuthor, complainBookTitle: complainBookTitle, complainBookISBN10: complainBookISBN10, complainBookISBN13: complainBookISBN13, complainBookCover: complainBookCover, complainBookComment: system_calls.ConvertTextToHTML(complainBookComment)})
+	$.getJSON("/cgi-bin/book.cgi?action=AJAX_complainBook", {complainBookAuthor: complainBookAuthor, complainBookTitle: complainBookTitle, complainBookISBN10: complainBookISBN10, complainBookISBN13: complainBookISBN13, complainBookCover: complainBookCover, complainBookComment: system_calls.ConvertTextToHTML(complainBookComment)})
 		.done(function(data) {
 			var		resultText;
 
@@ -2344,10 +2344,10 @@ var	AddBookComplainSubmitClickHandler = function(e)
 			$("#BookComplainResultModal_ResultText").empty().append(resultText);
 			setTimeout(function() {
 				$("#BookComplainModalResult").modal("show");
-			}, 300)
+			}, 300);
 		});
 
-}
+};
 
 var ComplainSpecifiedImageModal_Show = function()
 {
@@ -2363,7 +2363,7 @@ var ComplainSpecifiedImageModal_Show = function()
 
 	$("#ImageComplainModal").modal("show");
 
-}
+};
 
 var ComplainSpecifiedImageModal_SubmitClickHandler = function()
 {
@@ -2378,7 +2378,7 @@ var ComplainSpecifiedImageModal_SubmitClickHandler = function()
 
 	$("#ImageComplainModal").modal("hide");
 
-	$.getJSON('/cgi-bin/complain.cgi?action=AJAX_SubmitImageComplain', {id: id, type: type})
+	$.getJSON("/cgi-bin/complain.cgi?action=AJAX_SubmitImageComplain", {id: id, type: type})
 		.done(function(data) {
 			var		resultText;
 
@@ -2395,10 +2395,10 @@ var ComplainSpecifiedImageModal_SubmitClickHandler = function()
 			$("#BookComplainResultModal_ResultText").empty().append(resultText);
 			setTimeout(function() {
 				$("#BookComplainModalResult").modal("show");
-			}, 300)
+			}, 300);
 		});
 
-}
+};
 
 
 var	AddBookComplainButtonClickHandler = function(e)
@@ -2428,10 +2428,10 @@ var	AddBookComplainButtonClickHandler = function(e)
 	}
 	else
 	{
-		system_calls.PopoverError(currTag.attr("id"), "Вы не заполнили данные книги, подать жалобу не на что.")
+		system_calls.PopoverError(currTag.attr("id"), "Вы не заполнили данные книги, подать жалобу не на что.");
 	}
 
-}
+};
 
 var AddBookAddButtonClickHandler = function()
 {
@@ -2467,7 +2467,7 @@ var AddBookAddButtonClickHandler = function()
 	{
 		$("#AddBookAddButton").button("loading");
 
-		$.post('/cgi-bin/book.cgi?rand=' + Math.floor(Math.random() * 1000000000), 
+		$.post("/cgi-bin/book.cgi?rand=" + Math.floor(Math.random() * 1000000000), 
 						{
 							"action" : "AJAX_addEditProfileAddBook",
 							"title": system_calls.ConvertTextToHTML(addBook.AddBookTitle),
@@ -2511,7 +2511,7 @@ var AddBookAddButtonClickHandler = function()
 		}) // --- .always()
 		;
 	}
-}
+};
 
 var	AutocompleteWithBookAuthors = function(e)
 {
@@ -2530,7 +2530,7 @@ var	AutocompleteWithBookAuthors = function(e)
 		if(inputValue.length == 3)
 		{
 			$.getJSON(
-				'/cgi-bin/book.cgi',
+				"/cgi-bin/book.cgi",
 				{action:"JSON_getBookAuthorListAutocomplete", lookForKey:inputValue})
 				.done(function(data) {
 						AutocompleteList = [];
@@ -2592,7 +2592,7 @@ var	AutocompleteWithBookAuthors = function(e)
 							source: AutocompleteList
 						});
 		} // --- if(inputValue.length >= 2)
-}
+};
 
 var	AutocompleteWithBookTitles = function(e)
 {
@@ -2611,7 +2611,7 @@ var	AutocompleteWithBookTitles = function(e)
 		if(inputValue.length == 3)
 		{
 			$.getJSON(
-				'/cgi-bin/book.cgi',
+				"/cgi-bin/book.cgi",
 				{action:"JSON_getBookTitleListAutocomplete", lookForKey:inputValue})
 				.done(function(data) {
 						AutocompleteList = [];
@@ -2677,13 +2677,13 @@ var	AutocompleteWithBookTitles = function(e)
 							source: AutocompleteList
 						});
 		} // --- if(inputValue.length >= 2)
-}
+};
 
 
 var	AddCarrierPathCollapsibleCancel = function()
 {
 	$("div#AddCarrierCompany").empty();
-}
+};
 
 var AddCarrierPathCollapsibleCurrentEmploymentClickHandler = function()
 {
@@ -2702,7 +2702,7 @@ var AddCarrierPathCollapsibleCurrentEmploymentClickHandler = function()
 		$("div#AddCarrierCompany input#AddCarrierCompanyEndDate").parent().removeClass("visibility_hidden");
 		$("div#AddCarrierCompany span#AddCarrierCompanyCurrentEmployment img").attr("src", "/images/pages/common/checkbox_unchecked.png");
 	}
-}
+};
 
 var ChangeCurrentStatusClickHandler = function()
 {
@@ -2720,7 +2720,7 @@ var ChangeCurrentStatusClickHandler = function()
 				item.currentCompany = "0";
 			}
 
-			$.getJSON('/cgi-bin/index.cgi?action=AJAX_changeEditProfileCompanyEmploymentEndDateStatus', {companyID: item.companyID})
+			$.getJSON("/cgi-bin/index.cgi?action=AJAX_changeEditProfileCompanyEmploymentEndDateStatus", {companyID: item.companyID})
 				.done(function(data) {
 					if(data.result === "success")
 					{
@@ -2753,7 +2753,7 @@ var	RenderCVandTitle = function()
 
 var	UpdateUserSex = function(userSex)
 {
-	$.getJSON('/cgi-bin/account.cgi?action=AJAX_changeUserSex', {userSex: userSex})
+	$.getJSON("/cgi-bin/account.cgi?action=AJAX_changeUserSex", {userSex: userSex})
 		.done(function(data) {
 			if(data.result === "success")
 			{
@@ -2763,7 +2763,7 @@ var	UpdateUserSex = function(userSex)
 				console.debug("UpdateUserSex: ERROR: " + data.description);
 			}
 		});
-}
+};
 
 var	RenderUserSex = function()
 {
@@ -2784,7 +2784,7 @@ var	RenderUserSex = function()
 	$("input#sexMale").on("click", function() { UpdateUserSex("male"); });
 	$("input#sexFemale").on("click", function () { UpdateUserSex("female"); });
 
-}
+};
 
 var	RenderUserBirthday = function()
 {
@@ -2808,7 +2808,7 @@ var	RenderUserBirthday = function()
 	$("p#paragraphBirthday .editableSpan").mouseenter(editableFuncHighlightBgcolor);
 	$("p#paragraphBirthday .editableSpan").mouseleave(editableFuncNormalizeBgcolor);
 
-}
+};
 
 var	RenderCarrierPath = function()
 {
@@ -3044,7 +3044,7 @@ var	RenderCertificationPath = function()
 	$("div#CertificationPath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#CertificationPath .removeCertificationEntry").on("click", removeCompanyExperience);
-}
+};
 
 var	RenderSchoolPath = function()
 {
@@ -3139,7 +3139,7 @@ var	RenderSchoolPath = function()
 	$("div#SchoolPath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#SchoolPath .removeSchoolEntry").on("click", removeCompanyExperience);
-}
+};
 
 var	RenderUniversityPath = function()
 {
@@ -3245,7 +3245,7 @@ var	RenderUniversityPath = function()
 	$("div#UniversityPath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#UniversityPath .removeUniversityEntry").on("click", removeCompanyExperience);
-}
+};
 
 
 var	RenderCoursePath = function()
@@ -3305,14 +3305,14 @@ var	RenderCoursePath = function()
 								{
 									var		id = $(this).data("id");
 
-									$.getJSON('/cgi-bin/index.cgi?action=AJAX_setCourseRating', {id: usersCoursesID, rating: rating, rand: Math.round(Math.random() * 100000000)})
+									$.getJSON("/cgi-bin/index.cgi?action=AJAX_setCourseRating", {id: usersCoursesID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 									.done(function(data) {
 										if(data.result == "success")
 										{	
 										}
 										else
 										{
-												console.debug("ratingCallback: ERROR: " + data.description)
+												console.debug("ratingCallback: ERROR: " + data.description);
 										}
 									});
 									
@@ -3360,7 +3360,7 @@ var	RenderCoursePath = function()
 	$("div#CoursePath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#CoursePath .removeCourseEntry").on("click", removeCompanyExperience);
-}
+};
 
 var	RenderLanguagePath = function()
 {
@@ -3444,7 +3444,7 @@ var	RenderLanguagePath = function()
 	$("div#LanguagePath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#LanguagePath .removeLanguageEntry").on("click", removeCompanyExperience);
-}
+};
 
 var	RenderSkillPath = function()
 {
@@ -3502,7 +3502,7 @@ var	RenderSkillPath = function()
 	$("div#SkillPath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#SkillPath .removeSkillEntry").on("click", removeCompanyExperience);
-}
+};
 
 var	RenderBookPath = function()
 {
@@ -3567,14 +3567,14 @@ var	RenderBookPath = function()
 								{
 									var		id = $(this).data("id");
 
-									$.getJSON('/cgi-bin/book.cgi?action=AJAX_setBookRating', {id: usersBooksID, rating: rating, rand: Math.round(Math.random() * 100000000)})
+									$.getJSON("/cgi-bin/book.cgi?action=AJAX_setBookRating", {id: usersBooksID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 									.done(function(data) {
 										if(data.result == "success")
 										{	
 										}
 										else
 										{
-												console.debug("ratingCallback: ERROR: " + data.description)
+												console.debug("ratingCallback: ERROR: " + data.description);
 										}
 									});
 									
@@ -3625,7 +3625,7 @@ var	RenderBookPath = function()
 	$("div#BookPath .editableParagraph").mouseleave(editableFuncNormalizeBgcolor);
 
 	$("div#BookPath .removeBookEntry").on("click", removeCompanyExperience);
-}
+};
 
 var	RenderVacancyPath = function()
 {
@@ -3764,7 +3764,7 @@ var	AddCoverUploadClickHandler = function(e)
 	$("#AddGeneralCoverButton").data("uploadCoverID", currTag.data("id"));
 	$("#AddGeneralCoverButton").data("uploadCoverType", currTag.data("type"));
 	$("#AddGeneralCoverButton").click();
-}
+};
 
 var	AddGeneralCoverUploadChangeHandler = function(e)
 {
@@ -3793,7 +3793,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 
 		tmpCanvas.attr("width", finalW)
 				.attr("height", finalH);
-		tmpCanvasCtx = tmpCanvas[0].getContext('2d');
+		tmpCanvasCtx = tmpCanvas[0].getContext("2d");
 		tmpCanvasCtx.drawImage(imgOriginal, 0, 0, finalW, finalH);
 		imgFromCanvas = tmpCanvas[0].toDataURL("image/jpeg", 0.92);
 		blob = DataURItoBlob(imgFromCanvas);
@@ -3811,7 +3811,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 			processData: false,
 			async: true,
 			data: formData,
-			type: 'post',
+			type: "post",
 			success: function(data) {
 				var		jsonObj = JSON.parse(data);
 				console.debug("AddGeneralCoverUploadChangeHandler:upload:successHandler: URL /images/" + uploadCoverType + "/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
@@ -3938,22 +3938,22 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 				var		jsonObj = JSON.parse(data);
 				console.debug("AddGeneralCoverUploadChangeHandler:upload:failHandler:ERROR: " + jsonObj.textStatus);
 			}
-		})
+		});
 
-	}
+	};
 
 	imgOriginal.src = tmpURLObj;
-}
+};
 
 var	InitBirthdayAccessLabel = function()
 {
-	$("#switcherLabelBirthdayDatePublic").data("state", userProfile.birthdayAccess)
+	$("#switcherLabelBirthdayDatePublic").data("state", userProfile.birthdayAccess);
 
 	if(userProfile.birthdayAccess == "public")
 		$("#switcherBirthdayDatePublic").attr("checked", "checked");
 
 	RenderGUIBirthdayAccessLabel();
-}
+};
 
 var	InitAppliedVacanciesLabel = function()
 {
@@ -3963,7 +3963,7 @@ var	InitAppliedVacanciesLabel = function()
 		$("#switcherAppliedVacancies").attr("checked", "checked");
 
 	RenderGUIAppliedVacancies();
-}
+};
 
 var RenderGUIBirthdayAccessLabel = function()
 {
@@ -3973,7 +3973,7 @@ var RenderGUIBirthdayAccessLabel = function()
 		$("#switcherBirthdayDateDescription").empty().append("скрыт");
 	else
 		$("#switcherBirthdayDateDescription").empty().append("открыт");
-}
+};
 
 var RenderGUIAppliedVacancies = function()
 {
@@ -3983,7 +3983,7 @@ var RenderGUIAppliedVacancies = function()
 		$("#switcherAppliedVacanciesDescription").empty().append("Все поданные вакансии");
 	else
 		$("#switcherAppliedVacanciesDescription").empty().append("Вакансии в ожидании");
-}
+};
 
 var BirthdayAccessButtonClickHeader = function(e)
 {
@@ -3996,22 +3996,22 @@ var BirthdayAccessButtonClickHeader = function(e)
 	currentTag.data("state", state);
 	userProfile.birthdayAccess = state;
 
-	$.getJSON('/cgi-bin/account.cgi?action=' + (state == "public" ? "AJAX_editProfile_setBirthdayPublic" : "AJAX_editProfile_setBirthdayPrivate"), {rand: Math.round(Math.random() * 100000000)})
+	$.getJSON("/cgi-bin/account.cgi?action=" + (state == "public" ? "AJAX_editProfile_setBirthdayPublic" : "AJAX_editProfile_setBirthdayPrivate"), {rand: Math.round(Math.random() * 100000000)})
 	.done(function(data) {
 		if(data.result == "success")
 		{	
 		}
 		else
 		{
-				console.debug("BirthdayAccessButtonClickHeader: ERROR: " + data.description)
+				console.debug("BirthdayAccessButtonClickHeader: ERROR: " + data.description);
 		}
 	})
 	.fail(function(data){
-				console.debug("BirthdayAccessButtonClickHeader: ERROR: fail parse server response")
+				console.debug("BirthdayAccessButtonClickHeader: ERROR: fail parse server response");
 	});
 
 	RenderGUIBirthdayAccessLabel();
-}
+};
 
 var AppliedVacanciesButtonClickHeader = function(e)
 {
@@ -4024,23 +4024,23 @@ var AppliedVacanciesButtonClickHeader = function(e)
 	currentTag.data("state", state);
 	userProfile.appliedVacanciesRender = state;
 
-	$.getJSON('/cgi-bin/index.cgi?action=' + (state == "all" ? "AJAX_editProfile_setAppliedVacanciesAll" : "AJAX_editProfile_setAppliedVacanciesInprogress"), {rand: Math.round(Math.random() * 100000000)})
+	$.getJSON("/cgi-bin/index.cgi?action=" + (state == "all" ? "AJAX_editProfile_setAppliedVacanciesAll" : "AJAX_editProfile_setAppliedVacanciesInprogress"), {rand: Math.round(Math.random() * 100000000)})
 	.done(function(data) {
 		if(data.result == "success")
 		{	
 		}
 		else
 		{
-				console.debug("AppliedVacanciesButtonClickHeader: ERROR: " + data.description)
+				console.debug("AppliedVacanciesButtonClickHeader: ERROR: " + data.description);
 		}
 	})
 	.fail(function(data){
-				console.debug("AppliedVacanciesButtonClickHeader: ERROR: fail parse server response")
+				console.debug("AppliedVacanciesButtonClickHeader: ERROR: fail parse server response");
 	});
 
 	RenderGUIAppliedVacancies();
 	RenderVacancyPath();
-}
+};
 
 var AdverseCleanButtonClickHeader = function(e)
 {
@@ -4048,14 +4048,14 @@ var AdverseCleanButtonClickHeader = function(e)
 	var   triggeredAction = currentTag.data("action");
 	var   triggeredID = currentTag.data("id");
 
-	$.getJSON('/cgi-bin/index.cgi?action=' + triggeredAction, {id: triggeredID, rand: Math.round(Math.random() * 100000000)})
+	$.getJSON("/cgi-bin/index.cgi?action=" + triggeredAction, {id: triggeredID, rand: Math.round(Math.random() * 100000000)})
 	.done(function(data) {
 		if(data.result == "success")
 		{	
 		}
 		else
 		{
-				console.debug("AdverseCleanButtonClickHeader: ERROR: " + data.description)
+				console.debug("AdverseCleanButtonClickHeader: ERROR: " + data.description);
 		}
 	});
 
@@ -4080,8 +4080,8 @@ var AdverseCleanButtonClickHeader = function(e)
 				$("#switcherStateRecommendation" + triggeredID + "Comment").empty().append("опубликована");
 			}
 		}
-	})
-}
+	});
+};
 
 var	RenderRecommendationPath = function()
 {
@@ -4167,7 +4167,7 @@ var	RenderRecommendationPath = function()
 			var		divSwitcher = $("<div>").addClass("form-switcher");
 			var   	switcherButton = $("<input>").attr("type", "checkbox")
 												.attr("id", "switcherStateRecommendation" + item.recommendationID)
-												.attr("name", "switcherStateRecommendation" + item.recommendationID)
+												.attr("name", "switcherStateRecommendation" + item.recommendationID);
 			var   	switcherLabel = $("<label>").addClass("switcher")
 												.attr("for", "switcherStateRecommendation" + item.recommendationID)
 												.attr("data-id", item.recommendationID)
@@ -4175,15 +4175,15 @@ var	RenderRecommendationPath = function()
 
 			if((item.recommendationState == "adverse") || (item.recommendationState == "potentially adverse"))
 			{
-				divRecommendationTitle.append("скрыта")
+				divRecommendationTitle.append("скрыта");
 
 				switcherLabel.attr("data-action", "AJAX_editProfile_setRecommendationClean");
 			}
 			else
 			{
-				divRecommendationTitle.append("опубликована")
+				divRecommendationTitle.append("опубликована");
 
-				switcherLabel.attr("data-action", "AJAX_editProfile_setRecommendationAdverse")
+				switcherLabel.attr("data-action", "AJAX_editProfile_setRecommendationAdverse");
 				switcherButton.attr("checked", "");
 			}
 
@@ -4388,7 +4388,7 @@ var	DeletePreviewAvatar = function (id)
 var DrawAllAvatars = function()
 {
 	// --- AJAX avatar list download 
-	$.getJSON('/cgi-bin/index.cgi?action=JSON_getAvatarList', {param1: ""})
+	$.getJSON("/cgi-bin/index.cgi?action=JSON_getAvatarList", {param1: ""})
 		.done(function(data) {
 			var		i;
 
@@ -4508,12 +4508,12 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).on("keyup", keyupEventHandler);
 		$(tag).on("change", selectChangeHandler);
 		$(tag).on("blur", selectChangeHandler);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
 		}
-	}
+	};
 
 	var	editableFuncReplaceSpanToSelectUniversityDegree = function () 
 	{
@@ -4576,12 +4576,12 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).on("keyup", keyupEventHandler);
 		$(tag).on("change", selectChangeHandler);
 		$(tag).on("blur", selectChangeHandler);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
 		}
-	}
+	};
 
 	var	editableFuncReplaceSpanToSelectLanguageLevel = function () 
 	{
@@ -4641,12 +4641,12 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).on("keyup", keyupEventHandler);
 		$(tag).on("change", selectChangeHandler);
 		$(tag).on("blur", selectChangeHandler);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
 		}
-	}
+	};
 
 	var	editableFuncReplaceToInput = function () {
 		var	curr_year = system_calls.GetTodaysYear();
@@ -4693,12 +4693,12 @@ var	ajaxReturnSuccess = function(data) {
 		// $(tag).data("action", $(this).data("action"));
 		{
 			var thisTag = this;
-			Object.keys($(thisTag).data()).forEach(function(item) { $(tag).data(item, $(thisTag).data(item)); })
+			Object.keys($(thisTag).data()).forEach(function(item) { $(tag).data(item, $(thisTag).data(item)); });
 		}
 
 		$(this).replaceWith(tag);
 		$(tag).on("keyup", keyupEventHandler);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 
 		if($(tag).data("action") == "AJAX_updateFirstName") 
 		{
@@ -5287,7 +5287,7 @@ var	ajaxReturnSuccess = function(data) {
 		});
 
 		currentTag.replaceWith(tag);
-		$(tag).removeClass('editable_highlighted_class');
+		$(tag).removeClass("editable_highlighted_class");
 		$(tag).after(tagButtonAccept);
 		$(tag).after(tagButtonReject);
 		$(tag).on("keyup", keyupEventHandler);
@@ -5372,7 +5372,7 @@ var	ajaxReturnSuccess = function(data) {
 						{
 							item.occupationStart = ajaxValue;
 						}
-					})
+					});
 				});
 		}
 		else
@@ -5403,7 +5403,7 @@ var	ajaxReturnSuccess = function(data) {
 					{
 						item.occupationStart = ajaxValue;
 					}
-				})
+				});
 
 				console.debug("UpdateOccupationStartDatePickerOnChangeHandler: exit");
 			});
@@ -5418,7 +5418,7 @@ var	ajaxReturnSuccess = function(data) {
 		console.debug("UpdateOccupationFinishDatePickerOnChangeHandler change event");
 		$(this).prev().datepicker("option", "maxDate", ajaxValue);
 		$.getJSON(
-			'/cgi-bin/index.cgi',
+			"/cgi-bin/index.cgi",
 			{action:ajaxAction, id:ajaxActionID, value:ajaxValue},
 			function (data) 
 			{
@@ -5430,7 +5430,7 @@ var	ajaxReturnSuccess = function(data) {
 					{
 						item.occupationFinish = ajaxValue;
 					}
-				})
+				});
 
 				console.debug("UpdateOccupationFinishDatePickerOnChangeHandler: exit");
 			}
@@ -5464,7 +5464,7 @@ var	ajaxReturnSuccess = function(data) {
 				currentTag.autocomplete("destroy");
 
 			// --- copying data attributes
-			Object.keys($(currentTag).data()).forEach(function(item) { $(newTag).data(item, $(currentTag).data(item)); })
+			Object.keys($(currentTag).data()).forEach(function(item) { $(newTag).data(item, $(currentTag).data(item)); });
 
 			setTimeout(function(){ currentTag.replaceWith(newTag); }, 100);
 			$(newTag).on("click", editableFuncReplaceToInput);

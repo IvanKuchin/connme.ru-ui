@@ -43,12 +43,12 @@ var find_friends = (function()
 		}
 
 		return tempTag;
-	}
+	};
 
 	var	SendRequestAndRefreshList = function(action, lookForKey)
 	{
 
-		$.getJSON('/cgi-bin/index.cgi', {action:action, lookForKey:lookForKey})
+		$.getJSON("/cgi-bin/index.cgi", {action:action, lookForKey:lookForKey})
 			.done(function(data) 
 			{
 				JSON_FindFriendsList = data;
@@ -58,7 +58,7 @@ var find_friends = (function()
 			.fail(function() {
 				console.debug("ERROR: parsing JSON response from server");
 			});
-	}
+	};
 
 	var	JSON_getFindFriendByID = function (event, ui) 
 	{
@@ -80,7 +80,7 @@ var find_friends = (function()
 			// --- tooltip alert
 			system_calls.PopoverError("friendSearchText", "Напишите более 2 букв");
 		}
-	}
+	};
 
 	var	FindFriendsOnKeyupHandler = function(event)
 	{
@@ -96,6 +96,6 @@ var find_friends = (function()
 
 	return {
 		Init: Init
-	}
+	};
 })();
 

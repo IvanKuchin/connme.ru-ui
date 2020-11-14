@@ -14,7 +14,7 @@
 
 PreviewImageControl = function ()
 {
-	'use strict';
+	"use strict";
 
 	var		img_tag_global;
 	var		rotation;
@@ -27,7 +27,7 @@ PreviewImageControl = function ()
 		var regex = /exif_rotate\-(\d+)/;
 		var	regex_match = img_tag_global.attr("class").match(regex);
 
-		img_tag_global.css({'left':'0px', 'top':'0px'}); // --- reset drag-n-drop position
+		img_tag_global.css({"left":"0px", "top":"0px"}); // --- reset drag-n-drop position
 		rotation	= 0;
 		scaleX		= 1;
 		scaleY		= 1;
@@ -126,7 +126,7 @@ PreviewImageControl = function ()
 
 	var	Update = function()
 	{
-		img_tag_global.css({'transform': 'rotateZ(' + rotation + 'deg) scaleX(' + scaleX + ') scaleY(' + scaleY + ')'});
+		img_tag_global.css({"transform": "rotateZ(" + rotation + "deg) scaleX(" + scaleX + ") scaleY(" + scaleY + ")"});
 	};
 
 	var	RotateLeft = function()
@@ -136,7 +136,7 @@ PreviewImageControl = function ()
 		rotation = rotation - 90;
 		Update();
 
-		$.getJSON('/cgi-bin/anyrole_1.cgi?action=AJAX_rotateImageCounterclockwise', {id: id})
+		$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_rotateImageCounterclockwise", {id: id})
 				.done(function(data) {
 					if(data.result == "success")
 					{
@@ -157,7 +157,7 @@ PreviewImageControl = function ()
 		rotation = rotation + 90;
 		Update();
 
-		$.getJSON('/cgi-bin/anyrole_1.cgi?action=AJAX_rotateImageClockwise', {id: id})
+		$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_rotateImageClockwise", {id: id})
 				.done(function(data) {
 					if(data.result == "success")
 					{
@@ -180,7 +180,7 @@ PreviewImageControl = function ()
 			scaleY = -scaleY;
 		Update();
 
-		$.getJSON('/cgi-bin/anyrole_1.cgi?action=AJAX_flipImageHorizontal', {id: id})
+		$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_flipImageHorizontal", {id: id})
 				.done(function(data) {
 					if(data.result == "success")
 					{
@@ -203,7 +203,7 @@ PreviewImageControl = function ()
 			scaleX = -scaleX;
 		Update();
 
-		$.getJSON('/cgi-bin/anyrole_1.cgi?action=AJAX_flipImageVertical', {id: id})
+		$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_flipImageVertical", {id: id})
 				.done(function(data) {
 					if(data.result == "success")
 					{
