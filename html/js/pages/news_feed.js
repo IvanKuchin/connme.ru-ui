@@ -504,7 +504,7 @@ news_feed = (function()
 					});
 				$('.modal').on('hidden.bs.modal', function() {
 						$('.iOS-device').css('top', 0);
-						$(window).scrollTop(modalScrollPosition);    
+						$(window).scrollTop(modalScrollPosition);	
 					});
 			}
 

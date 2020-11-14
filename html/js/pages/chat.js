@@ -65,7 +65,7 @@ chat = (function()
 	  if( !escapable.test(quoted)) return quoted;
 
 	  return quoted.replace( escapable, function(a){
-	    return '';
+		return '';
 	  });
 	}
 */
@@ -726,9 +726,9 @@ chat = (function()
 									.addClass("message_pane_intermessage_interval")
 									.attr("data-messageID", messageObj.id)
 									.hover( function() { $(this).children("div.message_pane_timestamp").removeClass("message_pane_timestamp_white"); }, function() { $(this).children("div.message_pane_timestamp").addClass("message_pane_timestamp_white"); } );
-		var		divAvatarFromMe     	= $("<div>").addClass("col-lg-1 col-md-2 col-sm-2 col-xs-0 hidden-xs");
+		var		divAvatarFromMe	 	= $("<div>").addClass("col-lg-1 col-md-2 col-sm-2 col-xs-0 hidden-xs");
 		var		divAvatarFromFriend 	= $("<div>").addClass("col-lg-1 col-md-2 col-sm-2 col-xs-0 hidden-xs");
-		var		divTimestampFromMe    	= $("<div>").addClass("col-lg-2 col-md-2 col-sm-2 col-xs-0 hidden-xs message_pane_timestamp message_pane_timestamp_white animateClass message_pane_align_right ")
+		var		divTimestampFromMe		= $("<div>").addClass("col-lg-2 col-md-2 col-sm-2 col-xs-0 hidden-xs message_pane_timestamp message_pane_timestamp_white animateClass message_pane_align_right ")
 													.append(GetMessageTimestamp(messageObj));
 		var		divTimestampFromFriend	= $("<div>").addClass("col-lg-2 col-md-2 col-sm-2 col-xs-0 hidden-xs message_pane_timestamp message_pane_timestamp_white animateClass ")
 													.append(GetMessageTimestamp(messageObj));
@@ -1081,22 +1081,22 @@ chat = (function()
 	var	EmojiClickHandler = function()
 	{
 		function InsertAtCursor(myField, myValue) {
-		    //IE support
-		    if (document.selection) {
-		        myField.focus();
-		        sel = document.selection.createRange();
-		        sel.text = myValue;
-		    }
-		    //MOZILLA and others
-		    else if (myField.selectionStart || myField.selectionStart == '0') {
-		        var startPos = myField.selectionStart;
-		        var endPos = myField.selectionEnd;
-		        myField.value = myField.value.substring(0, startPos)
-		            + myValue
-		            + myField.value.substring(endPos, myField.value.length);
-		    } else {
-		        myField.value += myValue;
-		    }
+			//IE support
+			if (document.selection) {
+				myField.focus();
+				sel = document.selection.createRange();
+				sel.text = myValue;
+			}
+			//MOZILLA and others
+			else if (myField.selectionStart || myField.selectionStart == '0') {
+				var startPos = myField.selectionStart;
+				var endPos = myField.selectionEnd;
+				myField.value = myField.value.substring(0, startPos)
+					+ myValue
+					+ myField.value.substring(endPos, myField.value.length);
+			} else {
+				myField.value += myValue;
+			}
 		}
 
 		console.debug("shortcut: " + $(this).data("shortcut"));

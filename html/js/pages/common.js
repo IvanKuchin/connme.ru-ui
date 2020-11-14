@@ -633,6 +633,11 @@ system_calls = (function()
 		return	result;
 	};
 
+	var	GetTodaysYear = function()
+	{
+		return new Date().getFullYear();
+	};
+
 	var	GetLocalizedDateFromSecondsHumanFormat = function(seconds)
 	{
 		// TODO: 2delete @ June 1, 2017
@@ -793,7 +798,7 @@ system_calls = (function()
 	// --- 			2 месяца 
 	// --- 			1 год 2 месяца 
 	// --- 			3 года 11 месяцев 
-	// ---                           ^^^^^^ (no days, no hours, no minutes)	
+	// ---						   ^^^^^^ (no days, no hours, no minutes)	
 	var	GetLocalizedWorkDurationFromDelta = function(seconds)
 	{
 		var		result = "";
@@ -1252,7 +1257,7 @@ system_calls = (function()
 	}; // --- RenderFriendshipButtons
 
 	// --- input:
-	//            callbackFunc - function called on click event
+	//			callbackFunc - function called on click event
 	var	BuildCompanySingleBlock = function(item, i, arr, callbackFunc)
 	{
 		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3, tagUl5;
@@ -1265,7 +1270,7 @@ system_calls = (function()
 		divColLogo 	= $("<div/>").addClass("col-lg-1 col-md-1 col-sm-2 hidden-xs margin_top_bottom_15_0");
 		tagA3   	= $("<a>").attr("href", "/company/" + item.link + "?rand=" + Math.random() * 1234567890);
 		// tagImg3 	= $("<img>").attr("src", item["avatar"])
-		//                         .attr("height", "80");
+		//						 .attr("height", "80");
 		tagCanvas3	= $("<canvas>").attr("width", "80")
 									.attr("height", "80")
 									.addClass('canvas-big-logo');
@@ -1281,7 +1286,7 @@ system_calls = (function()
 		divContainer.append(divRow)
 					.append(divRowXSButtons.append(divColXSButtons));
 		divRow 		.append(divColLogo)
-				    .append(divInfo);
+					.append(divInfo);
 		divColLogo	.append(tagA3);
 		tagA3		.append(tagImg3);
 		tagA3		.append(tagCanvas3);
@@ -1297,7 +1302,7 @@ system_calls = (function()
 	};
 
 	// --- input:
-	//            callbackFunc - function called on click event
+	//			callbackFunc - function called on click event
 	var	BuildGroupSingleBlock = function(item, i, arr, callbackFunc)
 	{
 		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3, tagUl5;
@@ -1310,7 +1315,7 @@ system_calls = (function()
 		divColLogo 	= $("<div/>").addClass("col-lg-1 col-md-1 col-sm-2 hidden-xs margin_top_bottom_15_0");
 		tagA3   	= $("<a>").attr("href", "/group/" + item.link + "?rand=" + GetUUID());
 		// tagImg3 	= $("<img>").attr("src", item["avatar"])
-		//                         .attr("height", "80");
+		//						 .attr("height", "80");
 		tagCanvas3	= $("<canvas>").attr("width", "80")
 									.attr("height", "80")
 									.addClass('canvas-big-logo');
@@ -1326,7 +1331,7 @@ system_calls = (function()
 		divContainer.append(divRow)
 					.append(divRowXSButtons.append(divColXSButtons));
 		divRow 		.append(divColLogo)
-				    .append(divInfo);
+					.append(divInfo);
 		divColLogo	.append(tagA3);
 		tagA3		.append(tagImg3);
 		tagA3		.append(tagCanvas3);
@@ -1429,7 +1434,7 @@ system_calls = (function()
 		tagDiv3 	= $("<div/>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3 margin_top_bottom_15_0");
 		tagA3   	= $("<a>").attr("href", "/userprofile/" + item.id);
 		// tagImg3 	= $("<img>").attr("src", item["avatar"])
-		//                         .attr("height", "80");
+		//						 .attr("height", "80");
 		tagCanvas3	= $("<canvas>").attr("width", "80")
 									.attr("height", "80")
 									.addClass('canvas-big-avatar');
@@ -1447,7 +1452,7 @@ system_calls = (function()
 		tagDiv1.append(tagDiv2);
 		tagDiv2 .append(tagDiv3)
 				.append(tagDivButtons)
-			    .append(tagDiv4);
+				.append(tagDiv4);
 		tagDiv3.append(tagA3);
 		tagA3.append(tagImg3);
 		tagA3.append(tagCanvas3);
@@ -1740,6 +1745,7 @@ system_calls = (function()
 		GetHoursSpelling: GetHoursSpelling,
 		GetDaysSpelling: GetDaysSpelling,
 		GetMonthsSpelling: GetMonthsSpelling,
+		GetTodaysYear: GetTodaysYear,
 
 		GetAvatarsList: GetAvatarsList,
 
@@ -2159,7 +2165,7 @@ var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast)
 // --- user avatar - fit into quad with shortest side (crop other dimension)
 // --- company log - fit into quad with longest side (no crop)
 // --- INPUT:
-//            usually userNameLast = ""
+//			usually userNameLast = ""
 var DrawCompanyAvatar = function(canvas, avatarPath, userName, userNameLast)
 {
 	"use strict";
@@ -2993,7 +2999,7 @@ system_notifications = (function ()
 				{
 					if (Notification.permission !== 'denied') 
 					{
-					    Notification.requestPermission();
+						Notification.requestPermission();
 					}
 					else
 					{
@@ -3033,7 +3039,7 @@ troubleshooting = (function ()
 
 		var callback = function(stackframes) {
 		  var stringifiedStack = stackframes.map(function(sf) {
-		    return sf.toString();
+			return sf.toString();
 		  }).join('\n');
 		  traceback += stringifiedStack + "\n";
 
@@ -3079,147 +3085,147 @@ troubleshooting = (function ()
  */
 (function (global) {
 
-    var apple_phone         = /iPhone/i,
-        apple_ipod          = /iPod/i,
-        apple_tablet        = /iPad/i,
-        android_phone       = /(?=.*\bAndroid\b)(?=.*\bMobile\b)/i, // Match 'Android' AND 'Mobile'
-        android_tablet      = /Android/i,
-        amazon_phone        = /(?=.*\bAndroid\b)(?=.*\bSD4930UR\b)/i,
-        amazon_tablet       = /(?=.*\bAndroid\b)(?=.*\b(?:KFOT|KFTT|KFJWI|KFJWA|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|KFARWI|KFASWI|KFSAWI|KFSAWA)\b)/i,
-        windows_phone       = /Windows Phone/i,
-        windows_tablet      = /(?=.*\bWindows\b)(?=.*\bARM\b)/i, // Match 'Windows' AND 'ARM'
-        other_blackberry    = /BlackBerry/i,
-        other_blackberry_10 = /BB10/i,
-        other_opera         = /Opera Mini/i,
-        other_chrome        = /(CriOS|Chrome)(?=.*\bMobile\b)/i,
-        other_firefox       = /(?=.*\bFirefox\b)(?=.*\bMobile\b)/i, // Match 'Firefox' AND 'Mobile'
-        seven_inch = new RegExp(
-            '(?:' +         // Non-capturing group
+	var apple_phone		 = /iPhone/i,
+		apple_ipod		  = /iPod/i,
+		apple_tablet		= /iPad/i,
+		android_phone	   = /(?=.*\bAndroid\b)(?=.*\bMobile\b)/i, // Match 'Android' AND 'Mobile'
+		android_tablet	  = /Android/i,
+		amazon_phone		= /(?=.*\bAndroid\b)(?=.*\bSD4930UR\b)/i,
+		amazon_tablet	   = /(?=.*\bAndroid\b)(?=.*\b(?:KFOT|KFTT|KFJWI|KFJWA|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|KFARWI|KFASWI|KFSAWI|KFSAWA)\b)/i,
+		windows_phone	   = /Windows Phone/i,
+		windows_tablet	  = /(?=.*\bWindows\b)(?=.*\bARM\b)/i, // Match 'Windows' AND 'ARM'
+		other_blackberry	= /BlackBerry/i,
+		other_blackberry_10 = /BB10/i,
+		other_opera		 = /Opera Mini/i,
+		other_chrome		= /(CriOS|Chrome)(?=.*\bMobile\b)/i,
+		other_firefox	   = /(?=.*\bFirefox\b)(?=.*\bMobile\b)/i, // Match 'Firefox' AND 'Mobile'
+		seven_inch = new RegExp(
+			'(?:' +		 // Non-capturing group
 
-            'Nexus 7' +     // Nexus 7
+			'Nexus 7' +	 // Nexus 7
 
-            '|' +           // OR
+			'|' +		   // OR
 
-            'BNTV250' +     // B&N Nook Tablet 7 inch
+			'BNTV250' +	 // B&N Nook Tablet 7 inch
 
-            '|' +           // OR
+			'|' +		   // OR
 
-            'Kindle Fire' + // Kindle Fire
+			'Kindle Fire' + // Kindle Fire
 
-            '|' +           // OR
+			'|' +		   // OR
 
-            'Silk' +        // Kindle Fire, Silk Accelerated
+			'Silk' +		// Kindle Fire, Silk Accelerated
 
-            '|' +           // OR
+			'|' +		   // OR
 
-            'GT-P1000' +    // Galaxy Tab 7 inch
+			'GT-P1000' +	// Galaxy Tab 7 inch
 
-            ')',            // End non-capturing group
+			')',			// End non-capturing group
 
-            'i');           // Case-insensitive matching
+			'i');		   // Case-insensitive matching
 
-    var match = function(regex, userAgent) {
-        return regex.test(userAgent);
-    };
+	var match = function(regex, userAgent) {
+		return regex.test(userAgent);
+	};
 
-    var IsMobileClass = function(userAgent) {
-        var ua = userAgent || navigator.userAgent;
+	var IsMobileClass = function(userAgent) {
+		var ua = userAgent || navigator.userAgent;
 
-        // Facebook mobile app's integrated browser adds a bunch of strings that
-        // match everything. Strip it out if it exists.
-        var tmp = ua.split('[FBAN');
-        if (typeof tmp[1] !== 'undefined') {
-            ua = tmp[0];
-        }
+		// Facebook mobile app's integrated browser adds a bunch of strings that
+		// match everything. Strip it out if it exists.
+		var tmp = ua.split('[FBAN');
+		if (typeof tmp[1] !== 'undefined') {
+			ua = tmp[0];
+		}
 
-        // Twitter mobile app's integrated browser on iPad adds a "Twitter for
-        // iPhone" string. Same probable happens on other tablet platforms.
-        // This will confuse detection so strip it out if it exists.
-        tmp = ua.split('Twitter');
-        if (typeof tmp[1] !== 'undefined') {
-            ua = tmp[0];
-        }
+		// Twitter mobile app's integrated browser on iPad adds a "Twitter for
+		// iPhone" string. Same probable happens on other tablet platforms.
+		// This will confuse detection so strip it out if it exists.
+		tmp = ua.split('Twitter');
+		if (typeof tmp[1] !== 'undefined') {
+			ua = tmp[0];
+		}
 
-        this.apple = {
-            phone:  match(apple_phone, ua),
-            ipod:   match(apple_ipod, ua),
-            tablet: !match(apple_phone, ua) && match(apple_tablet, ua),
-            device: match(apple_phone, ua) || match(apple_ipod, ua) || match(apple_tablet, ua)
-        };
-        this.amazon = {
-            phone:  match(amazon_phone, ua),
-            tablet: !match(amazon_phone, ua) && match(amazon_tablet, ua),
-            device: match(amazon_phone, ua) || match(amazon_tablet, ua)
-        };
-        this.android = {
-            phone:  match(amazon_phone, ua) || match(android_phone, ua),
-            tablet: !match(amazon_phone, ua) && !match(android_phone, ua) && (match(amazon_tablet, ua) || match(android_tablet, ua)),
-            device: match(amazon_phone, ua) || match(amazon_tablet, ua) || match(android_phone, ua) || match(android_tablet, ua)
-        };
-        this.windows = {
-            phone:  match(windows_phone, ua),
-            tablet: match(windows_tablet, ua),
-            device: match(windows_phone, ua) || match(windows_tablet, ua)
-        };
-        this.other = {
-            blackberry:   match(other_blackberry, ua),
-            blackberry10: match(other_blackberry_10, ua),
-            opera:        match(other_opera, ua),
-            firefox:      match(other_firefox, ua),
-            chrome:       match(other_chrome, ua),
-            device:       match(other_blackberry, ua) || match(other_blackberry_10, ua) || match(other_opera, ua) || match(other_firefox, ua) || match(other_chrome, ua)
-        };
-        this.seven_inch = match(seven_inch, ua);
-        this.any = this.apple.device || this.android.device || this.windows.device || this.other.device || this.seven_inch;
+		this.apple = {
+			phone:  match(apple_phone, ua),
+			ipod:   match(apple_ipod, ua),
+			tablet: !match(apple_phone, ua) && match(apple_tablet, ua),
+			device: match(apple_phone, ua) || match(apple_ipod, ua) || match(apple_tablet, ua)
+		};
+		this.amazon = {
+			phone:  match(amazon_phone, ua),
+			tablet: !match(amazon_phone, ua) && match(amazon_tablet, ua),
+			device: match(amazon_phone, ua) || match(amazon_tablet, ua)
+		};
+		this.android = {
+			phone:  match(amazon_phone, ua) || match(android_phone, ua),
+			tablet: !match(amazon_phone, ua) && !match(android_phone, ua) && (match(amazon_tablet, ua) || match(android_tablet, ua)),
+			device: match(amazon_phone, ua) || match(amazon_tablet, ua) || match(android_phone, ua) || match(android_tablet, ua)
+		};
+		this.windows = {
+			phone:  match(windows_phone, ua),
+			tablet: match(windows_tablet, ua),
+			device: match(windows_phone, ua) || match(windows_tablet, ua)
+		};
+		this.other = {
+			blackberry:   match(other_blackberry, ua),
+			blackberry10: match(other_blackberry_10, ua),
+			opera:		match(other_opera, ua),
+			firefox:	  match(other_firefox, ua),
+			chrome:	   match(other_chrome, ua),
+			device:	   match(other_blackberry, ua) || match(other_blackberry_10, ua) || match(other_opera, ua) || match(other_firefox, ua) || match(other_chrome, ua)
+		};
+		this.seven_inch = match(seven_inch, ua);
+		this.any = this.apple.device || this.android.device || this.windows.device || this.other.device || this.seven_inch;
 
-        // excludes 'other' devices and ipods, targeting touchscreen phones
-        this.phone = this.apple.phone || this.android.phone || this.windows.phone;
+		// excludes 'other' devices and ipods, targeting touchscreen phones
+		this.phone = this.apple.phone || this.android.phone || this.windows.phone;
 
-        // excludes 7 inch devices, classifying as phone or tablet is left to the user
-        this.tablet = this.apple.tablet || this.android.tablet || this.windows.tablet;
+		// excludes 7 inch devices, classifying as phone or tablet is left to the user
+		this.tablet = this.apple.tablet || this.android.tablet || this.windows.tablet;
 
-        if (typeof window === 'undefined') {
-            return this;
-        }
-    };
+		if (typeof window === 'undefined') {
+			return this;
+		}
+	};
 
-    var instantiate = function() {
-        var IM = new IsMobileClass();
-        IM.Class = IsMobileClass;
-        return IM;
-    };
+	var instantiate = function() {
+		var IM = new IsMobileClass();
+		IM.Class = IsMobileClass;
+		return IM;
+	};
 
-    if (typeof module !== 'undefined' && module.exports && typeof window === 'undefined') {
-        //node
-        module.exports = IsMobileClass;
-    } else if (typeof module !== 'undefined' && module.exports && typeof window !== 'undefined') {
-        //browserify
-        module.exports = instantiate();
-    } else if (typeof define === 'function' && define.amd) {
-        //AMD
-        define('isMobile', [], global.isMobile = instantiate());
-    } else {
-        global.isMobile = instantiate();
-    }
+	if (typeof module !== 'undefined' && module.exports && typeof window === 'undefined') {
+		//node
+		module.exports = IsMobileClass;
+	} else if (typeof module !== 'undefined' && module.exports && typeof window !== 'undefined') {
+		//browserify
+		module.exports = instantiate();
+	} else if (typeof define === 'function' && define.amd) {
+		//AMD
+		define('isMobile', [], global.isMobile = instantiate());
+	} else {
+		global.isMobile = instantiate();
+	}
 
 })(this);
 
 
 String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.split(search).join(replacement);
+	var target = this;
+	return target.split(search).join(replacement);
 };
 
 String.prototype.trimLeft = function(charlist) {
   if (charlist === undefined)
-    charlist = "\\s";
+	charlist = "\\s";
 
   return this.replace(new RegExp("^[" + charlist + "]+"), "");
 };
 
 String.prototype.trimRight = function(charlist) {
   if (charlist === undefined)
-    charlist = "\\s";
+	charlist = "\\s";
 
   return this.replace(new RegExp("[" + charlist + "]+$"), "");
 };
@@ -3229,20 +3235,20 @@ String.prototype.trim = function(charlist) {
 };
 
 $.fn.selectRange = function(start, end) {
-    var e = document.getElementById($(this).attr('id')); // I don't know why... but $(this) don't want to work today :-/
-    if (!e) return;
-    else if (e.setSelectionRange) { e.focus(); e.setSelectionRange(start, end); } /* WebKit */ 
-    else if (e.createTextRange) { var range = e.createTextRange(); range.collapse(true); range.moveEnd('character', end); range.moveStart('character', start); range.select(); } /* IE */
-    else if (e.selectionStart) { e.selectionStart = start; e.selectionEnd = end; }
+	var e = document.getElementById($(this).attr('id')); // I don't know why... but $(this) don't want to work today :-/
+	if (!e) return;
+	else if (e.setSelectionRange) { e.focus(); e.setSelectionRange(start, end); } /* WebKit */ 
+	else if (e.createTextRange) { var range = e.createTextRange(); range.collapse(true); range.moveEnd('character', end); range.moveStart('character', start); range.select(); } /* IE */
+	else if (e.selectionStart) { e.selectionStart = start; e.selectionEnd = end; }
 };
 
 $.urlParam = function(name)
 {
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results === null){
-       return "";
-    }
-    else{
-       return decodeURI(results[1]) || "";
-    }
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	if (results === null){
+	   return "";
+	}
+	else{
+	   return decodeURI(results[1]) || "";
+	}
 };

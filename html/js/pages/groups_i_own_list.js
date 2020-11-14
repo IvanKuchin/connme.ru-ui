@@ -3,7 +3,7 @@ var	groups_i_own_list = groups_i_own_list || {};
 
 var	groups_i_own_list = (function()
 {
-    'use strict';
+	'use strict';
 
 	var	JSON_FindGroupsList_Autocomplete = [];
 	var JSON_MyGroupsList;
@@ -204,13 +204,13 @@ var	groups_i_own_list = (function()
 									currentCategory = "";
 									$.each( items, function( index, item ) {
 										var li;
-									    if ( item.category != currentCategory ) {
-									    	ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-									        currentCategory = item.category;
-									    }
+										if ( item.category != currentCategory ) {
+											ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+											currentCategory = item.category;
+										}
 										li = that._renderItemData( ul, item );
 										if ( item.category ) {
-										    li.attr( "aria-label", item.category + " : " + item.label + item.login );
+											li.attr( "aria-label", item.category + " : " + item.label + item.login );
 										} // --- getJSON.done() autocomplete.renderMenu foreach() if(item.category)
 									}); // --- getJSON.done() autocomplete.renderMenu foreach()
 								} // --- getJSON.done() autocomplete.renderMenu

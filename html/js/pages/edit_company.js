@@ -87,57 +87,57 @@ edit_company = (function()
 
 		// --- Image uploader
 		$(function () {
-		    // Change this to the location of your server-side upload handler:
-		    $('#fileupload').fileupload({
-		        url: '/cgi-bin/companylogouploader.cgi?uploadType=companyLogo',
-		        formData: {companyid:companyProfile.id},
-		        dataType: 'json',
-		        maxFileSize: 30 * 1024 * 1024, 
-		        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+			// Change this to the location of your server-side upload handler:
+			$('#fileupload').fileupload({
+				url: '/cgi-bin/companylogouploader.cgi?uploadType=companyLogo',
+				formData: {companyid:companyProfile.id},
+				dataType: 'json',
+				maxFileSize: 30 * 1024 * 1024, 
+				acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 
 
-		        done: function (e, data) {
+				done: function (e, data) {
 
-		        	$.each(data.result, function(index, value) 
-		        		{
-			            	if(value.result == "error")
-			            	{
-			            		console.debug("fileupload: done handler: ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
-			            		if(value.textStatus == "wrong format")
-			            		{
-				            		$("#UploadAvatarErrorBS_ImageName").text(value.fileName);
-				            		$("#UploadAvatarErrorBS").modal("show");
-				            	}
-			            	}
+					$.each(data.result, function(index, value) 
+						{
+							if(value.result == "error")
+							{
+								console.debug("fileupload: done handler: ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
+								if(value.textStatus == "wrong format")
+								{
+									$("#UploadAvatarErrorBS_ImageName").text(value.fileName);
+									$("#UploadAvatarErrorBS").modal("show");
+								}
+							}
 
-			            	if(value.result == "success")
-			            	{
-			            		companyProfile.logo_folder = value.logo_folder;
-			            		companyProfile.logo_filename = value.logo_filename;
+							if(value.result == "success")
+							{
+								companyProfile.logo_folder = value.logo_folder;
+								companyProfile.logo_filename = value.logo_filename;
 
-			            		console.debug("fileupload: done handler: uploading success original file[" + value.fileName + "], destination file[folder:" + companyProfile.logo_folder + ", filename:" + companyProfile.logo_filename + "]");
+								console.debug("fileupload: done handler: uploading success original file[" + value.fileName + "], destination file[folder:" + companyProfile.logo_folder + ", filename:" + companyProfile.logo_filename + "]");
 
-			            		RenderCompanyLogo();
-			            	}
+								RenderCompanyLogo();
+							}
 
 							// --- reset progress bar
 							setTimeout(function() { $('#progress .progress-bar').css('width', '0%'); }, 500);
-		            	});
+						});
 
-		        },
-		        progressall: function (e, data) {
-		            var progress = parseInt(data.loaded / data.total * 100, 10);
-		            $('#progress .progress-bar').css(
-		                'width',
-		                progress + '%'
-		            );
-		        },
-		        fail: function (e, data) {
-		        	alert("ошибка загрузки фаила: " + data.textStatus);
-		        }
+				},
+				progressall: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('#progress .progress-bar').css(
+						'width',
+						progress + '%'
+					);
+				},
+				fail: function (e, data) {
+					alert("ошибка загрузки фаила: " + data.textStatus);
+				}
 
-		    }).prop('disabled', !$.support.fileInput)
-		        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+			}).prop('disabled', !$.support.fileInput)
+				.parent().addClass($.support.fileInput ? undefined : 'disabled');
 		});
 
 	};
@@ -161,7 +161,7 @@ edit_company = (function()
 				+ 'С уважением ' + $("#myFirstName").text() + " " + $("#myLastName").text() + ' (userid:' + $("#myUserID").data("myuserid") + ').';
 
 
-	    window.location.href = link;
+		window.location.href = link;
 	}
 
 	var	PrefillInternalStructures = function() 
@@ -268,9 +268,9 @@ edit_company = (function()
 
 	// --- create autocomplete
 	// --- input:
-	// ---       elem - for ex ("input#ID")
+	// ---	   elem - for ex ("input#ID")
 	// --- 		 srcData - array of {id:"id", label:"label"}
-	// ---       callbackChange - function(event, ui)
+	// ---	   callbackChange - function(event, ui)
 	var	CreateAutocompleteWithChangeCallback = function(elem, srcData, callbackChange)
 	{
 		if($(elem).length && srcData.length)
@@ -731,13 +731,13 @@ edit_company = (function()
 								var currentCategory = "";
 								$.each( items, function( index, item ) {
 									var li;
-								    if ( item.category != currentCategory ) {
-								    	ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-								        currentCategory = item.category;
-								    }
+									if ( item.category != currentCategory ) {
+										ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+										currentCategory = item.category;
+									}
 									li = that._renderItemData( ul, item );
 									if ( item.category ) {
-									    li.attr( "aria-label", item.category + " : " + item.label + item.login );
+										li.attr( "aria-label", item.category + " : " + item.label + item.login );
 									} // --- getJSON.done() autocomplete.renderMenu foreach() if(item.category)
 								}); // --- getJSON.done() autocomplete.renderMenu foreach()
 							} // --- getJSON.done() autocomplete.renderMenu
@@ -821,13 +821,13 @@ edit_company = (function()
 									var currentCategory = "";
 									$.each( items, function( index, item ) {
 										var li;
-									    if ( item.category != currentCategory ) {
-									    	ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-									        currentCategory = item.category;
-									    }
+										if ( item.category != currentCategory ) {
+											ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+											currentCategory = item.category;
+										}
 										li = that._renderItemData( ul, item );
 										if ( item.category ) {
-										    li.attr( "aria-label", item.category + " : " + item.label + item.login );
+											li.attr( "aria-label", item.category + " : " + item.label + item.login );
 										} // --- getJSON.done() autocomplete.renderMenu foreach() if(item.category)
 									}); // --- getJSON.done() autocomplete.renderMenu foreach()
 								} // --- getJSON.done() autocomplete.renderMenu
@@ -1922,6 +1922,7 @@ edit_company = (function()
 				dateFormat: "dd/mm/yy",
 				changeMonth: true,
 	  			changeYear: true,
+	  			yearRange: system_calls.GetTodaysYear() - 100 + ":" + system_calls.GetTodaysYear(),
 	  			showOtherMonths: true
 	  			// maxDate: system_calls.ConvertMonthNameToNumber($(tag).next().val()) || system_calls.ConvertMonthNameToNumber($(tag).next().text())
 			});
@@ -2248,7 +2249,7 @@ edit_company = (function()
 
 	// --- Replacement Select to Span
 	// --- input: 1) tag
-	// ---        2) function to call to convert Span->Select
+	// ---		2) function to call to convert Span->Select
 	var	editableFuncReplaceSelectToSpan = function (param, funcFromSelectToSpan) 
 	{
 		var		ajaxAction;

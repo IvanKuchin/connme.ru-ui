@@ -127,14 +127,10 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title"><i class="fa fa-exclamation-triangle color_red" aria-hidden="true"></i> Вы не администратор компании</h4>
+						<h4 class="modal-title"><i class="fa fa-exclamation-triangle color_red" aria-hidden="true"></i> Вы не администратор группы</h4>
 					</div>
 					<div class="modal-body">
-							Вы не можете редактировать данные компании, поскольку не являетесь администратором.<br>Если вам необходимо исправить какие-либо данные, вы можете:
-							<ol>
-								<li>Пожаловаться на компанию, если вы в ней работали, нажав на логотип в <a href="/edit_profile?rand=<<vars:rand>>">своем профиле</a></li>
-								<li><a href="/companies_i_own_list?rand=<<vars:rand>>">Стать администратором компании.</a></li>
-								<li><a href="#" class="mailme">Написать письмо</a> администрации сайта с подробным описанием запроса.</li>
+							Вы не можете редактировать данные группы, поскольку не являетесь администратором.<br>
 							</ol>
 					</div>
 					<div class="modal-footer">

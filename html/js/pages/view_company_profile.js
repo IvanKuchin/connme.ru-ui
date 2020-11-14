@@ -975,7 +975,7 @@ view_company_profile = (function()
 
 		// --- update GUI has to be inside getJSON->done->if(success).
 		// --- To improve User Experience (react on user actions immediately) 
-		// ---     I'm updating GUI immediately after click, not waiting server response
+		// ---	 I'm updating GUI immediately after click, not waiting server response
 		if(affectedAction == "AJAX_removeRecommendationEntry")
 		{
 			companyProfile.recommendation.forEach(function(item, i, arr) {

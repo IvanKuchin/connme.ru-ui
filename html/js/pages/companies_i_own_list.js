@@ -3,7 +3,7 @@ var	companies_i_own_list = companies_i_own_list || {};
 
 var	companies_i_own_list = (function()
 {
-    'use strict';
+	'use strict';
 
 	var	JSON_FindCompaniesList_Autocomplete = [];
 	var JSON_MyCompaniesList;
@@ -46,7 +46,7 @@ var	companies_i_own_list = (function()
 				+ 'С уважением ' + $("#myFirstName").text() + " " + $("#myLastName").text() + '.';
 
 
-	    window.location.href = link;
+		window.location.href = link;
 	}
 
 	var	SendPossessionRequestResult = function()
@@ -293,13 +293,13 @@ var	companies_i_own_list = (function()
 									currentCategory = "";
 									$.each( items, function( index, item ) {
 										var li;
-									    if ( item.category != currentCategory ) {
-									    	ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-									        currentCategory = item.category;
-									    }
+										if ( item.category != currentCategory ) {
+											ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+											currentCategory = item.category;
+										}
 										li = that._renderItemData( ul, item );
 										if ( item.category ) {
-										    li.attr( "aria-label", item.category + " : " + item.label + item.login );
+											li.attr( "aria-label", item.category + " : " + item.label + item.login );
 										} // --- getJSON.done() autocomplete.renderMenu foreach() if(item.category)
 									}); // --- getJSON.done() autocomplete.renderMenu foreach()
 								} // --- getJSON.done() autocomplete.renderMenu

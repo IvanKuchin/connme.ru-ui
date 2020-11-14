@@ -126,9 +126,9 @@ onmessage = function(e)
 
 			postMessage(obj2Send);
 
-		    close();
+			close();
 		  } else {
-		    console.debug('ParseBulkData: ERROR: XMLHttpRequest returned not 200');
+			console.debug('ParseBulkData: ERROR: XMLHttpRequest returned not 200');
 		  }
 		}
 

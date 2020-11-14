@@ -199,6 +199,7 @@ create_group = (function()
 				dateFormat: "dd/mm/yy",
 				changeMonth: true,
 				changeYear: true,
+				yearRange: system_calls.GetTodaysYear() - 100 + ":" + system_calls.GetTodaysYear(),
 				showOtherMonths: true
 				// maxDate: system_calls.ConvertMonthNameToNumber($(tag).next().val()) || system_calls.ConvertMonthNameToNumber($(tag).next().text())
 			});

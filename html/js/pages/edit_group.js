@@ -3,21 +3,13 @@ var	edit_group = edit_group || {};
 
 edit_group = (function()
 {
-	'use strict';
+	"use strict";
 
 	var		groupProfile = {};
-	var		AutocompleteList = [];
-	var		datepickerDateFormat;
-
 	var 	JSON_groupPosition = [];
-	var		JSON_geoCountry = [];
-	var		JSON_geoRegion = [];
 	var		JSON_geoLocality = [];
-	var		JSON_university = [];
-	var		JSON_school = [];
 	var		JSON_language = [];
 	var		JSON_skill = [];
-	var		JSON_dataForProfile = {};
 
 	var	Init = function()
 	{
@@ -30,7 +22,7 @@ edit_group = (function()
 
 
 
-		$.getJSON('/cgi-bin/group.cgi?action=AJAX_getGroupProfile', {id: groupProfile.id})
+		$.getJSON("/cgi-bin/group.cgi?action=AJAX_getGroupProfile", {id: groupProfile.id})
 			.done(function(data) 
 			{
 				if((data.result === "success") && (data.groups.length))
@@ -44,7 +36,7 @@ edit_group = (function()
 					}
 					else
 					{
-						$("#NotMyGroup .mailme").on("click", function(){ return CraftGroupChangeMail(data.groups[0]); });
+						// $("#NotMyGroup .mailme").on("click", function(){ return CraftGroupChangeMail(data.groups[0]); });
 						$("#NotMyGroup").modal("show");
 					}
 				}
@@ -57,54 +49,54 @@ edit_group = (function()
 		// --- Image uploader
 		$(function () 
 		{
-		    // Change this to the location of your server-side upload handler:
-		    $('#fileupload').fileupload({
-		        url: '/cgi-bin/grouplogouploader.cgi?uploadType=groupLogo',
-		        formData: {groupid:groupProfile.id},
-		        dataType: 'json',
-		        maxFileSize: 30 * 1024 * 1024, 
-		        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+			// Change this to the location of your server-side upload handler:
+			$('#fileupload').fileupload({
+				url: '/cgi-bin/grouplogouploader.cgi?uploadType=groupLogo',
+				formData: {groupid:groupProfile.id},
+				dataType: 'json',
+				maxFileSize: 30 * 1024 * 1024, 
+				acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
 
 
-		        done: function (e, data) {
+				done: function (e, data) {
 
-		        	$.each(data.result, function(index, value) 
-		        		{
-			            	if(value.result == "error")
-			            	{
-			            		console.debug("fileupload: done handler: ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
-			            		if(value.textStatus == "wrong format")
-			            		{
-				            		$("#UploadAvatarErrorBS_ImageName").text(value.fileName);
-				            		$("#UploadAvatarErrorBS").modal("show");
-				            	}
-			            	}
+					$.each(data.result, function(index, value) 
+						{
+							if(value.result == "error")
+							{
+								console.debug("fileupload: done handler: ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
+								if(value.textStatus == "wrong format")
+								{
+									$("#UploadAvatarErrorBS_ImageName").text(value.fileName);
+									$("#UploadAvatarErrorBS").modal("show");
+								}
+							}
 
-			            	if(value.result == "success")
-			            	{
-			            		groupProfile.logo_folder = value.logo_folder;
-			            		groupProfile.logo_filename = value.logo_filename;
+							if(value.result == "success")
+							{
+								groupProfile.logo_folder = value.logo_folder;
+								groupProfile.logo_filename = value.logo_filename;
 
-			            		console.debug("fileupload: done handler: uploading success original file[" + value.fileName + "], destination file[folder:" + groupProfile.logo_folder + ", filename:" + groupProfile.logo_filename + "]");
+								console.debug("fileupload: done handler: uploading success original file[" + value.fileName + "], destination file[folder:" + groupProfile.logo_folder + ", filename:" + groupProfile.logo_filename + "]");
 
-			            		RenderGroupLogo();
-			            	}
-		            	});
+								RenderGroupLogo();
+							}
+						});
 
-		        },
-		        progressall: function (e, data) {
-		            var progress = parseInt(data.loaded / data.total * 100, 10);
-		            $('#progress .progress-bar').css(
-		                'width',
-		                progress + '%'
-		            );
-		        },
-		        fail: function (e, data) {
-		        	alert("ошибка загрузки фаила: " + data.textStatus);
-		        }
+				},
+				progressall: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					$('#progress .progress-bar').css(
+						'width',
+						progress + '%'
+					);
+				},
+				fail: function (e, data) {
+					alert("ошибка загрузки фаила: " + data.textStatus);
+				}
 
-		    }).prop('disabled', !$.support.fileInput)
-		        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+			}).prop('disabled', !$.support.fileInput)
+				.parent().addClass($.support.fileInput ? undefined : 'disabled');
 		});
 
 	};
@@ -132,9 +124,9 @@ edit_group = (function()
 
 	// --- create autocomplete
 	// --- input:
-	// ---       elem - for ex ("input#ID")
+	// ---	   elem - for ex ("input#ID")
 	// --- 		 srcData - array of {id:"id", label:"label"}
-	// ---       callbackChange - function(event, ui)
+	// ---	   callbackChange - function(event, ui)
 	var	CreateAutocompleteWithChangeCallback = function(elem, srcData, callbackChange)
 	{
 		if($(elem).length && srcData.length)
@@ -397,7 +389,7 @@ edit_group = (function()
 	};
 
 	var	editableFuncReplaceSpanToInput = function () 
-	{
+	{		
 		var	tag = $("<input>", {
 			val: $(this).text(),
 			type: "text",
@@ -455,9 +447,10 @@ edit_group = (function()
 				monthNamesShort: [ "Янв", "Фев", "Мар", "Апр", "Май", "Июнь", "Июль", "Авг", "Сен", "Окт", "Ноя", "Дек" ],
 				dateFormat: "dd/mm/yy",
 				changeMonth: true,
-	  			changeYear: true,
-	  			showOtherMonths: true
-	  			// maxDate: system_calls.ConvertMonthNameToNumber($(tag).next().val()) || system_calls.ConvertMonthNameToNumber($(tag).next().text())
+				changeYear: true,
+				yearRange: system_calls.GetTodaysYear() - 100 + ":" + system_calls.GetTodaysYear(),
+				showOtherMonths: true
+				// maxDate: system_calls.ConvertMonthNameToNumber($(tag).next().val()) || system_calls.ConvertMonthNameToNumber($(tag).next().text())
 			});
 		}
 
@@ -468,7 +461,7 @@ edit_group = (function()
 	{
 		var currentTag = ((typeof param.html == "function") ? param : $(this));
 		var	newTag = $("<span>", {
-			text: $(currentTag).val().replace(/^\s+/, '').replace(/\s+$/, ''),
+			text: $(currentTag).val().replace(/^\s+/, "").replace(/\s+$/, ""),
 			id: $(currentTag).attr("id"),
 			class: $(currentTag).attr("class")
 		});
@@ -484,7 +477,7 @@ edit_group = (function()
 		else
 		{
 			$(currentTag).replaceWith(newTag);
-			$(newTag).on('click', editableFuncReplaceSpanToInput);
+			$(newTag).on("click", editableFuncReplaceSpanToInput);
 			$(newTag).mouseenter(editableFuncHighlightBgcolor);
 			$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 		}
@@ -565,7 +558,7 @@ edit_group = (function()
 		currentTag.replaceWith(newTag);
 		$("#" + currentID + "ButtonAccept").remove();
 		$("#" + currentID + "ButtonReject").remove();
-		$(newTag).on('click', editableFuncReplaceParagraphToTextarea);
+		$(newTag).on("click", editableFuncReplaceParagraphToTextarea);
 		$(newTag).mouseenter(editableFuncHighlightBgcolor);
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 	};
@@ -594,7 +587,7 @@ edit_group = (function()
 
 				groupProfile.description = filteredGroupDescription;
 
-				$.post('/cgi-bin/group.cgi?rand=' + Math.floor(Math.random() * 1000000000), 
+				$.post("/cgi-bin/group.cgi?rand=" + Math.floor(Math.random() * 1000000000), 
 					{
 						description: filteredGroupDescription,
 						action: "AJAX_updateGroupDescription",
@@ -789,7 +782,7 @@ edit_group = (function()
 
 	// --- Replacement Select to Span
 	// --- input: 1) tag
-	// ---        2) function to call to convert Span->Select
+	// ---		2) function to call to convert Span->Select
 	var	editableFuncReplaceSelectToSpan = function (param, funcFromSelectToSpan) 
 	{
 		var		ajaxAction;
@@ -797,10 +790,10 @@ edit_group = (function()
 		var		ajaxValue;
 
 		var 	currentTag = ((typeof param.html == "function") ? param : $(this));
-		var		initValue = $(currentTag).attr("initValue").replace(/^\s+/, '').replace(/\s+$/, '');
+		var		initValue = $(currentTag).attr("initValue").replace(/^\s+/, "").replace(/\s+$/, "");
 
 		var	newTag = $("<span>", {
-			text: $(currentTag).val().replace(/^\s+/, '').replace(/\s+$/, ''),
+			text: $(currentTag).val().replace(/^\s+/, "").replace(/\s+$/, ""),
 			id: $(currentTag).attr("id"),
 			class: $(currentTag).attr("class")
 		});
@@ -809,7 +802,7 @@ edit_group = (function()
 		$(newTag).data("action", $(currentTag).data("action"));
 
 		$(currentTag).replaceWith(newTag);
-		$(newTag).on('click', funcFromSelectToSpan);
+		$(newTag).on("click", funcFromSelectToSpan);
 		$(newTag).mouseenter(editableFuncHighlightBgcolor);
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 
