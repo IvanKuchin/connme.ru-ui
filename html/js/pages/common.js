@@ -4,7 +4,6 @@
 /*global DrawCompanyAvatar:off*/
 /*global userCache:off*/
 
-
 // --- change it in (chat.js, common.js, localy.h)
 var FREQUENCY_ECHO_REQUEST = 60;
 var FREQUENCY_USERNOTIFICATION_REQUEST = 60 * 5;
