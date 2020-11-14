@@ -2098,7 +2098,6 @@ news_feed = (function()
 		if(imageList.length > 0)
 		{
 			// --- Image carousel
-			var		imageArr = imageList;
 			var		tagDivContainer = $("<div/>").addClass("videoTag");
 			var		videoTag = $("<video>").addClass("videoPlacement")
 											.attr("data_playedAttempts", "0")
@@ -2140,7 +2139,6 @@ news_feed = (function()
 		if(imageList.length > 0)
 		{
 			// --- Image carousel
-			var		imageArr = imageList;
 			var		tagDivContainer = $("<div/>").addClass("videoTag");
 			var		videoTag = $("<iframe>").addClass("youtubeVideoPlacement")
 											.attr("id", "youtubeEmbedTag" + uniqueID)
@@ -2201,7 +2199,7 @@ news_feed = (function()
 
 
 			imageArr.forEach(
-				function(item, i, arr)
+				function(item, i)
 				{
 					var	tagLiIndicator = $("<li/>").attr("data-target", "#carousel" + uniqueID)
 													.attr("data-slide-to", i);
@@ -2215,7 +2213,7 @@ news_feed = (function()
 			);
 
 			imageArr.forEach(
-				function(item, i, arr)
+				function(item, i)
 				{
 					var	tagDivItem = $("<div/>").addClass("item");
 					var	tagImgCarousel = $("<img/>");
@@ -2299,7 +2297,7 @@ news_feed = (function()
 	{
 		var		ratingCallback = function(rating)
 								{
-									$.getJSON('/cgi-bin/book.cgi?action=AJAX_setBookRating', {bookID: bookID, rating: rating, rand: Math.round(Math.random() * 100000000)})
+									$.getJSON("/cgi-bin/book.cgi?action=AJAX_setBookRating", {bookID: bookID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 									.done(function(data) {
 										if(data.result == "success")
 										{
