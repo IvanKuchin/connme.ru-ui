@@ -24,6 +24,7 @@ globals:
     system_notifications: writeable,
     StackTrace: writeable,
     troubleshooting: writeable,
+    Uint8Array: writeable,
     userCache: writeable,
     window: writeable
 

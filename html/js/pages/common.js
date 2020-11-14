@@ -160,7 +160,7 @@ system_calls = (function()
 		var		original_tag = tagID;
 		var		display_timeout = Math.min(Math.max(30, message.length) * 100, 10000);
 
-		if(placement) { /* no action neede */ } else { placement = "top"; }
+		if(placement) { /* no action needed */ } else { placement = "top"; }
 
 		if(typeof(tagID) == "string") 		{ alarm_tag = $("#" + tagID); attr_id = tagID; }
 		else if(typeof(tagID) == "object")	{ alarm_tag = tagID; attr_id = tagID.attr("id"); }

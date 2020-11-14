@@ -3732,7 +3732,7 @@ news_feed = (function()
 						// --- if user is administering companies build new select box for company news
 						myCompanies = data.companies;
 						$("#NewsFeedNewMessage div.messageSrc")	.empty()
-																.append("<label for=\"ewsFeedMessageSrc\">Написать от имени:</label>")
+																.append("<label for=\"newsFeedMessageSrc\">Написать от имени:</label>")
 																.append(RenderSelectBoxWithUserAndCompanies(myProfile, myCompanies));
 
 						if(action == "getGroupWall")

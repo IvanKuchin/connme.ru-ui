@@ -595,7 +595,7 @@ var AddCarrierPathCollapsibleInitJobTitle = function()
 		delay : 300,
 		source: JSON_jobTitleID,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddCarrierPathCollapsibleInitJobTitle: change event handler"); 
 
 			if($(this).val() == "")
@@ -607,7 +607,7 @@ var AddCarrierPathCollapsibleInitJobTitle = function()
 				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddCarrierPathCollapsibleInitJobTitle: close event handler"); 
 		},
@@ -639,7 +639,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 		delay : 300,
 		source: JSON_certificationVendors,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddCertificationPathCollapsibleInitVendorTitle: change event handler"); 
 
 			if($(this).val() == "")
@@ -656,7 +656,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 				// $("input#AddCertificationTitle").removeAttr("disabled");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddCertificationPathCollapsibleInitVendorTitle:AddCertificationVendor: close event handler"); 
 		},
@@ -685,7 +685,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 		delay : 300,
 		source: JSON_certificationVendors,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddCertificationPathCollapsibleInitVendorTitle: change event handler"); 
 
 			if($(this).val() == "")
@@ -700,7 +700,7 @@ var AddCertificationPathCollapsibleInitVendorTitle = function()
 				// $("input#AddCourseTitle").removeAttr("disabled");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddCertificationPathCollapsibleInitVendorTitle:AddCourseVendor: close event handler"); 
 		},
@@ -732,7 +732,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 		delay : 300,
 		source: JSON_certificationTracks,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddCertificationPathCollapsibleInitTracksTitle: change event handler"); 
 
 			if($(this).val() == "")
@@ -747,7 +747,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 				// $("input#AddCertificationNumber").removeAttr("disabled");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddCertificationPathCollapsibleInitTracksTitle: close event handler"); 
 			AddCertificationPathPrefillByTitle();
@@ -777,7 +777,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 		delay : 300,
 		source: JSON_certificationTracks,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddCertificationPathCollapsibleInitTracksTitle: change event handler"); 
 
 			if($(this).val() == "")
@@ -789,7 +789,7 @@ var AddCertificationPathCollapsibleInitTracksTitle = function()
 				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddCertificationPathCollapsibleInitTracksTitle: close event handler"); 
 			AddCoursePathPrefillByTitle();
@@ -822,7 +822,7 @@ var AddDataForProfileCollapsibleInit = function()
 		delay : 300,
 		source: JSON_university,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddDataForProfileCollapsibleInit: change event handler"); 
 
 			if($(this).val() == "")
@@ -849,7 +849,7 @@ var AddDataForProfileCollapsibleInit = function()
 				AddUniversityUpdateRadioSelect();
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddDataForProfileCollapsibleInit: close event handler");
 		},
@@ -878,7 +878,7 @@ var AddDataForProfileCollapsibleInit = function()
 		delay : 300,
 		source: JSON_school,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddDataForProfileCollapsibleInit: change event handler"); 
 
 			if($(this).val() == "")
@@ -890,7 +890,7 @@ var AddDataForProfileCollapsibleInit = function()
 				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddDataForProfileCollapsibleInit: close event handler"); 
 		},
@@ -919,7 +919,7 @@ var AddDataForProfileCollapsibleInit = function()
 		delay : 300,
 		source: JSON_geoRegion,
 		minLength: 2,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddDataForProfileCollapsibleInit: change event handler"); 
 
 			if($(this).val() == "")
@@ -931,7 +931,7 @@ var AddDataForProfileCollapsibleInit = function()
 				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddDataForProfileCollapsibleInit: close event handler"); 
 		},
@@ -960,7 +960,7 @@ var AddDataForProfileCollapsibleInit = function()
 		delay : 300,
 		source: JSON_geoLocality,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddDataForProfileCollapsibleInit: change event handler"); 
 
 			if($(this).val() == "")
@@ -983,7 +983,7 @@ var AddDataForProfileCollapsibleInit = function()
 				AddUniversityUpdateRadioSelect();
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddDataForProfileCollapsibleInit: close event handler"); 
 		},
@@ -1012,7 +1012,7 @@ var AddDataForProfileCollapsibleInit = function()
 		delay : 300,
 		source: JSON_language,
 		minLength: 2,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddDataForProfileCollapsibleInit: change event handler"); 
 
 			if($(this).val() == "")
@@ -1027,7 +1027,7 @@ var AddDataForProfileCollapsibleInit = function()
 				// $("select#AddLanguageLevel").removeAttr("disabled");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddDataForProfileCollapsibleInit: close event handler"); 
 		},
@@ -1056,7 +1056,7 @@ var AddDataForProfileCollapsibleInit = function()
 		delay : 300,
 		source: JSON_skill,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddDataForProfileCollapsibleInit: change event handler"); 
 
 			if($(this).val() == "")
@@ -1068,7 +1068,7 @@ var AddDataForProfileCollapsibleInit = function()
 				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddDataForProfileCollapsibleInit: close event handler"); 
 		},
@@ -1102,7 +1102,7 @@ var AddCarrierPathCollapsibleInitCompany = function()
 		delay : 300,
 		source: JSON_CompanyNameID,
 		minLength: 3,
-		change: function (event, ui) { 
+		change: function () { 
 			console.debug ("AddCarrierPathCollapsibleInitCompany: change event handler"); 
 
 			if($(this).val() == "")
@@ -1114,7 +1114,7 @@ var AddCarrierPathCollapsibleInitCompany = function()
 				$(this).parent().removeClass("has-error").addClass("has-feedback has-success");
 			}
 		},
-		close: function (event, ui) 
+		close: function () 
 		{ 
 			console.debug ("AddCarrierPathCollapsibleInitCompany: close event handler"); 
 		},
@@ -2554,10 +2554,10 @@ var	AutocompleteWithBookAuthors = function(e)
 							delay : 300,
 							source: AutocompleteList,
 							select: AutocompleteSelectHandler,
-							change: function (event, ui) { 
+							change: function () { 
 								console.debug ("autocompleteBookAuthor.OnInputHandler autocomplete.change: change event handler"); 
 							},
-							close: function (event, ui) 
+							close: function () 
 							{ 
 								console.debug ("autocompleteBookAuthor.OnInputHandler autocomplete.close: close event handler"); 
 							},
@@ -2637,10 +2637,10 @@ var	AutocompleteWithBookTitles = function(e)
 							delay : 300,
 							source: AutocompleteList,
 							select: AutocompleteSelectHandler,
-							change: function (event, ui) { 
+							change: function () { 
 								console.debug ("AutocompleteWithBookTitle.OnInputHandler autocomplete.change: change event handler"); 
 							},
-							close: function (event, ui) 
+							close: function () 
 							{ 
 								console.debug ("AutocompleteWithBookTitle.OnInputHandler autocomplete.close: close event handler"); 
 								$("#AddBookAuthor").val("");
@@ -4717,10 +4717,10 @@ var	ajaxReturnSuccess = function(data) {
 				delay : 300,
 				minLength: 3,
 				source: JSON_jobTitleID,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateJobTitle: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateJobTitle: close event handler"); 
 				},
@@ -4752,10 +4752,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_CompanyNameID,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateCompanyName: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateCompanyName: close event handler"); 
 				},
@@ -4867,10 +4867,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_certificationVendors,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateCourseVendor: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateCourseVendor: close event handler"); 
 				},
@@ -4902,10 +4902,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_certificationTracks,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateCertificationTrack: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateCertificationTrack: close event handler"); 
 				},
@@ -4937,10 +4937,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_geoLocality,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateSchoolLocality: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateSchoolLocality: close event handler"); 
 				},
@@ -4972,10 +4972,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_geoRegion,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateUniversityRegion: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateUniversityRegion: close event handler"); 
 				},
@@ -5007,10 +5007,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_university,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateUniversityTitle: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateUniversityTitle: close event handler"); 
 				},
@@ -5042,10 +5042,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_school,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateSchoolTitle: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateSchoolTitle: close event handler"); 
 				},
@@ -5077,10 +5077,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_language,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateLanguageTitle: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateLanguageTitle: close event handler"); 
 				},
@@ -5112,10 +5112,10 @@ var	ajaxReturnSuccess = function(data) {
 			$(tag).autocomplete({
 				delay : 300,
 				source: JSON_skill,
-				change: function (event, ui) { 
+				change: function () { 
 					console.debug ("autocomplete updateLanguageTitle: change event handler"); 
 				},
-				close: function (event, ui) 
+				close: function () 
 				{ 
 					console.debug ("autocomplete updateLanguageTitle: close event handler"); 
 				},
@@ -5480,7 +5480,7 @@ var	ajaxReturnSuccess = function(data) {
 
 		if(($(newTag).text() == "Без имени") || ($(newTag).text() == "Без фамилии")) 
 		{
-			// --- no shange
+			// --- no change
 		}
 		else
 		{
