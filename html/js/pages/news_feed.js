@@ -1,3 +1,4 @@
+
 /*global PreviewImageControl*/
 /*global carousel_tools*/
 /*exported news_feed*/
@@ -1025,7 +1026,7 @@ var news_feed = (function()
 			});
 
 		// --- !!! It is important to rebuild carousel after downloading carousel-images
-		$(".carousel").carousel();
+		$("div.carousel.slide").carousel("pause");
 	};
 
 	var NewMessageModalFreezeAllFields = function()
@@ -1503,9 +1504,9 @@ var news_feed = (function()
 				BuildVideoTag(messageObject.messageImageList, $("#divNewsFeedMessageBody"));
 			else if(messageObject.messageImageList.length && messageObject.messageImageList[0].mediaType == "image")
 			{
-				BuildCarousel(messageObject.messageImageList, $("#divNewsFeedMessageBody"));
+				$("#divNewsFeedMessageBody").append(BuildCarousel(messageObject.messageImageList, false));
 				setTimeout(function() {
-					$("#divNewsFeedMessageBody div.carousel.slide[data-ride='carousel']").carousel("pause");
+					$("#divNewsFeedMessageBody div.carousel.slide[data_ride='carousel']").carousel("pause");
 				}, 1000);
 				
 			}
@@ -2102,7 +2103,6 @@ var news_feed = (function()
 
 		if(imageList.length > 0)
 		{
-			// --- Image carousel
 			var		tagDivContainer = $("<div/>").addClass("videoTag");
 			var		videoTag = $("<video>").addClass("videoPlacement")
 											.attr("data_playedAttempts", "0")
@@ -2127,7 +2127,7 @@ var news_feed = (function()
 
 			tagDivContainer.append(videoTag);
 			DOMtag.append(tagDivContainer);
-		} // --- end of carousel
+		}
 	};
 
 	// --- attach youtube video placement to DOMtag
@@ -2143,7 +2143,6 @@ var news_feed = (function()
 
 		if(imageList.length > 0)
 		{
-			// --- Image carousel
 			var		tagDivContainer = $("<div/>").addClass("videoTag");
 			var		videoTag = $("<iframe>").addClass("youtubeVideoPlacement")
 											.attr("id", "youtubeEmbedTag" + uniqueID)
@@ -2153,16 +2152,16 @@ var news_feed = (function()
 
 			tagDivContainer.append(videoTag);
 			DOMtag.append(tagDivContainer);
-		} // --- end of carousel
+		}
 	};
 
 
 	// --- attach Carousel to DOMtag
 	// --- imageList - image list
-	// --- DOMtag - carousel will be attached to that tag
-	var BuildCarousel = function(imageList, DOMtag)
+	var BuildCarousel = function(imageList, add_dataride)
 	{
 		var		uniqueID;
+		var		tagDivCarousel = $();
 
 		do
 		{
@@ -2173,20 +2172,21 @@ var news_feed = (function()
 		{
 			// --- Image carousel
 			var		imageArr = imageList;
-			var		tagDivCarousel = $("<div/>").addClass("carousel slide")
-												.attr("data-ride", "carousel")
-												.attr("id", "carousel" + uniqueID);
-			var		tagOlIndicator = $("<ol>").addClass("carousel-indicators");
-			var		tagDivCarouselInner = $("<div/>").addClass("carousel-inner")
-													.attr("role", "listbox");
-			var		tagALeftCarouselControl = $("<a>").addClass("left carousel-control")
+			var		tagOlIndicator = $("<ol>")			.addClass("carousel-indicators");
+			var		tagDivCarouselInner = $("<div/>")	.addClass("carousel-inner")
+														.attr("role", "listbox");
+			var		tagALeftCarouselControl = $("<a>")	.addClass("left carousel-control")
 														.attr("href", "#carousel" + uniqueID)
 														.attr("role", "button")
 														.attr("data-slide", "prev");
-			var		tagARightCarouselControl = $("<a>").addClass("right carousel-control")
+			var		tagARightCarouselControl = $("<a>")	.addClass("right carousel-control")
 														.attr("href", "#carousel" + uniqueID)
 														.attr("role", "button")
 														.attr("data-slide", "next");
+
+			tagDivCarousel = $("<div/>")				.addClass("carousel slide")
+														.attr("data_ride", add_dataride ? "carousel" : "none")
+														.attr("id", "carousel" + uniqueID);
 
 			imageArr.sort(function(a, b)
 				{
@@ -2260,8 +2260,9 @@ var news_feed = (function()
 							.append(tagDivCarouselInner)
 							.append(tagALeftCarouselControl)
 							.append(tagARightCarouselControl);
-			DOMtag.append(tagDivCarousel);
 		} // --- end of carousel
+
+		return tagDivCarousel;
 	};
 
 	var GetAverageRating = function(ratingArr)
@@ -3039,7 +3040,7 @@ var news_feed = (function()
 		if(jsonMessage.messageImageList.length && jsonMessage.messageImageList[0].mediaType == "video")
 			BuildVideoTag(jsonMessage.messageImageList, DOMtag);
 		else if(jsonMessage.messageImageList.length && jsonMessage.messageImageList[0].mediaType == "image")
-			BuildCarousel(jsonMessage.messageImageList, DOMtag);
+			DOMtag.append(BuildCarousel(jsonMessage.messageImageList, true));
 		else if(jsonMessage.messageImageList.length && jsonMessage.messageImageList[0].mediaType == "youtube_video")
 			BuildYoutubeEmbedTag(jsonMessage.messageImageList, DOMtag);
 
@@ -3408,7 +3409,7 @@ var news_feed = (function()
 			data.forEach(BuildNewsFeedSingleBlock);
 		}
 
-		setTimeout(LazyImageLoad, 3000);
+		setTimeout(LazyImageLoad, 1000);
 	};
 
 	var	ScrollToElementID = function(elementID)
@@ -3516,7 +3517,7 @@ var news_feed = (function()
 		}
 
 		carousel_tools.PlayVisibleCarousels();
-
+/*
 		// console.debug("HandlerScrollToShow: defining position of each carousel");
 		$("div.carousel.slide[data-ride='carousel']").each(
 			function()
@@ -3528,13 +3529,13 @@ var news_feed = (function()
 				else
 					tag.carousel("pause");
 			});
-
+*/
 		// console.debug("HandlerScrollToShow: defining position of each carousel");
 		$("div video.videoPlacement").each(
 			function()
 			{
 				var		tag = $(this);
-				// console.debug("HandlerScrollToShow: carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
+				// console.debug("HandlerScrollToShow: tag id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
 				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
 				{
 					var		playedAttempts = parseInt(tag.attr("data_playedAttempts"));

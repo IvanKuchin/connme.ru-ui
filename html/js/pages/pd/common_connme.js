@@ -230,8 +230,12 @@ var PreviewImageControl = function ()
 	};
 };
 
+
+// carousel attribute: data_ride="carousel" will play carousel once visible
+// carousel attribute: data_ride_type="cycle|once" will play carouse indefinitely or just once
 var carousel_tools = (function()
 {
+	var	CAROUSEL_DELAY			= 1000;
 	var	active_carousels_global = [];
 	var	timeout_handlers_global = [];
 
@@ -239,7 +243,7 @@ var carousel_tools = (function()
 	{
 		var		carousels = [];
 
-		$("div.carousel.slide[data-ride='carousel']").each(function(){
+		$("div.carousel[data_ride='carousel']").each(function(){
 			var	curr_tag = $(this);
 
 			if(system_calls.isTagFullyVisibleInWindowByHeight(curr_tag))
@@ -290,6 +294,27 @@ var carousel_tools = (function()
 		return $("#" + carousel_id).find(".item").length;
 	};
 
+	var	GetPlayedAttempts = function(carousel_id)
+	{
+		var played_attempts = $("#" + carousel_id).attr("data_playedattempts") || 0;
+
+		return parseInt(played_attempts);
+	};
+
+	var	GetRideType = function(carousel_id)
+	{
+		var played_attempts = $("#" + carousel_id).attr("data_ride_type") || 0;
+
+		return parseInt(played_attempts);
+	};
+
+	var	SetPlayedAttempts = function(carousel_id, attempts)
+	{
+		$("#" + carousel_id).attr("data_playedattempts", attempts);
+
+		return attempts;
+	};
+
 	var	GetActiveItemIndex = function(carousel_id)
 	{
 		var		number_of_items = GetTotalNumberOfItems(carousel_id);
@@ -307,14 +332,48 @@ var carousel_tools = (function()
 		return active_item;
 	};
 
+	var	IncreaseCarouselPlayedAttempts = function(carousel_id)
+	{
+		var		current_counter	= GetPlayedAttempts(carousel_id);
+
+		return SetPlayedAttempts(carousel_id, current_counter + 1);
+	};
+
 	var	Player = function(carousel_id)
 	{
-		var		active_idx	= GetActiveItemIndex(carousel_id);
-		var		next_idx	= (active_idx + 1) % GetTotalNumberOfItems(carousel_id);
+		var		number_of_items	= GetTotalNumberOfItems(carousel_id);
+		var		active_idx		= GetActiveItemIndex(carousel_id);
+		var		next_idx		= (active_idx + 1) % number_of_items;
+		var		ride_type	 	= GetRideType(carousel_id);
 
 		console.debug("slide ", carousel_id, ", ", active_idx, " -> ", next_idx);
 
-		timeout_handlers_global[carousel_id] = setTimeout(Player, 1000, carousel_id);
+		if(ride_type == "once")
+		{
+			// --- play once
+			if(GetPlayedAttempts(carousel_id) == 0)
+			{
+				if(active_idx < (number_of_items - 1))
+				{
+					$("#" + carousel_id).carousel(next_idx);
+				}
+				else
+				{
+					IncreaseCarouselPlayedAttempts(carousel_id);
+				}
+			}
+		}
+		else if(ride_type == "cycle")
+		{
+			// --- play in cycle
+			$("#" + carousel_id).carousel(next_idx);
+		}
+		else
+		{
+			console.error("Carousel ride type(" + ride_type + ") is unknown")
+		}
+
+		timeout_handlers_global[carousel_id] = setTimeout(Player, CAROUSEL_DELAY, carousel_id);
 	};
 
 	return {
