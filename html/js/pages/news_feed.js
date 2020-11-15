@@ -1514,7 +1514,7 @@ var news_feed = (function()
 
 			RefreshMessageCommentsList(messageID);
 
-			LazyImageLoad();
+			// LazyImageLoad();
 		}
 	};
 
