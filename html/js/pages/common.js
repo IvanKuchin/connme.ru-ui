@@ -1555,6 +1555,57 @@ system_calls = (function()
 		return lenghtyWord.length;
 	};
 
+	var	ArrayLeftIntersection = function(arr1, arr2)
+	{
+		var	result = [];
+		var	intersection = [];
+
+		for(var i = 0; i < arr1.length; ++i)
+		{
+			intersection[arr1[i]] = true;
+		}
+
+		for(i = 0; i < arr2.length; ++i)
+		{
+			if(intersection[arr2[i]]) delete(intersection[arr2[i]]);
+		}
+
+		for(var value in intersection)
+		{
+			result.push(value);
+		}
+
+		return result;
+	};
+
+	var	ArrayRightIntersection = function(arr1, arr2)
+	{
+		return ArrayLeftIntersection(arr2, arr1);
+	};
+
+	var	ArrayOuterIntersection = function(arr1, arr2)
+	{
+		return ArrayLeftIntersection(arr1, arr2).concat(ArrayRightIntersection(arr1, arr2));
+	};
+
+	var	ArrayInnerIntersection = function(arr1, arr2)
+	{
+		var	result = [];
+		var	intersection = [];
+
+		for(var i = 0; i < arr1.length; ++i)
+		{
+			intersection[arr1[i]] = true;
+		}
+
+		for(i = 0; i < arr2.length; ++i)
+		{
+			if(intersection[arr2[i]]) result.push(arr2[i]);
+		}
+
+		return result;
+	};
+
 	var	isTagFullyVisibleInWindowByHeight = function(tag)
 	{
 		var		windowTop		= $(window).scrollTop();
@@ -1641,7 +1692,13 @@ system_calls = (function()
 		ReplaceTextLinkToURL: ReplaceTextLinkToURL,
 		LongestWordSize: LongestWordSize,
 		LongestWord: LongestWord,
+
+		ArrayLeftIntersection:ArrayLeftIntersection,
+		ArrayRightIntersection:ArrayRightIntersection,
+		ArrayOuterIntersection:ArrayOuterIntersection,
+		ArrayInnerIntersection:ArrayInnerIntersection,
 		isTagFullyVisibleInWindowByHeight: isTagFullyVisibleInWindowByHeight,
+
 		ClearSession: ClearSession
 	};
 }

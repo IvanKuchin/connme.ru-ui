@@ -1,6 +1,8 @@
-var	news_feed = news_feed || {};
+/*global PreviewImageControl*/
+/*global carousel_tools*/
+/*exported news_feed*/
 
-news_feed = (function()
+var news_feed = (function()
 {
 	"use strict";
 
@@ -546,7 +548,7 @@ news_feed = (function()
 		imageTempSet = Math.floor(Math.random()*99999999);
 		$("#editFileupload").fileupload({formData: {imageTempSet: imageTempSet, messageID: $("#editNewsFeedMessageSubmit").data("messageID")}});
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if(typeof(item.messageId) != "undefined")
 				{
@@ -554,9 +556,9 @@ news_feed = (function()
 					{
 						var		messageMessage		= item.messageMessage;
 						var 	containerPreview	= $("<div>")
-																.appendTo("#editPostMessage_PreviewImage")
 																.addClass("container-fluid")
 																.append(RenderMessageMedia(item));
+
 
 						// --- init all fields
 						$("#editNewsFeedMessageTitle").val(system_calls.ConvertHTMLToText(item.messageTitle));
@@ -575,6 +577,8 @@ news_feed = (function()
 						{
 							$("#editNewsFeedAccessRightsFriends").prop("checked", true);
 						}
+
+						$("#editPostMessage_PreviewImage").append(containerPreview);
 					}
 				}
 			});
@@ -614,7 +618,7 @@ news_feed = (function()
 
 	*/
 		message.messageImageList.forEach(
-			function(item, i, arr)
+			function(item, i)
 			{
 				// --- video could be encoded in two formats (webm and mp4), but having the same content
 				// --- video must be displayed as the only file
@@ -622,7 +626,7 @@ news_feed = (function()
 				if (
 					(i === 0) ||
 					((typeof(item.mediaType) != "undefined") && (item.mediaType == "image"))
-				   )
+				)
 				{
 
 					var		rowPreview = $("<div>")
@@ -634,7 +638,6 @@ news_feed = (function()
 													.attr("data-action", "AJAX_newsFeedMarkImageToRemove");
 					var		mediaPreview;
 					var		mediaTitle;
-					var		hiddenClass = "";
 
 					if(item.mediaType == "image")
 					{
@@ -728,7 +731,7 @@ news_feed = (function()
 		return result;
 	};
 
-	var AllWayUp_ClickHandler = function(e)
+	var AllWayUp_ClickHandler = function()
 	{
 		var		curr_tag	= $(this);
 		var		curr_row	= curr_tag.closest("div.row");
@@ -744,6 +747,7 @@ news_feed = (function()
 					.done(function(data) {
 						if(data.result == "success")
 						{
+							// --- good2go
 
 						}
 						else
@@ -755,7 +759,7 @@ news_feed = (function()
 
 	};
 
-	var OneStepUp_ClickHandler = function(e)
+	var OneStepUp_ClickHandler = function()
 	{
 		var		curr_tag	= $(this);
 		var		curr_row	= curr_tag.closest("div.row");
@@ -773,6 +777,7 @@ news_feed = (function()
 						.done(function(data) {
 							if(data.result == "success")
 							{
+								// --- good2go
 
 							}
 							else
@@ -785,7 +790,7 @@ news_feed = (function()
 
 	};
 
-	var OneStepDown_ClickHandler = function(e)
+	var OneStepDown_ClickHandler = function()
 	{
 		var		curr_tag	= $(this);
 		var		curr_row	= curr_tag.closest("div.row");
@@ -803,6 +808,7 @@ news_feed = (function()
 						.done(function(data) {
 							if(data.result == "success")
 							{
+								// --- good2go
 
 							}
 							else
@@ -815,7 +821,7 @@ news_feed = (function()
 
 	};
 
-	var AllWayDown_ClickHandler = function(e)
+	var AllWayDown_ClickHandler = function()
 	{
 		var		curr_tag	= $(this);
 		var		curr_row	= curr_tag.closest("div.row");
@@ -831,6 +837,7 @@ news_feed = (function()
 					.done(function(data) {
 						if(data.result == "success")
 						{
+							// --- good2go
 
 						}
 						else
@@ -842,7 +849,7 @@ news_feed = (function()
 
 	};
 
-	var EditNewsFeedModalRemoveImage = function(e)
+	var EditNewsFeedModalRemoveImage = function()
 	{
 		var		currTag = $(this);
 		var		currAction = currTag.data("action");
@@ -893,7 +900,6 @@ news_feed = (function()
 
 	var	EditNewsFeedPostMessage = function () 
 	{
-		var	isClearToSubmit = false;
 		var	title = $("#editNewsFeedMessageTitle").val();
 		var	text = $("#editNewsFeedMessageText").val();
 		var	images = $("#editPostMessage_PreviewImage").html();
@@ -952,11 +958,11 @@ news_feed = (function()
 							$("#editNewsFeedMessage").modal("hide");
 						}			
 					})
-					.fail( function(data) {
+					.fail( function() {
 						system_calls.AlertError("newsFeedNewMessageError", "ошибка ответа сервера");
 						console.error("$(document).getJSON(AJAX_updateNewsFeed).success():ERROR parsing JSON server response");
 					})
-					.always(function(data) {
+					.always(function() {
 						$("#NewsFeedMessageSubmit").button("reset");
 					});
 		}
@@ -969,8 +975,8 @@ news_feed = (function()
 		// --- on a slow speed links users can continue seeing it some time
 		$("div#message" + messageID).parent().empty();
 		$.getJSON("/cgi-bin/index.cgi?action=AJAX_deleteNewsFeedMessage", {messageID: messageID})
-		 		.done(function(data) 
-		 		{
+				.done(function(data) 
+				{
 					if(data.result == "success")
 					{
 						ZeroizeThenUpdateNewsFeedThenScrollTo("");
@@ -985,8 +991,8 @@ news_feed = (function()
 	var DeleteMessageComment = function(commentID) 
 	{
 		$.getJSON("/cgi-bin/index.cgi?action=AJAX_deleteNewsFeedComment", {commentID: commentID})
-		 		.done(function(data) 
-		 		{
+				.done(function(data) 
+				{
 					if(data.result == "success")
 					{
 						if($("#buttonNewsFeedViewMessageComment").data("action") == "AJAX_commentOnMessageInNewsFeed")
@@ -1051,7 +1057,7 @@ news_feed = (function()
 			NewMessageModalFreezeAllFields();
 
 			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getURLMetaData", {url: newMessageURL, imageTempSet: imageTempSet})
-			 		.done(function(data) {
+					.done(function(data) {
 						if(data.result == "success")
 						{
 							if(data.title.length)
@@ -1140,7 +1146,7 @@ news_feed = (function()
 							console.error("GetDataFromProvidedURL: getJSON(AJAX_getURLMetaData).done():ERROR [" + data.description + "]");
 						}
 					})
-					.always(function(data) {
+					.always(function() {
 						NewMessageModalResetLayout();
 					});
 		}
@@ -1202,11 +1208,12 @@ news_feed = (function()
 
 
 		$.getJSON("/cgi-bin/index.cgi?action=AJAX_updateFirstLastName", {firstName: firstName, lastName: lastName})
-		 		.done(function(data) {
+				.done(function(data) {
 					console.debug("UsernameUpdateClickHandler: getJSON(AJAX_updateFirstLastName).done(): receive answer from server on 'like' click");
 
 					if(data.result == "success")
 					{
+						// --- good2go
 					}
 				});
 
@@ -1257,7 +1264,7 @@ news_feed = (function()
 		var	result = false;
 
 		arr.forEach(
-			function(item, i, arr)
+			function(item)
 			{
 				if(item.isMe == "yes")
 				{
@@ -1289,7 +1296,7 @@ news_feed = (function()
 		var		nameCounter = 0;
 
 		messageLikesUserList.forEach(
-			function(item, i, arr) 
+			function(item, i) 
 			{
 				var		strUser = "";
 
@@ -1359,7 +1366,7 @@ news_feed = (function()
 		buttonLike.attr("disabled", "");
 
 		$.getJSON("/cgi-bin/index.cgi?action=JSON_ClickLikeHandler", {messageId: buttonLike.data().messageId, messageLikeType: messageLikeType})
-		 		.done(function(data) {
+				.done(function(data) {
 					console.debug("ButtonMessageLikeClickHandler: getJSON(JSON_ClickLikeHandler).done(): receive answer from server on 'like' click");
 
 					if(data.result == "success")
@@ -1375,10 +1382,10 @@ news_feed = (function()
 					}
 
 				})
-				.fail(function(data) {
+				.fail(function() {
 					console.error("ButtonMessageLikeClickHandler: FAIL to parse JSON response from server");
 				})
-				.always(function(data) {
+				.always(function() {
 					buttonLike.removeAttr("disabled");
 				});
 	};
@@ -1406,7 +1413,7 @@ news_feed = (function()
 			$("#textareaNewsFeedViewMessage").val("");
 			$("#buttonNewsFeedViewMessageComment").button("loading");
 
-			tempArray.forEach(function(item, i, arr)
+			tempArray.forEach(function(item)
 				{
 					replyToUserList.push("@" + $(item).data("userid") + " ");
 				});
@@ -1426,7 +1433,7 @@ news_feed = (function()
 
 						setTimeout(function() {$("#buttonNewsFeedViewMessageComment").button("reset"); }, 500); // --- wait for animation
 					})
-					.fail(function(data) {
+					.fail(function() {
 						$("#buttonNewsFeedViewMessageComment").button("reset");
 					});
 		}
@@ -1442,7 +1449,7 @@ news_feed = (function()
 		var		messageID = $(this).data("messageId");
 		var		messageObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.messageId) != "undefined") && (item.messageId == messageID))
 				{
@@ -1517,7 +1524,7 @@ news_feed = (function()
 		var		bookID = $(this).data("bookID");
 		var		bookObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.bookID) != "undefined") && (item.bookID == bookID))
 					bookObject = item;
@@ -1550,7 +1557,7 @@ news_feed = (function()
 		var		certificationTrackID = $(this).data("certificationTrackID");
 		var		certificationObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.certificationTrackID) != "undefined") && (item.certificationTrackID == certificationTrackID))
 					certificationObject = item;
@@ -1583,7 +1590,7 @@ news_feed = (function()
 		var		courseTrackID = $(this).data("courseTrackID");
 		var		courseObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.courseTrackID) != "undefined") && (item.courseTrackID == courseTrackID))
 					courseObject = item;
@@ -1616,7 +1623,7 @@ news_feed = (function()
 		var		usersLanguageID = $(this).data("usersLanguageID");
 		var		languageObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.languageID) != "undefined") && (item.languageID == languageID))
 					languageObject = item;
@@ -1649,7 +1656,7 @@ news_feed = (function()
 		var		usersCompanyID = $(this).data("usersCompanyID");
 		var		companyObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.companyID) != "undefined") && (item.companyID == companyID))
 					companyObject = item;
@@ -1683,7 +1690,7 @@ news_feed = (function()
 		var		scienceDegreeUniversityID = $(this).data("scienceDegreeUniversityID");
 		var		scienceDegreeObject = {};
 
-		globalNewsFeed.forEach(function(item, i, arr)
+		globalNewsFeed.forEach(function(item)
 			{
 				if((typeof(item.scienceDegreeID) != "undefined") && (item.scienceDegreeID == scienceDegreeID))
 					scienceDegreeObject = item;
@@ -1712,7 +1719,7 @@ news_feed = (function()
 
 
 	// --- function adds user from this tag to ReplyTo field
-	var AddCommentOwnerToReply_ClickHandler = function(event)
+	var AddCommentOwnerToReply_ClickHandler = function()
 	{
 		var		currTag = $(this);
 		var		replyToUserID = currTag.data("ownerID");
@@ -1735,7 +1742,7 @@ news_feed = (function()
 			else
 			{
 				var		removeSign = $("<span>").addClass("glyphicon glyphicon-remove cursor_pointer")
-												.on("click", function(e)
+												.on("click", function()
 													{
 														// --- remove user from ReplyTo list
 														$(this).parent().remove();
@@ -1781,12 +1788,12 @@ news_feed = (function()
 		commentsArray = commentsArray.sort(function(item1, item2) { return ((parseFloat(item1.id) < parseFloat(item2.id)) ? -1 : 1); });
 
 		// --- populate commentsUserArray with users-comment-writers (for ex: commentsUserArray["@23"]="Иван Кучин")
-		commentsArray.forEach(function(item, i, arr)
+		commentsArray.forEach(function(item)
 			{
 				commentsUserArray["@" + item.user.userID] = "@" + item.user.name + " " + item.user.nameLast;
 			});
 
-		commentsArray.forEach(function(item, i, arr)
+		commentsArray.forEach(function(item, i)
 		{
 			var	spanUser = $("<span/>").append($("<a>").attr("href", "/userprofile/" + item.user.userID).append(item.user.name + " " + item.user.nameLast)).append(" написал(а) ");
 			var	spanReplyTo = $("<span>").append($("<span>").addClass("fa fa-reply")).append(" <div class=\"display_inline hidden-xs\">ответить</div>")
@@ -1802,9 +1809,9 @@ news_feed = (function()
 			if(i > 0) { DOMtag.append($("<div/>").addClass("news_feed_comment_separator")); }
 
 			// --- replace @userID -> @name_nameLast
-			Object.keys(commentsUserArray).forEach(function(item)
+			Object.keys(commentsUserArray).forEach(function()
 				{
-					function convert(str, match, offset, s)
+					function convert(str, match)
 					{
 						return "<i>" + commentsUserArray[match] + "</i>";
 					}
@@ -2307,7 +2314,7 @@ news_feed = (function()
 											$("span.bookTotalVoters" + bookID).empty().append(GetTotalVoters(data.bookReadersRatingList));
 
 											// --- update bookReadersRatingList in globalNewsFeed object
-											globalNewsFeed.forEach(function(item, i, arr)
+											globalNewsFeed.forEach(function(item, i)
 												{
 													if((typeof(item.bookID) != "undefined") && (item.bookID == bookID))
 														globalNewsFeed[i].bookReadersRatingList = data.bookReadersRatingList;
@@ -2320,7 +2327,7 @@ news_feed = (function()
 									});
 
 									// --- update bookMyRating in globalNewsFeed object
-									globalNewsFeed.forEach(function(item, i, arr)
+									globalNewsFeed.forEach(function(item, i)
 										{
 											if((typeof(item.bookID) != "undefined") && (item.bookID == bookID))
 												globalNewsFeed[i].bookMyRating = rating;
@@ -2362,14 +2369,14 @@ news_feed = (function()
 		{
 			imgCover = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder cursor_pointer")
 								.attr("src", "/images/books/" + jsonBook.bookCoverPhotoFolder + "/" + jsonBook.bookCoverPhotoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonBook.bookTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/books/" + jsonBook.bookCoverPhotoFolder + "/" + jsonBook.bookCoverPhotoFilename);
 								});
 			imgXSCover = $("<img>").addClass("max_100px visible-xs-inline niceborder cursor_pointer")
 								.attr("src", "/images/books/" + jsonBook.bookCoverPhotoFolder + "/" + jsonBook.bookCoverPhotoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonBook.bookTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/books/" + jsonBook.bookCoverPhotoFolder + "/" + jsonBook.bookCoverPhotoFilename);
@@ -2415,15 +2422,13 @@ news_feed = (function()
 		var		divMain = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		imgXSCover;
-		var		certificationID = jsonCertification.certificationID;
 
 
 		if((typeof(jsonCertification.certificationVendorLogoFolder) != "undefined") && (typeof(jsonCertification.certificationVendorLogoFilename) != "undefined") && (jsonCertification.certificationVendorLogoFolder.length) && (jsonCertification.certificationVendorLogoFilename.length))
 		{
 			imgLogo = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder cursor_pointer")
 								.attr("src", "/images/certifications/" + jsonCertification.certificationVendorLogoFolder + "/" + jsonCertification.certificationVendorLogoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonCertification.certificationTrackTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/certifications/" + jsonCertification.certificationVendorLogoFolder + "/" + jsonCertification.certificationVendorLogoFilename);
@@ -2449,8 +2454,6 @@ news_feed = (function()
 		var		divDescription = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		imgXSCover;
-		var		groupID = jsonGroup.groups[0].groupID;
 
 
 		if((typeof(jsonGroup.groups[0].logo_folder) != "undefined") && (typeof(jsonGroup.groups[0].logo_filename) != "undefined") && (jsonGroup.groups[0].logo_folder.length) && (jsonGroup.groups[0].logo_filename.length))
@@ -2482,8 +2485,6 @@ news_feed = (function()
 		var		divMain = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		imgXSCover;
-		var		companyID = jsonCompany.companies[0].companyID;
 
 
 		if((typeof(jsonCompany.companies[0].logo_folder) != "undefined") && (typeof(jsonCompany.companies[0].logo_filename) != "undefined") && (jsonCompany.companies[0].logo_folder.length) && (jsonCompany.companies[0].logo_filename.length))
@@ -2513,7 +2514,6 @@ news_feed = (function()
 		var		divMain = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		imgXSCover;
 		var		courseID = jsonCourse.courseID;
 
 		var		ratingCallback = function(rating)
@@ -2530,7 +2530,7 @@ news_feed = (function()
 											$("span.courseTotalVoters" + courseID).empty().append(GetTotalVoters(data.courseReadersRatingList));
 
 											// --- update courseReadersRatingList in globalNewsFeed object
-											globalNewsFeed.forEach(function(item, i, arr)
+											globalNewsFeed.forEach(function(item, i)
 												{
 													if((typeof(item.courseID) != "undefined") && (item.courseID == courseID))
 														globalNewsFeed[i].courseReadersRatingList = data.courseReadersRatingList;
@@ -2543,7 +2543,7 @@ news_feed = (function()
 									});
 
 									// --- update courseMyRating in globalNewsFeed object
-									globalNewsFeed.forEach(function(item, i, arr)
+									globalNewsFeed.forEach(function(item, i)
 										{
 											if((typeof(item.courseID) != "undefined") && (item.courseID == courseID))
 												globalNewsFeed[i].courseMyRating = rating;
@@ -2561,7 +2561,7 @@ news_feed = (function()
 		{
 			imgLogo = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder cursor_pointer")
 								.attr("src", "/images/certifications/" + jsonCourse.courseVendorLogoFolder + "/" + jsonCourse.courseVendorLogoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonCourse.courseTrackTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/certifications/" + jsonCourse.courseVendorLogoFolder + "/" + jsonCourse.courseVendorLogoFilename);
@@ -2591,7 +2591,6 @@ news_feed = (function()
 		var		divMain = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		scienceDegreeID = jsonScienceDegree.scienceDegreeID;
 		var		universityLocation = "";
 		var		studyPeriodLength = 0;
 		var		studyPeriodMessage = "";
@@ -2601,7 +2600,7 @@ news_feed = (function()
 		{
 			imgLogo = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder cursor_pointer")
 								.attr("src", "/images/universities/" + jsonScienceDegree.scienceDegreeUniversityLogoFolder + "/" + jsonScienceDegree.scienceDegreeUniversityLogoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonScienceDegree.scienceDegreeUniversityTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/universities/" + jsonScienceDegree.scienceDegreeUniversityLogoFolder + "/" + jsonScienceDegree.scienceDegreeUniversityLogoFilename);
@@ -2641,16 +2640,13 @@ news_feed = (function()
 		var		divMain = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		languageID = jsonLanguage.languageID;
-		var		studyPeriodLength = 0;
-		var		studyPeriodMessage = "";
 
 
 		if((typeof(jsonLanguage.languageLogoFolder) != "undefined") && (typeof(jsonLanguage.languageLogoFilename) != "undefined") && (jsonLanguage.languageLogoFolder.length) && (jsonLanguage.languageLogoFilename.length))
 		{
 			imgLogo = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder cursor_pointer")
 								.attr("src", "/images/flags/" + jsonLanguage.languageLogoFolder + "/" + jsonLanguage.languageLogoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonLanguage.languageUniversityTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/flags/" + jsonLanguage.languageLogoFolder + "/" + jsonLanguage.languageLogoFilename);
@@ -2672,16 +2668,13 @@ news_feed = (function()
 		var		divMain = $("<div>").addClass("col-xs-8 col-sm-10");
 		var		divCover = $("<div>").addClass("col-xs-4 col-sm-2 margin_top_10 ");
 		var		imgLogo;
-		var		companyID = jsonCompany.companyID;
-		var		studyPeriodLength = 0;
-		var		studyPeriodMessage = "";
 
 
 		if((typeof(jsonCompany.companyLogoFolder) != "undefined") && (typeof(jsonCompany.companyLogoFilename) != "undefined") && (jsonCompany.companyLogoFolder.length) && (jsonCompany.companyLogoFilename.length))
 		{
 			imgLogo = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder cursor_pointer")
 								.attr("src", "/images/companies/" + jsonCompany.companyLogoFolder + "/" + jsonCompany.companyLogoFilename)
-								.on("click", function(e) {
+								.on("click", function() {
 									$("#NewsFeedBookCoverDisplayModal").modal("show");
 									$("#NewsFeedBookCoverDisplayModal span.bookTitle").empty().append(jsonCompany.companyUniversityTitle);
 									$("#NewsFeedBookCoverDisplayModal img").attr("src", "/images/companies/" + jsonCompany.companyLogoFolder + "/" + jsonCompany.companyLogoFilename);
@@ -2732,7 +2725,6 @@ news_feed = (function()
 			var		imgComment = $("<img>").attr("src", "/images/pages/news_feed/comment.png")
 											.addClass("news_feed_comment");
 
-			var		myUserID = $("#myUserID").data("myuserid");
 
 			DOMtag.append(tagDiv6_1);
 			tagDiv6_1.append(tagSpan7_1);
@@ -2773,12 +2765,6 @@ news_feed = (function()
 	// --- used for certification and citing
 	var RenderCertificationBody = function(jsonCertification, DOMtag)
 	{
-		var			divRow = $("<div>").addClass("row");
-		var 		isbns = "";
-		var			divMain = $("<div>").addClass("col-xs-8 col-sm-10");
-		var			divLogo = $("<div>").addClass("col-xs-4 col-sm-2");
-		var			imgLogo;
-
 		if(jsonCertification.certificationID && jsonCertification.certificationID.length) DOMtag.attr("id", "certification" + jsonCertification.certificationID);
 
 		RenderCertificationMainInfo(jsonCertification, DOMtag);
@@ -2806,7 +2792,6 @@ news_feed = (function()
 			var		imgComment = $("<img>").attr("src", "/images/pages/news_feed/comment.png")
 											.addClass("news_feed_comment");
 
-			var		myUserID = $("#myUserID").data("myuserid");
 
 			DOMtag.append(tagDiv6_1);
 			tagDiv6_1.append(tagSpan7_1);
@@ -2828,12 +2813,6 @@ news_feed = (function()
 	// --- used for course and citing
 	var RenderCourseBody = function(jsonCourse, DOMtag)
 	{
-		var			divRow = $("<div>").addClass("row");
-		var 		isbns = "";
-		var			divMain = $("<div>").addClass("col-xs-8 col-sm-10");
-		var			divLogo = $("<div>").addClass("col-xs-4 col-sm-2");
-		var			imgLogo;
-
 		if(jsonCourse.usersCourseID && jsonCourse.usersCourseID.length) DOMtag.attr("id", "usercourse" + jsonCourse.usersCourseID);
 		if(jsonCourse.courseID && jsonCourse.courseID.length) DOMtag.append("<div id=\"course" + jsonCourse.courseID + "\"></div>");
 
@@ -2862,7 +2841,6 @@ news_feed = (function()
 			var		imgComment = $("<img>").attr("src", "/images/pages/news_feed/comment.png")
 											.addClass("news_feed_comment");
 
-			var		myUserID = $("#myUserID").data("myuserid");
 
 			DOMtag.append(tagDiv6_1);
 			tagDiv6_1.append(tagSpan7_1);
@@ -2885,13 +2863,6 @@ news_feed = (function()
 	// --- used for scienceDegree and citing
 	var RenderScienceDegreeBody = function(jsonScienceDegree, DOMtag)
 	{
-		var			divRow = $("<div>").addClass("row");
-		var 		isbns = "";
-		var			divMain = $("<div>").addClass("col-xs-8 col-sm-10");
-		var			divLogo = $("<div>").addClass("col-xs-4 col-sm-2");
-		var			imgLogo;
-		var			universityLocation = "";
-
 
 		// --- assign scienceDegreeID to be able to scroll to this scienceDegree
 		if(jsonScienceDegree.scienceDegreeID && jsonScienceDegree.scienceDegreeID.length) DOMtag.attr("id", "scienceDegree" + jsonScienceDegree.scienceDegreeID);
@@ -2922,8 +2893,6 @@ news_feed = (function()
 			var		imgComment = $("<img>").attr("src", "/images/pages/news_feed/comment.png")
 											.addClass("news_feed_comment");
 
-			var		myUserID = $("#myUserID").data("myuserid");
-
 			DOMtag.append(tagDiv6_1);
 			tagDiv6_1.append(tagSpan7_1);
 			tagSpan7_1.append(buttonLike)
@@ -2944,11 +2913,6 @@ news_feed = (function()
 	// --- used for language and citing
 	var RenderLanguageBody = function(jsonLanguage, DOMtag)
 	{
-		var			divRow = $("<div>").addClass("row");
-		var			divMain = $("<div>").addClass("col-xs-8 col-sm-10");
-		var			divLogo = $("<div>").addClass("col-xs-4 col-sm-2");
-		var			imgLogo;
-
 		// --- assign languageID to be able to scroll to this language
 		if(jsonLanguage.usersLanguageID && jsonLanguage.usersLanguageID.length) DOMtag.attr("id", "userLanguage" + jsonLanguage.usersLanguageID);
 		if(jsonLanguage.languageID && jsonLanguage.languageID.length) DOMtag.append("<div id=\"language" + jsonLanguage.languageID + "\"></div>");
@@ -2978,8 +2942,6 @@ news_feed = (function()
 			var		imgComment = $("<img>").attr("src", "/images/pages/news_feed/comment.png")
 											.addClass("news_feed_comment");
 
-			var		myUserID = $("#myUserID").data("myuserid");
-
 			DOMtag.append(tagDiv6_1);
 			tagDiv6_1.append(tagSpan7_1);
 			tagSpan7_1.append(buttonLike)
@@ -3000,11 +2962,6 @@ news_feed = (function()
 	// --- used for company and citing
 	var RenderCompanyBody = function(jsonCompany, DOMtag)
 	{
-		var			divRow = $("<div>").addClass("row");
-		var			divMain = $("<div>").addClass("col-xs-8 col-sm-10");
-		var			divLogo = $("<div>").addClass("col-xs-4 col-sm-2");
-		var			imgLogo;
-
 		// --- assign companyID to be able to scroll to this company
 		if(jsonCompany.usersCompanyID && jsonCompany.usersCompanyID.length) DOMtag.attr("id", "vacancy" + jsonCompany.usersCompanyID);
 		if(jsonCompany.companyID && jsonCompany.companyID.length) DOMtag.append("<div id=\"company" + jsonCompany.companyID + "\"></div>");
@@ -3033,8 +2990,6 @@ news_feed = (function()
 											.on("click", ButtonViewCompanyClickHandler);
 			var		imgComment = $("<img>").attr("src", "/images/pages/news_feed/comment.png")
 											.addClass("news_feed_comment");
-
-			var		myUserID = $("#myUserID").data("myuserid");
 
 			DOMtag.append(tagDiv6_1);
 			tagDiv6_1.append(tagSpan7_1);
@@ -3200,7 +3155,7 @@ news_feed = (function()
 		return result;
 	};
 
-	var BuildNewsFeedSingleBlock = function(item, i, arr)
+	var BuildNewsFeedSingleBlock = function(item)
 	{
 		var 	divContainer, divRow, divPhoto, hrefSrcObj, tagImg3, tagDivMessage, hrefUsername, spanTimestamp, canvasSrcObj;
 		var		tagDivMsgInfo;
@@ -3225,8 +3180,8 @@ news_feed = (function()
 									.append(system_calls.GetLocalizedDateInHumanFormatMsecSinceEvent(parseFloat(jsonMessage.eventTimestampDelta) * 1000));
 
 		divContainer.append(divRow); 
-		divRow.append(divPhoto)
-			   .append(tagDivMsgInfo);
+		divRow	.append(divPhoto)
+				.append(tagDivMsgInfo);
 		divPhoto.append(hrefSrcObj);
 		hrefSrcObj.append(tagImg3);
 		hrefSrcObj.append(canvasSrcObj);
@@ -3287,7 +3242,7 @@ news_feed = (function()
 			tagDivMsgInfo.append(spanTimestamp);
 			tagDivMsgInfo.append(hrefUsername);
 			tagDivMsgInfo.append(" " + system_calls.GetGenderedActionCategoryTitle(jsonMessage) + " ")
-				   .append(tagFriendLink);
+				.append(tagFriendLink);
 
 			var infoAboutFriend = BuildFriendBlock(jsonMessage);
 			divRow.append(tagDivMessage);
@@ -3397,7 +3352,6 @@ news_feed = (function()
 		var		total_sum = 0;
 		var		messages_timestamp_diff = [];
 		var		i;
-		var		prev_timestamp = 0;
 		var		temp;
 
 		messages_timestamp_diff.push(0);
@@ -3561,6 +3515,8 @@ news_feed = (function()
 			GetNewsFeedFromServer(false, "");
 		}
 
+		carousel_tools.PlayVisibleCarousels();
+
 		// console.debug("HandlerScrollToShow: defining position of each carousel");
 		$("div.carousel.slide[data-ride='carousel']").each(
 			function()
@@ -3669,11 +3625,11 @@ news_feed = (function()
 							$("#NewsFeedNewMessage").modal("hide");
 						}			
 					})
-					.fail( function(data) {
+					.fail( function() {
 						system_calls.AlertError("newsFeedNewMessageError", "ошибка ответа сервера");
 						console.error("$(document).getJSON(AJAX_postNewsFeed).success():ERROR parsing JSON server response");
 					})
-					.always(function(data) {
+					.always(function() {
 						$("#NewsFeedMessageSubmit").button("reset");
 					});
 		}
@@ -3765,7 +3721,7 @@ news_feed = (function()
 						console.error("ERROR: unknown status returned from server");
 					}
 				})
-				.fail(function(e) {
+				.fail(function() {
 					console.error("ERROR: parsing JSON response from server");
 				});
 
@@ -3828,5 +3784,3 @@ news_feed = (function()
 			};
 
 })();
-
-
