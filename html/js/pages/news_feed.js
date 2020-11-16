@@ -3574,7 +3574,6 @@ var news_feed = (function()
 				else
 					tag.carousel("pause");
 			});
-*/
 		// console.debug("HandlerScrollToShow: defining position of each carousel");
 		$("div video.videoPlacement").each(
 			function()
@@ -3593,6 +3592,7 @@ var news_feed = (function()
 				else
 					tag.get(0).pause();
 			});
+*/
 	};
 
 	var ZeroizeNewMessageModal = function()
