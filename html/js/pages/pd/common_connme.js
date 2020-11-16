@@ -274,8 +274,9 @@ var carousel_tools = (function()
 	{
 		if(carousels.length) console.debug("new carousels:", carousels);
 
-		for (var i = carousels.length - 1; i >= 0; i--) {
-			timeout_handlers_global[carousels[i]] = setTimeout(Player, 1000, carousels[i]);
+		for (var i = carousels.length - 1; i >= 0; i--) 
+		{
+			ScheduleNextSlideAfterTimeout(carousels[i]);
 		}
 	};
 
@@ -283,7 +284,8 @@ var carousel_tools = (function()
 	{
 		if(carousels.length) console.debug("hidden carousels:", carousels);
 
-		for (var i = carousels.length - 1; i >= 0; i--) {
+		for (var i = carousels.length - 1; i >= 0; i--) 
+		{
 			clearTimeout(timeout_handlers_global[carousels[i]]);
 			delete(timeout_handlers_global[carousels[i]]);
 		}
@@ -339,12 +341,17 @@ var carousel_tools = (function()
 		return SetPlayedAttempts(carousel_id, current_counter + 1);
 	};
 
+	var ScheduleNextSlideAfterTimeout = function(carousel_id)
+	{
+		timeout_handlers_global[carousel_id] = setTimeout(Player, CAROUSEL_DELAY, carousel_id);
+	};
+
 	var	Player = function(carousel_id)
 	{
 		var		number_of_items	= GetTotalNumberOfItems(carousel_id);
 		var		active_idx		= GetActiveItemIndex(carousel_id);
 		var		next_idx		= (active_idx + 1) % number_of_items;
-		var		ride_type	 	= GetRideType(carousel_id);
+		var		ride_type	 	= GetRideType(carousel_id) || "once";
 
 		console.debug("slide ", carousel_id, ", ", active_idx, " -> ", next_idx);
 
@@ -370,10 +377,10 @@ var carousel_tools = (function()
 		}
 		else
 		{
-			console.error("Carousel ride type(" + ride_type + ") is unknown")
+			console.error("Carousel ride type(" + ride_type + ") is unknown");
 		}
 
-		timeout_handlers_global[carousel_id] = setTimeout(Player, CAROUSEL_DELAY, carousel_id);
+		ScheduleNextSlideAfterTimeout(carousel_id);
 	};
 
 	return {

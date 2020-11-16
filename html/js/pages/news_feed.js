@@ -1501,14 +1501,15 @@ var news_feed = (function()
 													.data("action", "AJAX_commentOnMessageInNewsFeed");
 
 			if(messageObject.messageImageList.length && messageObject.messageImageList[0].mediaType == "video")
-				BuildVideoTag(messageObject.messageImageList, $("#divNewsFeedMessageBody"));
+				$("#divNewsFeedMessageBody").append(BuildCarousel(messageObject.messageImageList, false));
+				// $("#divNewsFeedMessageBody").append(BuildVideoTag(messageObject.messageImageList));
 			else if(messageObject.messageImageList.length && messageObject.messageImageList[0].mediaType == "image")
 			{
 				$("#divNewsFeedMessageBody").append(BuildCarousel(messageObject.messageImageList, false));
-				setTimeout(function() {
+/*				setTimeout(function() {
 					$("#divNewsFeedMessageBody div.carousel.slide[data_ride='carousel']").carousel("pause");
-				}, 1000);
-				
+				}, 500);
+*/				
 			}
 			else if(messageObject.messageImageList.length && messageObject.messageImageList[0].mediaType == "youtube_video")
 				BuildYoutubeEmbedTag(messageObject.messageImageList, $("#divNewsFeedMessageBody"));
@@ -2090,34 +2091,50 @@ var news_feed = (function()
 		});
 	};
 
-	// --- attach video placement to DOMtag
-	// --- imageList - image list
-	// --- DOMtag - video tag will be attached to that tag
-	var BuildVideoTag = function(imageList, DOMtag)
+	var isVideoInMedia = function(media_list)
 	{
+		var	result = false;
+
+		for(var i = 0; i < media_list.length; ++i)
+		{
+			if(media_list[i].mediaType == "video")
+			{
+				result = true;
+				break;
+			}
+		}
+
+		return result;
+	};
+
+	// --- attach video placement to DOMtag
+	// --- videoList - video list
+	var BuildVideoTag = function(videoList)
+	{
+		var		tagDivContainer = $("<div/>").addClass("videoTag");
 		var		uniqueID;
+
 		do
 		{
 			uniqueID = Math.round(Math.random() * 100000000);
 		} while($("div#videoTag" + uniqueID).length);
 
-		if(imageList.length > 0)
+		if(videoList.length > 0)
 		{
-			var		tagDivContainer = $("<div/>").addClass("videoTag");
 			var		videoTag = $("<video>").addClass("videoPlacement")
 											.attr("data_playedAttempts", "0")
 											.attr("id", "videoTag" + uniqueID)
 											.attr("controls", "true");
 
 			// --- put the .webm on the first place
-			imageList.sort(function(a, b)
+			videoList.sort(function(a, b)
 			{
 				if(a.filename.match(/.mp4$/) && b.filename.match(/.webm$/))
 					return 1;
 				return -1;
 			});
 
-			imageList.forEach(function(item)
+			videoList.forEach(function(item)
 			{	
 				var		subtype = item.filename.match(/\.(.*)$/);
 				var		srcTag = $("<source>")	.attr("src", "/video/feed/" + item.folder + "/" + item.filename)
@@ -2126,8 +2143,13 @@ var news_feed = (function()
 			});
 
 			tagDivContainer.append(videoTag);
-			DOMtag.append(tagDivContainer);
 		}
+		else
+		{
+			console.error("media object is empty");
+		}
+
+		return tagDivContainer;
 	};
 
 	// --- attach youtube video placement to DOMtag
@@ -2156,8 +2178,33 @@ var news_feed = (function()
 	};
 
 
+	// input:
+	//  media - media object
+	//  order - order in carousel (could be used for lazy load)
+	var GetMediaTag = function(media, order)
+	{
+		var	tag;
+
+		if(media.mediaType == "image")
+		{
+			tag = $("<img/>")	.attr((order  ? "data-lazyload" : "src"), "/images/feed/" + media.folder + "/" + media.filename);
+		}
+		else if(media.mediaType == "video")
+		{
+			// tag = $("<img/>")	.attr((order  ? "data-lazyload" : "src"), "/images/feed/" + media.folder + "/" + media.filename);
+			tag = BuildVideoTag([media]);
+		}
+		else
+		{
+			console.error("unknown media type (" + media.mediaType + ")");
+		}
+
+		return tag;
+	};
+
 	// --- attach Carousel to DOMtag
 	// --- imageList - image list
+	// --- add_dataride (true|false) - if true carousel will slide once visible, otherwise stands still
 	var BuildCarousel = function(imageList, add_dataride)
 	{
 		var		uniqueID;
@@ -2202,58 +2249,55 @@ var news_feed = (function()
 				});
 
 
-
 			imageArr.forEach(
 				function(item, i)
 				{
-					var	tagLiIndicator = $("<li/>").attr("data-target", "#carousel" + uniqueID)
-													.attr("data-slide-to", i);
+					var	tagDivItem		= $("<div/>").addClass("item");
+					// var	tagMediaItem	= $("<img/>").attr((i  ? "data-lazyload" : "src"), "/images/feed/" + item.folder + "/" + item.filename);
 
-					if(i === 0)
-					{
-						tagLiIndicator.addClass("active");
-					}
-					tagOlIndicator.append(tagLiIndicator);
-				}
-			);
+					if(i === 0) tagDivItem.addClass("active");
 
-			imageArr.forEach(
-				function(item, i)
-				{
-					var	tagDivItem = $("<div/>").addClass("item");
-					var	tagImgCarousel = $("<img/>");
-
-
-					if(i === 0)
-					{
-						tagImgCarousel.attr("src", "/images/feed/" + item.folder + "/" + item.filename);
-						tagDivItem.addClass("active");
-					}
-					else
-					{
-						tagImgCarousel.attr("data-lazyload", "/images/feed/" + item.folder + "/" + item.filename);
-
-						// --- this commented for unveil plugin
-						// tagImgCarousel.attr("data-src", "/images/feed/" + item.folder + "/" + item.filename);
-					}
-					tagDivItem.append(tagImgCarousel);
+					// tagDivItem.append(tagMediaItem);
+					tagDivItem.append(GetMediaTag(item, i));
 					tagDivCarouselInner.append(tagDivItem);
 				}
 			);
 
+			// --- render navigation buttons only if there is no video tag in the set
+			// --- video control could interfere with carousel control, 
+			// --- due to both controls are located at the same level
+			if(!isVideoInMedia(imageArr))
+			{
+				// --- navigation buttons at the bottom
+				imageArr.forEach(
+					function(item, i)
+					{
+						var	tagLiIndicator = $("<li/>").attr("data-target", "#carousel" + uniqueID)
+														.attr("data-slide-to", i);
+
+						if(i === 0)
+						{
+							tagLiIndicator.addClass("active");
+						}
+						tagOlIndicator.append(tagLiIndicator);
+					}
+				);
+			}
+
+			// --- side navigation buttons
 			tagALeftCarouselControl.append(
-				$("<span>")	.addClass("glyphicon glyphicon-chevron-left")
-							.attr("aria-hidden", "true")
+											$("<span>")	.addClass("glyphicon glyphicon-chevron-left")
+														.attr("aria-hidden", "true")
 									)
 									.append(
-				$("<span>")	.addClass("sr-only").append("Previous")
+											$("<span>")	.addClass("sr-only").append("Previous")
 									);
 			tagARightCarouselControl.append(
-				$("<span>")	.addClass("glyphicon glyphicon-chevron-right")
-							.attr("aria-hidden", "true")
+											$("<span>")	.addClass("glyphicon glyphicon-chevron-right")
+														.attr("aria-hidden", "true")
 									)
 									.append(
-				$("<span>")	.addClass("sr-only").append("Next")
+											$("<span>")	.addClass("sr-only").append("Next")
 									);
 
 			tagDivCarousel	.append(tagOlIndicator)
@@ -3038,7 +3082,8 @@ var news_feed = (function()
 		}
 
 		if(jsonMessage.messageImageList.length && jsonMessage.messageImageList[0].mediaType == "video")
-			BuildVideoTag(jsonMessage.messageImageList, DOMtag);
+			DOMtag.append(BuildCarousel(jsonMessage.messageImageList, true));
+			// DOMtag.append(BuildVideoTag(jsonMessage.messageImageList));
 		else if(jsonMessage.messageImageList.length && jsonMessage.messageImageList[0].mediaType == "image")
 			DOMtag.append(BuildCarousel(jsonMessage.messageImageList, true));
 		else if(jsonMessage.messageImageList.length && jsonMessage.messageImageList[0].mediaType == "youtube_video")
