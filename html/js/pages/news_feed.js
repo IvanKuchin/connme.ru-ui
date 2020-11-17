@@ -2107,6 +2107,26 @@ var news_feed = (function()
 		return result;
 	};
 
+	var Replicate_mp4_to_webm = function(video_list)
+	{
+		var	result	= [];
+		var	video_clone;
+
+		for(var i = 0; i < video_list.length; ++i)
+		{
+			result.push(video_list[i]);
+
+			if(video_list[i].filename.indexOf(".webm") == -1)
+			{
+				video_clone = Object.create(video_list[i]);
+				video_clone.filename = video_clone.filename.replace(".mp4", ".webm");
+				result.push(video_clone);
+			}
+		}
+
+		return result;
+	};
+
 	// --- attach video placement to DOMtag
 	// --- videoList - video list
 	var BuildVideoTag = function(videoList)
@@ -2125,6 +2145,12 @@ var news_feed = (function()
 											.attr("data_played_attempts", "0")
 											.attr("id", "videoTag" + uniqueID)
 											.attr("controls", "true");
+
+			// --- dirty hack
+			// --- add .webm file back to the list, due to .webm has been removed from the file list
+			// --- during building carousel.
+			videoList = Replicate_mp4_to_webm(videoList);
+
 
 			// --- put the .webm on the first place
 			videoList.sort(function(a, b)
@@ -2202,6 +2228,27 @@ var news_feed = (function()
 		return tag;
 	};
 
+	var	CleanUpFromWebm = function(media_list)
+	{
+		var	result = [];
+		var	media;
+
+		for(var i = 0; i < media_list.length; ++i)
+		{
+			media = media_list[i];
+			if((media.mediaType == "video") && (media.filename.indexOf(".webm") > 0))
+			{
+				// --- do not copy it to final list
+			}
+			else
+			{
+				result.push(media);
+			}
+		}
+
+		return result;
+	};
+
 	// --- attach Carousel to DOMtag
 	// --- imageList - image list
 	// --- add_data_ride (true|false) - if true carousel will slide once visible, otherwise stands still
@@ -2214,6 +2261,10 @@ var news_feed = (function()
 		{
 			uniqueID = Math.round(Math.random() * 100000000);
 		} while($("div#carousel" + uniqueID).length);
+
+		imageList = CleanUpFromWebm(imageList); // --- Dirty hack to keep number of media in the list 
+												// --- equal to number of carousel items.
+												// --- Must be a better way of doing that.
 
 		if(imageList.length > 0)
 		{
