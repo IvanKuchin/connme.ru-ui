@@ -8,7 +8,7 @@ var news_feed = (function()
 	"use strict";
 
 	var	myCompanies = [];
-	var	globalPageCounter = 0;  // --- used for transfer arg to function HandlerScrollToShow
+	var	globalPageCounter = 0;  // --- used to keep track of page number if scrolling
 	var	globalPostMessageImageList = []; // --- storage of previewImage objects in NewMessageModal
 	var	imageTempSet;
 	var globalNewsFeed;
@@ -3563,23 +3563,23 @@ var news_feed = (function()
 
 		carousel_tools.PlayVisibleCarousels();
 /*
-		// console.debug("HandlerScrollToShow: defining position of each carousel");
+		// console.debug("defining position of each carousel");
 		$("div.carousel.slide[data-ride='carousel']").each(
 			function()
 			{
 				var		tag = $(this);
-				// console.debug("HandlerScrollToShow: carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
+				// console.debug("carousel id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
 				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
 					tag.carousel("cycle");
 				else
 					tag.carousel("pause");
 			});
-		// console.debug("HandlerScrollToShow: defining position of each carousel");
+		// console.debug("defining position of each carousel");
 		$("div video.videoPlacement").each(
 			function()
 			{
 				var		tag = $(this);
-				// console.debug("HandlerScrollToShow: tag id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
+				// console.debug("tag id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
 				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
 				{
 					var		playedAttempts = parseInt(tag.attr("data_playedAttempts"));

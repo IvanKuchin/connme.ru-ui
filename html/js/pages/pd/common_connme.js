@@ -239,7 +239,7 @@ var carousel_tools = (function()
 	var	DELAY_AFTER_VIDEO_PLAYBACK			= 1000;
 	var	ACTION_DELAY_AFTER_SLIDE			= 700;
 	var	active_carousels_global 			= [];
-	var	timeout_handlers_global 			= [];
+	var	main_cycle_timeout_handlers_global 	= []; // --- use it with caution , if not sure, create separate handler tracker
 	var	video_playing_global				= [];
 
 	var GetVisibleCarousels = function()
@@ -269,6 +269,8 @@ var carousel_tools = (function()
 		PlayNewlyVisibleCarousels(newly_visible_carousels);
 		StopInvisibleAnymoreCarousels(invisible_carousels);
 
+		StopInvisibleVideo(video_playing_global);
+
 		// --- store visible carousels only
 		active_carousels_global = visible_carousels;
 	};
@@ -289,8 +291,27 @@ var carousel_tools = (function()
 
 		for (var i = carousels.length - 1; i >= 0; i--) 
 		{
-			clearTimeout(timeout_handlers_global[carousels[i]]);
-			delete(timeout_handlers_global[carousels[i]]);
+			console.debug("clear timeout ", carousels[i]);
+			clearTimeout(main_cycle_timeout_handlers_global[carousels[i]]);
+			delete(main_cycle_timeout_handlers_global[carousels[i]]);
+		}
+	};
+
+	var	StopInvisibleVideo = function(video_id_list)
+	{
+		var	video_tag;
+
+		for(var video_id in video_id_list)
+		{
+			video_tag = $("#" + video_id);
+
+			if(!system_calls.isTagFullyVisibleInWindowByHeight(video_tag))
+			{
+				console.debug("video tag ", video_tag, " not fully visible");
+
+				video_tag.get(0).pause();
+				delete(video_id_list[video_id]);
+			}
 		}
 	};
 
@@ -342,11 +363,11 @@ var carousel_tools = (function()
 		return active_item;
 	};
 
-	var	IncreaseCarouselPlayedAttempts = function(carousel_id)
+	var	IncreasePlayedAttempts = function(tag)
 	{
-		var		current_counter	= GetPlayedAttempts($("#" + carousel_id));
+		var		current_counter	= GetPlayedAttempts(tag);
 
-		return SetPlayedAttempts($("#" + carousel_id), current_counter + 1);
+		return SetPlayedAttempts(tag, current_counter + 1);
 	};
 
 	var	GetActiveItemType = function(carousel_id)
@@ -374,22 +395,31 @@ var carousel_tools = (function()
 	var ScheduleItemSlide_AfterVideoPlayed = function(carousel_id)
 	{
 		var	active_vdeo = GetActiveItem(carousel_id).find("video");
+		var	video_id	= active_vdeo.attr("id");
 
-		active_vdeo.get(0).play();
-		active_vdeo.get(0).onended = function()
-									{
-										var	curr_tag	= $(this);
-										var	carousel_id	= curr_tag.closest(".carousel.slide").attr("id");
-										
-										timeout_handlers_global[carousel_id] = setTimeout(SlideSingleCarousel, DELAY_AFTER_VIDEO_PLAYBACK, carousel_id);
-									};
+		if(GetPlayedAttempts(active_vdeo) === 0)
+		{
+			video_playing_global[video_id] = 1;
+			active_vdeo.get(0).play();
+			active_vdeo.get(0).onended = function()
+										{
+											var	video_tag	= $(this);
+											var	video_id	= video_tag.attr("id");
+											var	carousel_id	= video_tag.closest(".carousel.slide").attr("id");
+											
+											delete(video_playing_global[video_id]);
+											IncreasePlayedAttempts(video_tag);
+
+											main_cycle_timeout_handlers_global[carousel_id] = setTimeout(SlideSingleCarousel, DELAY_AFTER_VIDEO_PLAYBACK, carousel_id);
+										};
+		}
 	};
 
 	// --- this is helper function
 	// --- use main function instead (w/o _____-postfix)
 	var ScheduleItemSlide_AfterTimeout = function(carousel_id)
 	{
-		timeout_handlers_global[carousel_id] = setTimeout(SlideSingleCarousel, CAROUSEL_DELAY, carousel_id);
+		main_cycle_timeout_handlers_global[carousel_id] = setTimeout(SlideSingleCarousel, CAROUSEL_DELAY, carousel_id);
 	};
 
 	var ScheduleItemSlide = function(carousel_id)
@@ -410,10 +440,10 @@ var carousel_tools = (function()
 
 	var	AfterSlideAction = function(carousel_id)
 	{
-		if(timeout_handlers_global[carousel_id])
+		// if(main_cycle_timeout_handlers_global[carousel_id])
 		{
 			console.debug("after slide action (#" + carousel_id + ") -> " + GetActiveItemIndex(carousel_id));
-			
+
 			return ScheduleItemSlide(carousel_id);
 		}
 	};
@@ -435,11 +465,11 @@ var carousel_tools = (function()
 				if(active_idx < (number_of_items - 1))
 				{
 					$("#" + carousel_id).carousel(next_idx);
-					timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+					main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
 				}
 				else
 				{
-					IncreaseCarouselPlayedAttempts(carousel_id);
+					IncreasePlayedAttempts($("#" + carousel_id));
 				}
 			}
 		}
@@ -447,7 +477,7 @@ var carousel_tools = (function()
 		{
 			// --- play in cycle
 			$("#" + carousel_id).carousel(next_idx);
-			timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+			main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
 		}
 		else
 		{
