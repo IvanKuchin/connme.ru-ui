@@ -1,6 +1,6 @@
-
 /*global PreviewImageControl*/
 /*global carousel_tools*/
+/*global NoSleep*/
 /*exported news_feed*/
 
 var news_feed = (function()
