@@ -322,7 +322,7 @@ var carousel_tools = (function()
 
 	var	GetPlayedAttempts = function(tag)
 	{
-		var played_attempts = tag.attr("data_playedattempts") || 0;
+		var played_attempts = tag.attr("data_played_attempts") || 0;
 
 		return parseInt(played_attempts);
 	};
@@ -336,7 +336,7 @@ var carousel_tools = (function()
 
 	var	SetPlayedAttempts = function(tag, attempts)
 	{
-		tag.attr("data_playedattempts", attempts);
+		tag.attr("data_played_attempts", attempts);
 
 		return attempts;
 	};
@@ -394,14 +394,14 @@ var carousel_tools = (function()
 	// --- use main function instead (w/o _____-postfix)
 	var ScheduleItemSlide_AfterVideoPlayed = function(carousel_id)
 	{
-		var	active_vdeo = GetActiveItem(carousel_id).find("video");
-		var	video_id	= active_vdeo.attr("id");
+		var	active_video	= GetActiveItem(carousel_id).find("video");
+		var	video_id		= active_video.attr("id");
 
-		if(GetPlayedAttempts(active_vdeo) === 0)
+		if(GetPlayedAttempts(active_video) === 0)
 		{
 			video_playing_global[video_id] = 1;
-			active_vdeo.get(0).play();
-			active_vdeo.get(0).onended = function()
+			active_video.get(0).play();
+			active_video.get(0).onended = function()
 										{
 											var	video_tag	= $(this);
 											var	video_id	= video_tag.attr("id");

@@ -2122,7 +2122,7 @@ var news_feed = (function()
 		if(videoList.length > 0)
 		{
 			var		videoTag = $("<video>").addClass("videoPlacement")
-											.attr("data_playedAttempts", "0")
+											.attr("data_played_attempts", "0")
 											.attr("id", "videoTag" + uniqueID)
 											.attr("controls", "true");
 
@@ -2204,8 +2204,8 @@ var news_feed = (function()
 
 	// --- attach Carousel to DOMtag
 	// --- imageList - image list
-	// --- add_dataride (true|false) - if true carousel will slide once visible, otherwise stands still
-	var BuildCarousel = function(imageList, add_dataride)
+	// --- add_data_ride (true|false) - if true carousel will slide once visible, otherwise stands still
+	var BuildCarousel = function(imageList, add_data_ride)
 	{
 		var		uniqueID;
 		var		tagDivCarousel = $();
@@ -2232,7 +2232,7 @@ var news_feed = (function()
 														.attr("data-slide", "next");
 
 			tagDivCarousel = $("<div/>")				.addClass("carousel slide")
-														.attr("data_ride", add_dataride ? "carousel" : "none")
+														.attr("data_ride", add_data_ride ? "carousel" : "none")
 														.attr("id", "carousel" + uniqueID);
 
 			imageArr.sort(function(a, b)
@@ -3582,10 +3582,10 @@ var news_feed = (function()
 				// console.debug("tag id [" + tag.attr('id') + "] top position is " + tag.offset().top + " compare to " + windowPosition + " - " + (windowPosition + clientHeight));
 				if(system_calls.isTagFullyVisibleInWindowByHeight(tag))
 				{
-					var		playedAttempts = parseInt(tag.attr("data_playedAttempts"));
+					var		playedAttempts = parseInt(tag.attr("data_played_attempts"));
 					if(playedAttempts == 0)
 					{
-						tag.attr("data_playedAttempts", playedAttempts + 1);
+						tag.attr("data_played_attempts", playedAttempts + 1);
 						tag.get(0).play();
 					}
 				}
