@@ -1561,7 +1561,7 @@ view_profile = (function()
 								"action" : "AJAX_addViewProfileAddRecommendation",
 								"title": system_calls.FilterUnsupportedUTF8Symbols(addRecommendation.AddRecommendationTitle),
 								"recommendedUserID": friendUserID,
-								"eventTimestamp": currDate.getTime() / 1000 
+								"eventTimestamp": Math.round(currDate.getTime() / 1000) 
 							})
 			.done(function(data) {
 				var		resultJSON = JSON.parse(data);
@@ -1573,7 +1573,7 @@ view_profile = (function()
 											"recommendationTitle": system_calls.ConvertTextToHTML(addRecommendation.AddRecommendationTitle),
 											"recommendationRecommendedUserID": friendUserID,
 											"recommendationRecommendingUserID": myUserID,
-											"recommendationTimestamp": currDate.getTime() / 1000, 
+											"recommendationTimestamp": Math.round(currDate.getTime() / 1000), 
 											"recommendationState": "unknown"
 										};
 
