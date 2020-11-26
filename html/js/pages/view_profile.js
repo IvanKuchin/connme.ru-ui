@@ -96,8 +96,6 @@ view_profile = (function()
 	var DisplaySpecifiedImageModal_Show = function()
 	{
 		var		currTag = $(this);
-		var		type = currTag.data("type");
-		var		id = currTag.data("id");
 		var		src = currTag.attr("src");
 		var		title = currTag.data("title");
 
@@ -113,7 +111,7 @@ view_profile = (function()
 		var		duplicateFlag = false;
 
 		array.forEach(
-			function(item, i, arr)
+			function(item)
 			{
 				if(item.companyID == companyID) { duplicateFlag = true; }
 			});
@@ -134,10 +132,10 @@ view_profile = (function()
 		if(data.user1.id != data.user2.id)
 		{
 			user1Companies.forEach(
-				function(item1, index1, arr1)
+				function(item1)
 				{
 					user2Companies.forEach(
-							function(item2, index2, arr2)
+							function(item2)
 							{
 								if((typeof(item1.companyID) != "undefined") && (typeof(item2.companyID) != "undefined"))
 								{
@@ -199,7 +197,7 @@ view_profile = (function()
 				DrawUserAvatar(user1CanvasCtx, data.user1.avatar, data.user1.name, data.user1.nameLast);
 
 				data.handshakeUsers.forEach(
-					function(item, i, arr)
+					function(item, i)
 					{
 						var		hrefUserLink = $("<a>").attr("href", "/userprofile/" + item.id);
 						var		friendCanvas = $("<canvas>").attr("width", "40")
@@ -273,29 +271,29 @@ view_profile = (function()
 		}
 
 		{
-			var		user1Canvas = $("<canvas>").attr("width", "80")
+			user1Canvas = $("<canvas>").attr("width", "80")
 												.attr("height", "80")
 												.addClass("canvas-big-avatar class-tooltip")
 												.data("toggle", "tooltip")
 												.data("placement", "bottom")
 												.attr("title", data.user1.name + " " + data.user1.nameLast);
-			var		user1CanvasCtx = user1Canvas[0].getContext("2d");
-			var		user2Canvas = $("<canvas>").attr("width", "80")
+			user1CanvasCtx = user1Canvas[0].getContext("2d");
+			user2Canvas = $("<canvas>").attr("width", "80")
 												.attr("height", "80")
 												.addClass("canvas-big-avatar class-tooltip")
 												.data("toggle", "tooltip")
 												.data("placement", "bottom")
 												.attr("title", data.user2.name + " " + data.user2.nameLast);
-			var		user2CanvasCtx = user2Canvas[0].getContext("2d");
-			var		tagDivRow			= $("<div>").addClass("row");
-			var		tagDivUser1 		= $("<div>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3")
+			user2CanvasCtx = user2Canvas[0].getContext("2d");
+			tagDivRow			= $("<div>").addClass("row");
+			tagDivUser1 		= $("<div>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3")
 													.append(user1Canvas);
-			var		tagDivUser1Arrow	= $("<div>").addClass("col-ld-1 col-md-1 col-sm-1 col-xs-1 div-height-80")
+			tagDivUser1Arrow	= $("<div>").addClass("col-ld-1 col-md-1 col-sm-1 col-xs-1 div-height-80")
 													.append($("<span>").addClass("glyphicon glyphicon-arrow-right"));
 			var		tagDivCompanyHandshake = $("<div>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3");
-			var		tagDivUser2Arrow	= $("<div>").addClass("col-ld-1 col-md-1 col-sm-1 col-xs-1 div-height-80")
+			tagDivUser2Arrow	= $("<div>").addClass("col-ld-1 col-md-1 col-sm-1 col-xs-1 div-height-80")
 													.append($("<span>").addClass("glyphicon glyphicon-arrow-right"));
-			var		tagDivUser2 		= $("<div>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3")
+			tagDivUser2 		= $("<div>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3")
 													.append(user2Canvas);
 
 			if(data.handshakeCompanyStatus == "1hop")
@@ -304,7 +302,7 @@ view_profile = (function()
 				DrawUserAvatar(user1CanvasCtx, data.user1.avatar, data.user1.name, data.user1.nameLast);
 
 				data.handshakeCompanies.forEach(
-					function(item, i, arr)
+					function(item, i)
 					{
 						var		hrefCompanyLink = $("<a>").attr("href", "/companyprofile/" + item.companyID)
 															.addClass("class-tooltip")
@@ -364,8 +362,8 @@ view_profile = (function()
 		if(parseInt(my_user_id) && parseInt(friend_user_id))
 		{
 			$.getJSON("/cgi-bin/index.cgi?action=JSON_getShakeHands", {user1: my_user_id, user2: friend_user_id})
-		 		.done(function(data) 
-		 		{
+				.done(function(data) 
+				{
 					if(data.result == "success")
 					{
 						if(data.user1.id != data.user2.id)
@@ -385,7 +383,7 @@ view_profile = (function()
 	var	GetEmploymentDuration = function(empStart, empFinish)
 	{
 		var		result = "";
-		var		regexDate = /(\d+)\-(\d+)\-(\d+)/;
+		var		regexDate = /(\d+)-(\d+)-(\d+)/;
 		var		arrStart = regexDate.exec(empStart);
 
 		if(arrStart.length == 4)
@@ -420,8 +418,8 @@ view_profile = (function()
 		$("div#CarrierPath").empty();
 		userProfile.companies.sort(function(a, b)
 			{
-				var		arrA = a.occupationStart.split(/\-/);
-				var		arrB = b.occupationStart.split(/\-/);
+				var		arrA = a.occupationStart.split(/-/);
+				var		arrB = b.occupationStart.split(/-/);
 				var 	timeA, timeB;
 				var		result = 0;
 
@@ -434,14 +432,14 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.companies.forEach( function(item, i, arr) {
+		userProfile.companies.forEach( function(item) {
 			var		divRowTitle = $("<div>").addClass("row")
 												.attr("id", "companyTitle" + item.companyID);
 
 			var		divEmployment = $("<div>").addClass("col-xs-12 col-sm-7 col-sm-push-1");
 			var		divCompanyLogo = $("<div>").addClass("col-xs-5 col-sm-1 col-sm-pull-7");
 			var		divTimeline = $("<div>").addClass("col-xs-7 col-sm-4");
-			var		divClose = $("<div>").addClass("col-xs-2 col-lg-1 col-lg-push-6");
+			// var		divClose = $("<div>").addClass("col-xs-2 col-lg-1 col-lg-push-6");
 			var		paragraphTimeline = $("<b>");
 
 
@@ -460,11 +458,11 @@ view_profile = (function()
 			var		spanEmploymentDuration = $("<small>").addClass("")
 														.append("<br>(" + employmentDuration + ")");
 
-			var		spanCurrentPosition = $("<img>").addClass("custom_checkbox animateClass")
+/*			var		spanCurrentPosition = $("<img>").addClass("custom_checkbox animateClass")
 													.attr("src", (item.currentCompany == "1" ? "/images/pages/common/checkbox_checked.png" : "/images/pages/common/checkbox_unchecked.png"))
 													.attr("data-id", item.companyID)
 													.attr("data-currentcompany", item.currentCompany);
-
+*/
 			var		paragraphEmployment = $("<b>");
 			var		spanJobTitle = $("<span>").attr("data-id", item.companyID)
 													.attr("data-action", "updateJobTitle")
@@ -478,10 +476,11 @@ view_profile = (function()
 			var		spanCurrentPositionText = $("<span>").append(" настоящее время")
 														.data("id", item.companyID)
 														.data("action", "AJAX_changeCurrentStatus");
-			var		spanClose = $("<span>").attr("data-id", item.companyID)
+/*			var		spanClose = $("<span>").attr("data-id", item.companyID)
 											.attr("data-action", "AJAX_removeCompanyExperience")
 											.attr("aria-hidden", "true")
 											.addClass("glyphicon animateClass removeCompanyExperience");
+*/
 			var		imgCover;
 
 			result = result.add(divRowTitle);
@@ -559,7 +558,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.certifications.forEach( function(item, i, arr) {
+		userProfile.certifications.forEach( function(item) {
 			var		divRowCertification = $("<div>").addClass("row form-group")
 												.attr("id", "certification" + item.certificationID);
 
@@ -580,12 +579,11 @@ view_profile = (function()
 													.addClass("certificationNumber editableSpan")
 													.append(item.certificationNumber);
 
-			var		divClose = $("<div>").addClass("col-xs-2");
-			var		spanClose = $("<span>").attr("data-id", item.certificationID)
+/*			var		spanClose = $("<span>").attr("data-id", item.certificationID)
 											.attr("data-action", "AJAX_removeCertificationEntry")
 											.attr("aria-hidden", "true")
 											.addClass("glyphicon glyphicon-remove animateClass removeCertificationEntry");
-
+*/
 			var		imgCover;
 
 			if((typeof(item.certificationPhotoFolder) != "undefined") && (typeof(item.certificationPhotoFilename) != "undefined") && (item.certificationPhotoFolder.length) && (item.certificationPhotoFilename.length))
@@ -635,7 +633,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.courses.forEach( function(item, i, arr) {
+		userProfile.courses.forEach( function(item) {
 			var		usersCoursesID = item.courseID;
 			var		courseID = item.courseInternalID;
 
@@ -654,35 +652,36 @@ view_profile = (function()
 													.attr("data-action", "updateCourseTrack")
 													.addClass("courseTrack editableSpan")
 													.append(item.courseTrack);
-			var		spanNumber = $("<span>").attr("data-id", item.courseID)
+/*			var		spanNumber = $("<span>").attr("data-id", item.courseID)
 													.attr("data-action", "updateCourseNumber")
 													.addClass("courseNumber editableSpan")
 													.append(item.courseNumber);
-
 			var		divClose = $("<div>").addClass("col-xs-2");
 			var		spanClose = $("<span>").attr("data-id", item.courseID)
 											.attr("data-action", "AJAX_removeCourseEntry")
 											.attr("aria-hidden", "true")
 											.addClass("glyphicon glyphicon-remove animateClass removeCourseEntry");
+*/
 			var		currDate = new Date();
 			var		imgCover;
 
 			var		ratingCallback = function(rating)
 									{
-										var		id = $(this).data("id");
+										// var		id = $(this).data("id");
 
 										$.getJSON("/cgi-bin/index.cgi?action=AJAX_setCourseRating", {id: usersCoursesID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 										.done(function(data) {
 											if(data.result == "success")
-											{	
+											{
+												// --- good2go	
 											}
 											else
 											{
-											  console.debug("ratingCallback: ERROR: " + data.description);
+												console.debug("ratingCallback: ERROR: " + data.description);
 											}
 										});
 										
-										userProfile.courses.forEach(function(item, i, arr)
+										userProfile.courses.forEach(function(item, i)
 										{
 											if((typeof(item.courseInternalID) != "undefined") && (item.courseInternalID == courseID))
 												userProfile.courses[i].courseRating = rating;
@@ -737,7 +736,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.school.forEach( function(item, i, arr) {
+		userProfile.school.forEach( function(item) {
 			var		divRowSchool = $("<div>").addClass("row form-group")
 											.attr("id", "School" + item.schoolID);
 
@@ -761,13 +760,13 @@ view_profile = (function()
 													.attr("data-action", "updateSchoolTitle")
 													.addClass("schoolTitle editableSpan")
 													.append(item.schoolTitle);
-
+/*
 			var		divClose = $("<div>").addClass("col-xs-2");
 			var		spanClose = $("<span>").attr("data-id", item.schoolID)
 											.attr("data-action", "AJAX_removeSchoolEntry")
 											.attr("aria-hidden", "true")
 											.addClass("glyphicon glyphicon-remove animateClass removeSchoolEntry");
-
+*/
 			var		imgCover;
 
 			if((typeof(item.schoolPhotoFolder) != "undefined") && (typeof(item.schoolPhotoFilename) != "undefined") && (item.schoolPhotoFolder.length) && (item.schoolPhotoFilename.length))
@@ -819,7 +818,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.university.forEach( function(item, i, arr) {
+		userProfile.university.forEach( function(item) {
 			var		divRowUniversity = $("<div>").addClass("row form-group")
 											.attr("id", "University" + item.universityID);
 
@@ -847,13 +846,13 @@ view_profile = (function()
 													.attr("data-action", "updateUniversityTitle")
 													.addClass("UniversityTitle editableSpan")
 													.append(item.universityTitle);
-
+/*
 			var		divClose = $("<div>").addClass("col-xs-2");
 			var		spanClose = $("<span>").attr("data-id", item.universityID)
 											.attr("data-action", "AJAX_removeUniversityEntry")
 											.attr("aria-hidden", "true")
 											.addClass("glyphicon glyphicon-remove animateClass removeUniversityEntry");
-
+*/
 			var		imgCover;
 
 			if((typeof(item.universityPhotoFolder) != "undefined") && (typeof(item.universityPhotoFilename) != "undefined") && (item.universityPhotoFolder.length) && (item.universityPhotoFilename.length))
@@ -906,7 +905,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.languages.forEach( function(item, i, arr) {
+		userProfile.languages.forEach( function(item) {
 			var		divRowLanguage = $("<div>").addClass("row form-group")
 												.attr("id", "Language" + item.languageID);
 
@@ -921,12 +920,13 @@ view_profile = (function()
 													.attr("data-action", "updateLanguageLevel")
 													.addClass("LanguageLevel editableSelectLanguageLevel")
 													.append(item.languageLevel);
-
+/*
 			var		divClose = $("<div>").addClass("col-xs-2");
 			var		spanClose = $("<span>").attr("data-id", item.languageID)
 											.attr("data-action", "AJAX_removeLanguageEntry")
 											.attr("aria-hidden", "true")
 											.addClass("glyphicon glyphicon-remove animateClass removeLanguageEntry");
+*/
 			var		imgCover;
 
 			if((typeof(item.languagePhotoFolder) != "undefined") && (typeof(item.languagePhotoFilename) != "undefined") && (item.languagePhotoFolder.length) && (item.languagePhotoFilename.length))
@@ -976,7 +976,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.skills.forEach( function(item, i, arr) {
+		userProfile.skills.forEach( function(item) {
 			var		divRowSkill = $("<div>").addClass("row")
 											.attr("id", "skill" + item.skillID);
 
@@ -999,12 +999,13 @@ view_profile = (function()
 											.on("click", SkillConfirmationClickHandler);
 
 			var		divApprovers = $("<div>").addClass("col-sm-6 hidden-xs");
+			var		spanApprovers;
 
-			item.skillConfirmed.forEach(function(item1, i1, arr1) {
+			item.skillConfirmed.forEach(function(item1, i1) {
 				// --- maximum 10 avatars displayed
 				if(i1 < 10)
 				{
-					var		spanApprovers = $("<span>").attr("data-id", item.skillID)
+					spanApprovers = $("<span>").attr("data-id", item.skillID)
 													.attr("data-approverID", item1)
 													.attr("aria-hidden", "true")
 													.addClass("animateClass");
@@ -1035,7 +1036,7 @@ view_profile = (function()
 				// --- last sign is "..."
 				if(i1 == 10)
 				{
-					var		spanApprovers = $("<span>").append("...");
+					spanApprovers = $("<span>").append("...");
 					
 					divApprovers.append(spanApprovers);
 				}
@@ -1076,9 +1077,8 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.books.forEach( function(item, i, arr) {
+		userProfile.books.forEach( function(item) {
 			var		bookID = item.bookID;
-			var		usersBooksID = item.id;
 
 			var		divRowBook = $("<div>").addClass("row margin_top_10")
 												.attr("id", "Book" + item.id);
@@ -1097,31 +1097,33 @@ view_profile = (function()
 													.attr("data-script", "book.cgi")
 													.addClass("bookAuthor")
 													.append(item.bookAuthorName);
-
+/*
 			var		spanTimestamp = $("<span>").addClass("bookReadTimestamp editableSpan formatDate")
 												.append(system_calls.GetLocalizedDateNoTimeFromSeconds(item.bookReadTimestamp))
 												.data("id", item.id)
 												.data("action", "updateBookReadTimestamp")
 												.data("script", "book.cgi");
+*/
 			var		currDate = new Date();
 			var		imgCover;
 
 			var		ratingCallback = function(rating)
 									{
-										var		id = $(this).data("id");
+										// var		id = $(this).data("id");
 
 										$.getJSON("/cgi-bin/book.cgi?action=AJAX_setBookRating", {bookID: bookID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 										.done(function(data) {
 											if(data.result == "success")
 											{	
+												// --- good2go
 											}
 											else
 											{
-											  console.debug("ratingCallback: ERROR: " + data.description);
+												console.debug("ratingCallback: ERROR: " + data.description);
 											}
 										});
 										
-										userProfile.books.forEach(function(item, i, arr)
+										userProfile.books.forEach(function(item, i)
 										{
 											if((typeof(item.bookID) != "undefined") && (item.bookID == bookID))
 												userProfile.books[i].bookRating = rating;
@@ -1173,23 +1175,23 @@ view_profile = (function()
 			{
 				var		titleA;
 				var		titleB;
-				var		result;
+				// var		result;
 
 				if(a.entity_type == "company") titleA = a.company[0].name;
 				if(a.entity_type == "group") titleA = a.group[0].title;
 				if(b.entity_type == "company") titleB = b.company[0].name;
 				if(b.entity_type == "group") titleB = b.group[0].title;
 
-				if(titleA == titleB) { result = 0; }
+/*				if(titleA == titleB) { result = 0; }
 				if(titleA > titleB) { result = -1; }
 				if(titleA < titleB) { result = 1; }
-
+*/
 				return titleA.localeCompare(titleB);
 			});
-		userProfile.subscriptions.forEach( function(item, i, arr) {
+		userProfile.subscriptions.forEach( function(item) {
 			if(item.entity_type == "company")
 			{
-				var		companyID = item.company[0].id;
+				// var		companyID = item.company[0].id;
 
 				var		divRow = $("<div>").addClass("row margin_top_10")
 											.attr("id", "company" + item.company[0].id);
@@ -1204,13 +1206,14 @@ view_profile = (function()
 												.attr("data-script", "company.cgi")
 												.addClass("companyTitle")
 												.append(linkToCompany);
-
+/*
 				var		spanTimestamp = $("<span>").addClass("companyReadTimestamp editableSpan formatDate")
 													.append(system_calls.GetLocalizedDateNoTimeFromSeconds(item.company[0].eventTimestamp))
 													.data("id", item.company[0].id)
 													.data("action", "updateCompanyReadTimestamp")
 													.data("script", "company.cgi");
 				var		currDate = new Date();
+*/
 				var		imgCover;
 
 				if((typeof(item.company[0].logo_folder) != "undefined") && (typeof(item.company[0].logo_filename) != "undefined") && (item.company[0].logo_folder.length) && (item.company[0].logo_filename.length))
@@ -1263,23 +1266,23 @@ view_profile = (function()
 			{
 				var		titleA;
 				var		titleB;
-				var		result;
+				// var		result;
 
 				if(a.entity_type == "company") titleA = a.company[0].name;
 				if(a.entity_type == "group") titleA = a.group[0].title;
 				if(b.entity_type == "company") titleB = b.company[0].name;
 				if(b.entity_type == "group") titleB = b.group[0].title;
 
-				if(titleA == titleB) { result = 0; }
+/*				if(titleA == titleB) { result = 0; }
 				if(titleA > titleB) { result = -1; }
 				if(titleA < titleB) { result = 1; }
-
+*/
 				return titleA.localeCompare(titleB);
 			});
-		userProfile.subscriptions.forEach( function(item, i, arr) {
+		userProfile.subscriptions.forEach( function(item) {
 			if(item.entity_type == "group")
 			{
-				var		groupID = item.group[0].id;
+				// var		groupID = item.group[0].id;
 
 				var		divRow = $("<div>").addClass("row margin_top_10")
 											.attr("id", "group" + item.group[0].id);
@@ -1294,13 +1297,14 @@ view_profile = (function()
 												.attr("data-script", "group.cgi")
 												.addClass("groupTitle")
 												.append(linkToGroup);
-
+/*
 				var		spanTimestamp = $("<span>").addClass("groupReadTimestamp editableSpan formatDate")
 													.append(system_calls.GetLocalizedDateNoTimeFromSeconds(item.group[0].eventTimestamp))
 													.data("id", item.group[0].id)
 													.data("action", "updateGroupReadTimestamp")
 													.data("script", "group.cgi");
 				var		currDate = new Date();
+*/
 				var		imgCover;
 
 				if((typeof(item.group[0].logo_folder) != "undefined") && (typeof(item.group[0].logo_filename) != "undefined") && (item.group[0].logo_folder.length) && (item.group[0].logo_filename.length))
@@ -1383,7 +1387,7 @@ view_profile = (function()
 
 				return result;
 			});
-		userProfile.recommendation.forEach( function(item, i, arr) {
+		userProfile.recommendation.forEach( function(item) {
 
 			// --- if user recommendation haven't been checked by admin or confirmed and clean.
 			if((item.recommendationState == "unknown") || (item.recommendationState == "clean"))
@@ -1393,7 +1397,9 @@ view_profile = (function()
 												.attr("id", "titleRecommendation" + item.recommendationID);
 				var		divFriendTitle = $("<div>").addClass("col-xs-6 col-sm-8");
 				var		divFriendTimestamp = $("<div>").addClass("col-xs-4 col-sm-2")
-													   .append($("<h6>").append($("<small>").append(system_calls.GetLocalizedDateFromSeconds(item.recommendationTimestamp))));
+														.append(
+															$("<h6>").append(
+																$("<small>").append(system_calls.GetLocalizedDateFromSeconds(item.recommendationTimestamp))));
 				var		divFriendClose = $("<div>").addClass("col-xs-2");
 				var		spanClose = $("<span>").attr("data-id", item.recommendationID)
 												.attr("data-action", "AJAX_removeRecommendationEntry")
@@ -1427,10 +1433,10 @@ view_profile = (function()
 								.attr("title", user.name + " " + user.nameLast);
 
 					divFriendTitle.append($("<span>").append(href1.append(canvas)))
-								  .append(" ")
-								  .append($("<span>").addClass("vertical_align_top")
-								  					 .append(href2.append(user.name + " " + user.nameLast).addClass("vertical_align_top"))
-								  					 .append(system_calls.GetGenderedPhrase(user, " написал(а):", " написал:", " написала:")));
+								.append(" ")
+								.append($("<span>")	.addClass("vertical_align_top")
+													.append(href2.append(user.name + " " + user.nameLast).addClass("vertical_align_top"))
+													.append(system_calls.GetGenderedPhrase(user, " написал(а):", " написал:", " написала:")));
 				}
 				else
 				{
@@ -1461,7 +1467,7 @@ view_profile = (function()
 		window.setTimeout(userCache.RequestServerToUpdateCache, 1000);
 	};
 
-	var		SkillConfirmationClickHandler = function(event)
+	var		SkillConfirmationClickHandler = function()
 	{
 		var		currTag = $(this);
 		var		currTagAction = currTag.data("action");
@@ -1472,6 +1478,7 @@ view_profile = (function()
 			.done(function(data) {
 				if(data.result === "success")
 				{
+					// --- good2go
 				}
 				else
 				{
@@ -1482,7 +1489,7 @@ view_profile = (function()
 		// --- improve UseExperience to avoid delay in server response
 		if(currTagAction == "viewProfile_SkillApprove")
 		{
-			userProfile.skills.forEach(function(item, i, arr)
+			userProfile.skills.forEach(function(item)
 			{
 				if(item.skillID == currTagID)
 				{
@@ -1495,7 +1502,7 @@ view_profile = (function()
 		}
 		if(currTagAction == "viewProfile_SkillReject")
 		{
-			userProfile.skills.forEach(function(item, i, arr)
+			userProfile.skills.forEach(function(item)
 			{
 				if(item.skillID == currTagID)
 				{
@@ -1641,7 +1648,7 @@ view_profile = (function()
 
 
 	// --- Are You Sure modal handler
-	var RemoveRecommendationEntry = function(e) {
+	var RemoveRecommendationEntry = function() {
 		var		affectedID = $(this).data("id");
 		var		affectedAction = $(this).data("action");
 
@@ -1668,6 +1675,7 @@ view_profile = (function()
 			.done(function(data) {
 				if(data.result === "success")
 				{
+					// --- good2go
 				}
 				else
 				{
@@ -1680,7 +1688,7 @@ view_profile = (function()
 		// ---	 I'm updating GUI immediately after click, not waiting server response
 		if(affectedAction == "AJAX_removeRecommendationEntry")
 		{
-			userProfile.recommendation.forEach(function(item, i, arr) {
+			userProfile.recommendation.forEach(function(item, i) {
 				if(item.recommendationID == affectedID)
 				{
 					userProfile.recommendation.splice(i, 1);
@@ -1742,6 +1750,7 @@ view_profile = (function()
 							var		resultJSON = JSON.parse(data);
 							if(resultJSON.result === "success")
 							{
+								// --- good2go
 
 							}
 							else
@@ -1781,13 +1790,13 @@ view_profile = (function()
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 	};
 
-	var	editableFuncReplaceToTextarea = function (e) {
+	var	editableFuncReplaceToTextarea = function () {
 		var	ButtonAcceptHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphAccept($("#" + associatedTextareaID));
 		};
 
-		var	ButtonRejectHandler = function(e) {
+		var	ButtonRejectHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphReject($("#" + associatedTextareaID));
 		};
