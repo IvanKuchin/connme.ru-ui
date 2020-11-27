@@ -1555,6 +1555,25 @@ system_calls = (function()
 		return lenghtyWord.length;
 	};
 
+	// --- output:
+	//     if empy - URL is valid
+	//     if not empty - error message
+	var isValidURL = function(url)
+	{
+		var	result = "";
+
+		if(url.length === 0)
+		{
+			result = "пустой URL";
+		}
+		else if((url.toLowerCase().indexOf("http://") == -1) && (url.toLowerCase().indexOf("https://") == -1))
+		{
+			result = "не указано http:// или https://";
+		}
+
+		return result
+	};
+
 	var	ArrayLeftIntersection = function(arr1, arr2)
 	{
 		var	result = [];
@@ -1692,6 +1711,7 @@ system_calls = (function()
 		ReplaceTextLinkToURL: ReplaceTextLinkToURL,
 		LongestWordSize: LongestWordSize,
 		LongestWord: LongestWord,
+		isValidURL: isValidURL,
 
 		ArrayLeftIntersection:ArrayLeftIntersection,
 		ArrayRightIntersection:ArrayRightIntersection,

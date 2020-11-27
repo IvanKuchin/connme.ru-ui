@@ -17,10 +17,10 @@ var news_feed = (function()
 	var	globalMyCompanies = [];
 	var	modalScrollPosition; // --- Modal issues on IOS (see end of Init)
 	var	NoSleep_global;
+	const uploadFileRegexImageVideo_global = /(\.|\/)(gif|jpe?g|png|mov|avi|mp4|webm)$/i;
 
 	var Init = function() 
 	{
-		var		uploadFileRegexImageVideo = /(\.|\/)(gif|jpe?g|png|mov|avi|mp4|webm)$/i;
 
 		myProfile.id = $("#myUserID").data("myuserid");
 		myProfile.firstName = $("#myFirstName").text();
@@ -38,22 +38,19 @@ var news_feed = (function()
 			// --- News feed post message
 			$("#NewsFeedMessageSubmit").on("click", NewsFeedPostMessage_ClickHandler);
 			// --- News feed: New message: Link: GetData button
-			$("#newsFeed_NewMessageLink_GetDataButton").on("click", function() {
-				GetDataFromProvidedURL();
-			});
+			$("#newsFeed_NewMessageLink_GetDataButton").on("click", GetDataFromProvidedURL);
 			// --- Post message modal window show handler
-			$("#NewsFeedNewMessage").on("shown.bs.modal", function () {
-				NewMessageNewsFeedModalShownHandler();
-			});
+			$("#NewsFeedNewMessage").on("shown.bs.modal", NewMessageNewsFeedModal_ShownHandler);
 			// --- Post message modal window hide handler
-			$("#NewsFeedNewMessage").on("hidden.bs.modal", function () {
-				NewMessageNewsFeedModalHiddenHandler();
-			});
+			$("#NewsFeedNewMessage").on("hidden.bs.modal", MessageModal_HiddenHandler);
+
+			// --- enable/disable button on input to the link field
 			$("#newsFeedMessageLink").on("input" , function () {
 				var		content = $(this).val();
 				if(content.length) $("#newsFeed_NewMessageLink_GetDataButton").removeAttr("disabled");
 				else $("#newsFeed_NewMessageLink_GetDataButton").attr("disabled", "");
 			});
+
 			// --- messageAccessRights: 
 			// --- 		hide if posted from company/group, 
 			// --- 		unhide if posted from person
@@ -74,17 +71,11 @@ var news_feed = (function()
 
 			// --- "Edit message" events
 			// --- News feed post message
-			$("#editNewsFeedMessageSubmit").on("click", function() {
-				EditNewsFeedPostMessage();
-			});
+			$("#editNewsFeedMessageSubmit").on("click", EditNewsFeedPostMessage);
 			// --- Post message modal window show handler
-			$("#editNewsFeedMessage").on("show.bs.modal", function () {
-				EditNewsFeedModalShownHandler();
-			});
+			$("#editNewsFeedMessage").on("show.bs.modal", EditNewsFeedModal_ShownHandler);
 			// --- Post message modal window hide handler
-			$("#editNewsFeedMessage").on("hidden.bs.modal", function () {
-				EditNewsFeedModalHiddenHandler();
-			});
+			$("#editNewsFeedMessage").on("hidden.bs.modal", MessageModal_HiddenHandler);
 
 			// --- New message image uploader
 			$(function () {
@@ -94,147 +85,18 @@ var news_feed = (function()
 					dataType: "json",
 					maxFileSize: 300 * 1024 * 1024,
 					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-					acceptFileTypes: uploadFileRegexImageVideo,
+					acceptFileTypes: uploadFileRegexImageVideo_global,
 					singleFileUploads: true,
 					disableImageResize: false,
 					imageMaxWidth: 1024,
 					imageMaxHeight: 768,
 
-					always: function (e, data)
-					{
-						var containerPreview = $("<div>").appendTo("#PostMessage_PreviewImage");
-
-						console.debug("newimageuploader: always handler: start");
-						containerPreview.addClass("container-fluid");
-
-						data.files.forEach(
-							function(item, i)
-							{
-								var		rowPreview = $("<div>").appendTo(containerPreview)
-																	.addClass("row");
-
-								console.debug("newimageuploader: always handler: filename [" + item.name + "]");
-
-								--globalUploadImageCounter;
-								$("#NewsFeedMessageSubmit").text("Загрузка (" + (globalUploadImageTotal - globalUploadImageCounter) + " из " + globalUploadImageTotal + ") ...");
-
-								// TODO: 2delete: debug function to check upload functionality
-								globalUploadImage_UnloadedList = jQuery.grep(globalUploadImage_UnloadedList, function(itemList) { return itemList != item.name; } );
-								Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
-
-
-								console.debug("newimageuploader: always handler: number of uploading images is " + globalUploadImageCounter);
-								if(!globalUploadImageCounter)
-								{
-									// $("#NewsFeedMessageSubmit").button('reset');
-									$("#NewsFeedMessageSubmit").text("Написать");
-								}
-
-								// --- reset progress bar
-								$("#NewMessageProgress .progress-bar").removeClass("active")
-																	.css("width", "0%");
-								$("#NewMessageProgress .progress-string").empty();
-
-
-								if(typeof(data.result) != "undefined")
-								{							
-									if(data.result[i].result == "success")
-									{							
-										rowPreview.addClass(" alert alert-success");
-										$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview).append(typeof(item.preview) != "undefined" ? item.preview : "");
-										$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(item.name);
-
-										globalPostMessageImageList.push(data.result[i]);
-									}
-									else
-									{
-										rowPreview.addClass(" alert alert-danger");
-										$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
-										$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(data.result[0].fileName + " " + data.result[0].textStatus);
-									}
-								}
-								else
-								{
-									console.error("newimageuploader:ERROR in image upload (most probably image format is not supported)");							
-									rowPreview.addClass(" alert alert-danger");
-									$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
-									$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append("ошибка: " + item.name);
-								}
-							}
-						);
-					},
-					done: function (e, data) 
-					{
-						var	value = data.result;
-							{
-								if(value[0].result == "error")
-								{
-									console.error("newimageuploader: done handler:ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
-								}
-
-								if(value[0].result == "success")
-								{
-									console.debug("newimageuploader: done handler: uploading success [" + value[0].fileName + "]");
-									// DrawAllAvatars();
-								}
-							}
-
-					},
-					add: function (e, data) 
-					{
-						// --- original part of "add" handler 
-						// --- !!! ATTENTION !!! do not change it
-						var $this = $(this);
-						var originalAdd = $.blueimp.fileupload.prototype.options.add;
-
-						data.process(function () {
-							return $this.fileupload("process", data);
-						});
-						originalAdd.call(this, e, data);
-
-
-						// --- custom part of "add" handler
-						data.files.forEach(
-							function(item, i)
-							{ 
-								console.debug("newimageuploader: add handler: filename " + i + " is " + item.name); 
-								if(uploadFileRegexImageVideo.test(item.name))
-								{
-									++globalUploadImageCounter;
-									globalUploadImageTotal = globalUploadImageCounter;
-
-									// TODO: 2delete:  debug function to check upload functionality
-									globalUploadImage_UnloadedList.push(item.name);
-									Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
-								}
-							});
-						if(globalUploadImageCounter)
-						{
-							// $("#NewsFeedMessageSubmit").button('loading');
-							$("#NewsFeedMessageSubmit").text("Загрузка (0 из " + globalUploadImageCounter + ") ...");
-						}
-						console.debug("newimageuploader: add handler: number of uploading images is " + globalUploadImageCounter);
-					},
-					progressall: function (e, data) {
-						var progress = parseInt(data.loaded / data.total * 100, 10);
-
-						$("#NewMessageProgress .progress-bar").css("width", progress + "%");
-						if(progress > 97) 
-						{
-							$("#NewMessageProgress .progress-bar").addClass("active");
-							$("#NewMessageProgress .progress-string").empty().append("Обработка...");
-						}
-						else
-						{
-							$("#NewMessageProgress .progress-string").empty().append(progress + "%");
-						}
-					},
-					fail: function (e, data) {
-						console.error("editimageuploader: fail handler:ERROR image uploading [" + data.textStatus + "]");
-						// alert("ошибка загрузки фаила: " + data.textStatus);
-					}
-
-					})
+					always:			BlueimpImageUploader_Always,
+					done: 			BlueimpImageUploader_Done,
+					add:			BlueimpImageUploader_Add,
+					progressall:	BlueimpImageUploader_Progressall,
+					fail: 			BlueimpImageUploader_Fail
+				})
 					.on("fileuploadprocessalways", function (e, data) {
 						if(
 							(typeof(data.files.error) !=  "undefined") && data.files.error &&
@@ -266,144 +128,18 @@ var news_feed = (function()
 					dataType: "json",
 					maxFileSize: 100 * 1024 * 1024, 
 					// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-					acceptFileTypes: uploadFileRegexImageVideo,
+					acceptFileTypes: uploadFileRegexImageVideo_global,
 					singleFileUploads: true,
 					disableImageResize: false,
 					imageMaxWidth: 1024,
 					imageMaxHeight: 768,
 
 
-					always: function (e, data)
-					{
-						var containerPreview = $("<div>").appendTo("#editPostMessage_PreviewImage");
-
-						console.debug("editimageuploader: always handler: start");
-						containerPreview.addClass("container-fluid");
-
-						data.files.forEach(
-							function(item, i)
-							{
-								var		rowPreview = $("<div>").appendTo(containerPreview)
-																	.addClass("row");
-
-								console.debug("editimageuploader: always handler: filename [" + item.name + "]");
-			
-								--globalUploadImageCounter;
-								$("#editNewsFeedMessageSubmit").text("Загрузка (" + (globalUploadImageTotal - globalUploadImageCounter) + " из " + globalUploadImageTotal + ") ...");
-
-								// TODO: 2delete: debug function to check upload functionality
-								globalUploadImage_UnloadedList = jQuery.grep(globalUploadImage_UnloadedList, function(itemList) { return itemList != item.name; } );
-								Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
-
-								console.debug("editimageuploader: always handler: number of uploading images is " + globalUploadImageCounter);
-								if(!globalUploadImageCounter)
-								{
-									// $("#editNewsFeedMessageSubmit").button('reset');
-									$("#editNewsFeedMessageSubmit").text("Написать");
-								}
-
-								// --- reset progress bar
-								$("#EditMessageProgress .progress-bar").removeClass("active")
-																	.css("width", "0%");
-								$("#EditMessageProgress .progress-string").empty();
-
-								if(typeof(data.result) != "undefined")
-								{							
-									if(data.result[i].result == "success")
-									{							
-										rowPreview.addClass(" alert alert-success");
-										$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview).append(typeof(item.preview) != "undefined" ? item.preview : "");
-										$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(item.name);
-
-										globalPostMessageImageList.push(data.result[i]);
-									}
-									else
-									{
-										rowPreview.addClass(" alert alert-danger");
-										$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
-										$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(data.result[0].fileName + " " + data.result[0].textStatus);
-									}
-								}
-								else
-								{
-									console.error("newimageuploader:ERROR in image upload (most probably image format is not supported)");							
-									rowPreview.addClass(" alert alert-danger");
-									$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
-									$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append("ошибка: " + item.name);
-								}
-							}
-						);
-					},
-					done: function (e, data) 
-					{
-						var	value = data.result;
-							{
-								if(value[0].result == "error")
-								{
-									console.error("editimageuploader: done handler:ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
-								}
-
-								if(value[0].result == "success")
-								{
-									console.debug("editimageuploader: done handler: uploading success [" + value[0].fileName + "]");
-									// DrawAllAvatars();
-								}
-							}
-
-					},
-					add: function (e, data) 
-					{
-						// --- original part of "add" handler 
-						// --- !!! ATTENTION !!! do not change it
-						var $this = $(this);
-						var originalAdd = $.blueimp.fileupload.prototype.options.add;
-
-						data.process(function () {
-							return $this.fileupload("process", data);
-						});
-						originalAdd.call(this, e, data);
-
-						// --- custom part of "add" handler
-						data.files.forEach(
-							function(item, i)
-							{ 
-								console.debug("editimageuploader: add handler: filename " + i + " is " + item.name); 
-								if(uploadFileRegexImageVideo.test(item.name))
-								{
-									++globalUploadImageCounter;
-									globalUploadImageTotal = globalUploadImageCounter;
-									// TODO: 2delete:  debug function to check upload functionality
-									globalUploadImage_UnloadedList.push(item.name);
-									Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
-								}
-							});
-						if(globalUploadImageCounter)
-						{
-							// $("#NewsFeedMessageSubmit").button('loading');
-							$("#editNewsFeedMessageSubmit").text("Загрузка (0 из " + globalUploadImageCounter + ") ...");
-						}
-
-						console.debug("editimageuploader: add handler: number of uploading images is " + globalUploadImageCounter);
-					},
-					progressall: function (e, data) {
-						var progress = parseInt(data.loaded / data.total * 100, 10);
-
-						$("#EditMessageProgress .progress-bar").css("width", progress + "%");
-						if(progress > 97) 
-						{
-							$("#EditMessageProgress .progress-bar").addClass("active");
-							$("#EditMessageProgress .progress-string").empty().append("Обработка...");
-						}
-						else
-						{
-							$("#EditMessageProgress .progress-string").empty().append(progress + "%");
-						}
-					},
-					fail: function (e, data) {
-						console.error("editimageuploader: fail handler:ERROR image uploading [" + data.textStatus + "]");
-						// alert("ошибка загрузки фаила: " + data.textStatus);
-					}
-
+					always:			BlueimpImageUploader_Always,
+					done:			BlueimpImageUploader_Done,
+					add:			BlueimpImageUploader_Add,
+					progressall:	BlueimpImageUploader_Progressall,
+					fail:			BlueimpImageUploader_Fail
 				})
 					.on("fileuploadprocessalways", function (e, data) {
 						if(
@@ -427,6 +163,8 @@ var news_feed = (function()
 					.parent().addClass($.support.fileInput ? undefined : "disabled");
 			});
 
+			// --- paste picture
+			$("#NewsFeedNewMessage").on("paste", AddImageClipbufferImage_PasteHandler);
 
 			// --- Is it require to update username ?
 			if($("#myUserID").data("myuserid") && $("#myUserID").attr("data-mylogin") && $("#myUserID").attr("data-mylogin").length && ($("#myUserID").attr("data-mylogin") != "Guest"))
@@ -521,8 +259,150 @@ var news_feed = (function()
 
 	};
 
+	var BlueimpImageUploader_Always = function (e, data)
+	{
+		var	modal_tag			= $(e.target).closest(".modal");
+		var	media_preview_area	= modal_tag.find(".__media_preview_area");
+		var media_preview		= $("<div>").appendTo(media_preview_area);
+
+		console.debug("imageuploader: always handler: start");
+		media_preview.addClass("container-fluid");
+
+		data.files.forEach(
+			function(item, i)
+			{
+				var		rowPreview = $("<div>").appendTo(media_preview)
+													.addClass("row");
+
+				console.debug("imageuploader: always handler: filename [" + item.name + "]");
+
+				--globalUploadImageCounter;
+				modal_tag.find("__submit").text("Загрузка (" + (globalUploadImageTotal - globalUploadImageCounter) + " из " + globalUploadImageTotal + ") ...");
+
+				// TODO: 2delete: debug function to check upload functionality
+				globalUploadImage_UnloadedList = jQuery.grep(globalUploadImage_UnloadedList, function(itemList) { return itemList != item.name; } );
+				Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
+
+
+				console.debug("imageuploader: always handler: number of uploading images is " + globalUploadImageCounter);
+				if(!globalUploadImageCounter)
+				{
+					// modal_tag.find("__submit").button('reset');
+					modal_tag.find("__submit").text("Написать");
+				}
+
+				// --- reset progress bar
+				modal_tag.find(".progress-bar")		.removeClass("active")
+													.css("width", "0%");
+				modal_tag.find(".progress-string")	.empty();
+
+
+				if(typeof(data.result) != "undefined")
+				{							
+					if(data.result[i].result == "success")
+					{							
+						rowPreview.addClass(" alert alert-success");
+						$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview).append(typeof(item.preview) != "undefined" ? item.preview : "");
+						$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(item.name);
+
+						globalPostMessageImageList.push(data.result[i]);
+					}
+					else
+					{
+						rowPreview.addClass(" alert alert-danger");
+						$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
+						$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(data.result[0].fileName + " " + data.result[0].textStatus);
+					}
+				}
+				else
+				{
+					console.error("imageuploader:ERROR in image upload (most probably image format is not supported)");							
+					rowPreview.addClass(" alert alert-danger");
+					$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
+					$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append("ошибка: " + item.name);
+				}
+			}
+		);
+	};
+
+	var	BlueimpImageUploader_Done = function (e, data) 
+	{
+		var	value = data.result;
+			{
+				if(value[0].result == "error")
+				{
+					console.error("imageuploader: done handler:ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
+				}
+
+				if(value[0].result == "success")
+				{
+					console.debug("imageuploader: done handler: uploading success [" + value[0].fileName + "]");
+					// DrawAllAvatars();
+				}
+			}
+
+	};
+
+	var	 BlueimpImageUploader_Add = function (e, data) 
+	{
+		// --- original part of "add" handler 
+		// --- !!! ATTENTION !!! do not change it
+		var $this = $(this);
+		var originalAdd = $.blueimp.fileupload.prototype.options.add;
+
+		data.process(function () {
+			return $this.fileupload("process", data);
+		});
+		originalAdd.call(this, e, data);
+
+		// --- custom part of "add" handler
+		var	modal_tag			= $(e.target).closest(".modal");
+
+		data.files.forEach(
+			function(item, i)
+			{ 
+				console.debug("imageuploader: add handler: filename " + i + " is " + item.name); 
+				if(uploadFileRegexImageVideo_global.test(item.name))
+				{
+					++globalUploadImageCounter;
+					globalUploadImageTotal = globalUploadImageCounter;
+					// TODO: 2delete:  debug function to check upload functionality
+					globalUploadImage_UnloadedList.push(item.name);
+					Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
+				}
+			});
+		if(globalUploadImageCounter)
+		{
+			modal_tag.find("__submit").text("Загрузка (0 из " + globalUploadImageCounter + ") ...");
+		}
+
+		console.debug("imageuploader: add handler: number of uploading images is " + globalUploadImageCounter);
+	};
+
+	var	 BlueimpImageUploader_Progressall = function (e, data) 
+	{
+		var	modal_tag			= $(e.target).closest(".modal");
+		var progress = parseInt(data.loaded / data.total * 100, 10);
+
+		modal_tag.find(".progress-bar").css("width", progress + "%");
+		if(progress > 97) 
+		{
+			modal_tag.find(".progress-bar")		.addClass("active");
+			modal_tag.find(".progress-string")	.empty().append("Обработка...");
+		}
+		else
+		{
+			modal_tag.find(".progress-string")	.empty().append(progress + "%");
+		}
+	};
+
+	var	BlueimpImageUploader_Fail = function (e, data) 
+	{
+		console.error("newimageuploader: fail handler:ERROR image uploading [" + data.textStatus + "]");
+	};
+
 	// --- initialize all fields in "edit form"
-	var EditNewsFeedModalShownHandler = function()
+	var EditNewsFeedModal_ShownHandler = function()
 	{
 		var		editMessageID = $("#editNewsFeedMessageSubmit").data("messageID");
 
@@ -585,17 +465,42 @@ var news_feed = (function()
 
 		// --- zeroize tempSet for user at image_news table
 		$.getJSON("/cgi-bin/index.cgi?action=AJAX_prepareEditFeedImages", {messageID: editMessageID, imageTempSet: imageTempSet})
-				.done(function(data) 
+				.done(function() 
 				{
-					console.debug("AJAX_prepareEditFeedImages.done(): result = " + data.result);
+					// --- good2go
 				})
 				.fail(function() 
 				{
-					console.debug("ERROR: $(document).getJSON(AJAX_cleanupFeedImages).fail(): result");
+					console.debug("fail() returned from edit message preparation");
 				});
 
 		// --- activate noSleep feature to avoid screen dimming during upload
 		if(isMobile.phone) NoSleep_global.enable();
+	};
+
+
+	var	AddImageClipbufferImage_PasteHandler = function(event)
+	{
+		var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+		console.log("PasteHandler:" + JSON.stringify(items)); // will give you the mime types
+
+		for (var idx in items) 
+		{
+			var item = items[idx];
+
+			if (item.kind === "file") 
+			{
+				var blob = item.getAsFile();
+				var reader = new FileReader();
+
+				reader.onload = function(event)
+				{
+					console.log(event.target.result);
+				}; // data url!
+
+				reader.readAsDataURL(blob);
+			}
+		}
 	};
 
 	var	RenderMessageMedia = function(message)
@@ -870,101 +775,31 @@ var news_feed = (function()
 				});
 	};
 
-	// --- clean-up picture uploads environment
-	var EditNewsFeedModalHiddenHandler = function()
+	var	EditNewsFeedPostMessage = function(e)
 	{
-		// --- clean-up preview pictures in PostMessage modal window 
-		$("#editPostMessage_PreviewImage").empty();
-		globalPostMessageImageList = [];
+		var	submit_button	= $(e.target);
+		var	modal_tag		= submit_button.closest(".modal");
+		var	error_message	= CheckModalValidity(modal_tag);
 
-		// --- set progress bar to 0 length
-		$("div.progress .progress-bar").css("width", "0%");
-
-		// --- clean-up error message
-		$("#newsFeedEditMessageError").empty().removeClass();
-
-		// --- cleanup picture list from the posted message
-		$.getJSON("/cgi-bin/index.cgi?action=AJAX_editCleanupFeedImages", {imageTempSet: imageTempSet})
-				.done(function(data) {
-					console.debug("AJAX_editCleanupFeedImages: result = " + data.result);
-				});
-
-
-		// --- set var imageSet to NULL
-		imageTempSet = "";
-		$("#editFileupload").fileupload({formData: {imageTempSet: imageTempSet}});
-
-		// --- deactivate noSleep feature, reverse back to normal behavior
-		if(isMobile.phone) NoSleep_global.disable();
-	};
-
-	var	EditNewsFeedPostMessage = function () 
-	{
-		var	title = $("#editNewsFeedMessageTitle").val();
-		var	text = $("#editNewsFeedMessageText").val();
-		var	images = $("#editPostMessage_PreviewImage").html();
-		var	lenghtyWord;
-
-		if((title.length === 0) && (text.length === 0) && (images.length < 40))
+		if(error_message.length)
 		{
-			system_calls.PopoverError("editNewsFeedMessageSubmit", "Невозможно написать пустое сообщение");
-		}
-		else if(system_calls.LongestWordSize(title) > 37) // четырёхсотпятидесятисемимиллиметровое
-		{
-			lenghtyWord = system_calls.LongestWord(title);
-
-			$("#editNewsFeedMessageTitle").selectRange(title.search(lenghtyWord), title.search(lenghtyWord) + lenghtyWord.length);
-
-			system_calls.PopoverError("editNewsFeedMessageSubmit", "Слишком длинное слово: " + lenghtyWord);
-		}
-		else if(system_calls.LongestWordSize(text) > 37) // четырёхсотпятидесятисемимиллиметровое
-		{
-			lenghtyWord = system_calls.LongestWord(text);
-
-			$("#editNewsFeedMessageText").selectRange(text.search(lenghtyWord), text.search(lenghtyWord) + lenghtyWord.length);
-
-			system_calls.PopoverError("editNewsFeedMessageSubmit", "Слишком длинное слово: " + lenghtyWord);
+			system_calls.PopoverError(modal_tag.find(".__submit"), error_message);
 		}
 		else
 		{
-			$("#NewsFeedMessageSubmit").button("loading");
-
-			$.ajax({
-					url: "/cgi-bin/index.cgi", 
-					type: "POST",
-					dataType: "json",
-					data: 
+			var data =
 					{
-						action: "AJAX_updateNewsFeedMessage",
-						newsFeedMessageID:	 $("#editNewsFeedMessageSubmit").data("messageID"),
-						newsFeedMessageTitle:  $("#editNewsFeedMessageTitle").val(),
-						newsFeedMessageLink:   $("#editNewsFeedMessageLink").val(),
-						newsFeedMessageText:   $("#editNewsFeedMessageText").val(),
-						newsFeedMessageRights: $("#editNewsFeedAccessRights input:checked").val(),
-						newsFeedMessageImageTempSet: imageTempSet 
-					}})
-					.done(function(data) {
-						console.debug("$(document).getJSON(AJAX_updateNewsFeed).success(): status - " + data[0].result);
+						action:							"AJAX_updateNewsFeedMessage",
+						newsFeedMessageID:				modal_tag.find(".__submit").data("messageID"),
+						newsFeedMessageTitle:			modal_tag.find(".__title").val(),
+						newsFeedMessageLink:			modal_tag.find(".__link").val(),
+						newsFeedMessageText:			modal_tag.find(".__text").val(),
+						newsFeedMessageRights:			modal_tag.find(".__access_rights").find("input:checked").val(),
+						newsFeedMessageImageTempSet:	imageTempSet,
+						random:							system_calls.GetUUID()
+					};
 
-						if(data[0].result == "error") 
-						{
-							system_calls.AlertError("newsFeedEditMessageError", data[0].description);
-							console.error("$(document).getJSON(AJAX_updateNewsFeed).success():ERROR status " + data[0].description);
-						}				
-						if(data[0].result == "success") 
-						{
-							ZeroizeThenUpdateNewsFeedThenScrollTo("");
-
-							$("#editNewsFeedMessage").modal("hide");
-						}			
-					})
-					.fail( function() {
-						system_calls.AlertError("newsFeedNewMessageError", "ошибка ответа сервера");
-						console.error("$(document).getJSON(AJAX_updateNewsFeed).success():ERROR parsing JSON server response");
-					})
-					.always(function() {
-						$("#NewsFeedMessageSubmit").button("reset");
-					});
+			__MessageSubmitToServer(modal_tag, data);
 		}
 	};
 
@@ -1030,27 +865,33 @@ var news_feed = (function()
 
 	var NewMessageModalFreezeAllFields = function()
 	{
-		$("#newsFeedMessageTitle").attr("disabled", "");
-		$("#newsFeedMessageLink").attr("disabled", "");
-		$("#newsFeedMessageText").attr("disabled", "");
+		var		modal_tag = $("#NewsFeedNewMessage");
 
-		$("#newsFeed_NewMessageLink_GetDataButton").button("loading");
-		$("#NewsFeedMessageSubmit").button("loading");
+		modal_tag.find(".__title")			.attr("disabled", "");
+		modal_tag.find(".__link")			.attr("disabled", "");
+		modal_tag.find(".__text")			.attr("disabled", "");
+
+		modal_tag.find(".__get_from_link")	.button("loading");
+		modal_tag.find(".__submit")			.button("loading");
 	};
 
 	var NewMessageModalResetLayout = function()
 	{
-		$("#newsFeedMessageTitle").removeAttr("disabled");
-		$("#newsFeedMessageLink").removeAttr("disabled");
-		$("#newsFeedMessageText").removeAttr("disabled");
+		var		modal_tag = $("#NewsFeedNewMessage");
 
-		$("#newsFeed_NewMessageLink_GetDataButton").button("reset");
-		$("#NewsFeedMessageSubmit").button("reset");
+		modal_tag.find(".__title")			.removeAttr("disabled");
+		modal_tag.find(".__link")			.removeAttr("disabled");
+		modal_tag.find(".__text")			.removeAttr("disabled");
+
+		modal_tag.find(".__get_from_link")	.button("reset");
+		modal_tag.find(".__submit")			.button("reset");
 	};
 
-	var GetDataFromProvidedURL = function()
+	var GetDataFromProvidedURL = function(e)
 	{
-		var		newMessageURL = $("#newsFeedMessageLink").val();
+		var		curr_button		= $(e.target);
+		var		modal_tag		= curr_button.closest(".modal");
+		var		newMessageURL	= $("#newsFeedMessageLink").val();
 
 		if(newMessageURL.length)
 		{
@@ -1094,7 +935,8 @@ var news_feed = (function()
 							if(typeof(data.imageID) && typeof(data.imageURL) && data.imageID.length && data.imageURL.length)
 							{
 								// --- update GUI
-								var 	containerPreview = $("<div>").appendTo("#PostMessage_PreviewImage");
+								var		media_preview_area	 = modal_tag.find(".__media_preview_area");
+								var 	containerPreview = $("<div>").appendTo(media_preview_area);
 								var		rowPreview = $("<div>").appendTo(containerPreview)
 																.addClass("row")
 																.attr("id", "rowPreviewImageID" + data.imageID);
@@ -3551,87 +3393,129 @@ var news_feed = (function()
 
 	var ZeroizeNewMessageModal = function()
 	{
-		$("#newsFeedMessageTitle").val("");
-		$("#newsFeedMessageLink").val("");
-		$("#newsFeed_NewMessageLink_GetDataButton").attr("disabled", "");
-		$("#newsFeedMessageText").val("");
-		$("[name=newsFeedAccessRights]:eq(0)").prop("checked", true);
+		var	modal_tag = $("#NewsFeedNewMessage");
+
+		modal_tag.find(".__title")				.val("");
+		modal_tag.find(".__text")				.val("");
+		modal_tag.find(".__link")				.val("");
+		modal_tag.find(".__get_from_link")		.attr("disabled", "");
+		$("[name=newsFeedAccessRights]:eq(0)")	.prop("checked", true);
 	};
 
-	var	NewsFeedPostMessage_ClickHandler = function () 
+
+	var	CheckModalValidity = function(modal_tag)
 	{
-		var	title = $("#newsFeedMessageTitle").val();
-		var	text = $("#newsFeedMessageText").val();
-		var	images = $("#PostMessage_PreviewImage").html();
+		var	title			= modal_tag.find(".__title").val();
+		var	link			= modal_tag.find(".__link").val();
+		var	text			= modal_tag.find(".__text").val();
+		var	images			= modal_tag.find(".__media_preview_area").html();
 		var	lenghtyWord;
+		var	error_message	= "";
 
 		if((title.length || text.length || images.length) === 0)
 		{
-			system_calls.PopoverError("NewsFeedMessageSubmit", "Невозможно написать пустое сообщение");
+			error_message = "Невозможно написать пустое сообщение";
+			system_calls.PopoverError(modal_tag.find(".__title"), error_message);
 		}
 		else if(system_calls.LongestWordSize(title) > 37) // четырёхсотпятидесятисемимиллиметровое
 		{
 			lenghtyWord = system_calls.LongestWord(title);
 
-			$("#newsFeedMessageTitle").selectRange(title.search(lenghtyWord), title.search(lenghtyWord) + lenghtyWord.length);
+			modal_tag.find(".__title").selectRange(title.search(lenghtyWord), title.search(lenghtyWord) + lenghtyWord.length);
 
-			system_calls.PopoverError("NewsFeedMessageSubmit", "Слишком длинное слово: " + lenghtyWord);
+			error_message = "Слишком длинное слово: " + lenghtyWord;
+			system_calls.PopoverError(modal_tag.find(".__title"), error_message);
 		}
 		else if(system_calls.LongestWordSize(text) > 37) // четырёхсотпятидесятисемимиллиметровое
 		{
 			lenghtyWord = system_calls.LongestWord(text);
 
-			$("#newsFeedMessageText").selectRange(text.search(lenghtyWord), text.search(lenghtyWord) + lenghtyWord.length);
+			modal_tag.find(".__text").selectRange(text.search(lenghtyWord), text.search(lenghtyWord) + lenghtyWord.length);
 
-			system_calls.PopoverError("NewsFeedMessageSubmit", "Слишком длинное слово: " + lenghtyWord);
+			error_message = "Слишком длинное слово: " + lenghtyWord;
+			system_calls.PopoverError(modal_tag.find(".__text"), error_message);
+		}
+		else if(link.length && system_calls.isValidURL(link).length)
+		{
+			error_message = system_calls.isValidURL(link);
+			system_calls.PopoverError(modal_tag.find(".__link"), error_message);
+		}
+		else if(link.length && !title.length)
+		{
+			error_message = "Заголовок обязателен";
+			system_calls.PopoverError(modal_tag.find(".__title"), error_message);
+		}
+
+		return error_message;
+	};
+
+	var	__MessageSubmitToServer = function(modal_tag, data)
+	{
+		modal_tag.find(".__submit").button("loading");
+
+		$.ajax({
+				url: "/cgi-bin/index.cgi", 
+				type: "POST",
+				dataType: "json",
+				cache: false,
+				data: data
+				})
+				.done(function(data) 
+				{
+					console.debug("success(): status - " + data[0].result);
+
+					if(data[0].result == "error") 
+					{
+						system_calls.AlertError(modal_tag.find(".__alert"), data[0].description);
+					}				
+					if(data[0].result == "success") 
+					{
+						ZeroizeNewMessageModal();
+						ZeroizeThenUpdateNewsFeedThenScrollTo("");
+
+						modal_tag.modal("hide");
+					}			
+				})
+				.fail( function()
+				{
+					system_calls.AlertError(modal_tag.find(".__alert"), "ошибка ответа сервера");
+				})
+				.always(function() 
+				{
+					modal_tag.find(".__submit").button("reset");
+				});
+
+	};
+
+	var	NewsFeedPostMessage_ClickHandler = function(e) 
+	{
+		var	submit_button	= $(e.target);
+		var	modal_tag		= submit_button.closest(".modal");
+		var	error_message	= CheckModalValidity(modal_tag);
+
+		if(error_message.length)
+		{
+			system_calls.PopoverError(modal_tag.find(".__submit"), error_message);
 		}
 		else
 		{
-
-			$("#NewsFeedMessageSubmit").button("loading");
-
-			$.ajax({
-					url: "/cgi-bin/index.cgi", 
-					type: "POST",
-					dataType: "json",
-					cache: false,
-					data: 
+			var data =
 					{
-						action: "AJAX_postNewsFeedMessage",
-						newsFeedMessageDstType: $("#news_feed").data("dsttype"),
-						newsFeedMessageDstID: $("#news_feed").data("dstid"),
-						newsFeedMessageSrcType: $("#srcEntity option:selected").data("srcType"),
-						newsFeedMessageSrcID: $("#srcEntity option:selected").data("srcID"),
-						newsFeedMessageTitle: $("#newsFeedMessageTitle").val(),
-						newsFeedMessageLink: $("#newsFeedMessageLink").val(),
-						newsFeedMessageText: $("#newsFeedMessageText").val(),
-						newsFeedMessageRights: $("#newsFeedAccessRights:checked").val(),
-						newsFeedMessageImageTempSet: imageTempSet,
-						random: system_calls.GetUUID()
-					}})
-					.done(function(data) {
-						console.debug("$(document).getJSON(AJAX_postNewsFeed).success(): status - " + data[0].result);
+						action:							"AJAX_postNewsFeedMessage",
+						newsFeedMessageDstType:			$("#news_feed").data("dsttype"),
+						newsFeedMessageDstID:			$("#news_feed").data("dstid"),
+						newsFeedMessageSrcType:			$("#srcEntity option:selected").data("srcType"),
+						newsFeedMessageSrcID:			$("#srcEntity option:selected").data("srcID"),
+						newsFeedMessageTitle:			modal_tag.find(".__title").val(),
+						newsFeedMessageLink:			modal_tag.find(".__link").val(),
+						newsFeedMessageText:			modal_tag.find(".__text").val(),
+						newsFeedMessageRights:			modal_tag.find(".__access_rights").find("input:checked").val(),
+						newsFeedMessageImageTempSet:	imageTempSet,
+						random:							system_calls.GetUUID()
+					};
 
-						if(data[0].result == "error") 
-						{
-							system_calls.AlertError("newsFeedNewMessageError", data[0].description);
-							console.error("$(document).getJSON(AJAX_postNewsFeed).success():ERROR status " + data[0].description);
-						}				
-						if(data[0].result == "success") 
-						{
-							ZeroizeNewMessageModal();
-							ZeroizeThenUpdateNewsFeedThenScrollTo("");
+			__MessageSubmitToServer(modal_tag, data);
 
-							$("#NewsFeedNewMessage").modal("hide");
-						}			
-					})
-					.fail( function() {
-						system_calls.AlertError("newsFeedNewMessageError", "ошибка ответа сервера");
-						console.error("$(document).getJSON(AJAX_postNewsFeed).success():ERROR parsing JSON server response");
-					})
-					.always(function() {
-						$("#NewsFeedMessageSubmit").button("reset");
-					});
 		}
 
 	};
@@ -3651,7 +3535,7 @@ var news_feed = (function()
 	};
 
 	// --- clean-up picture uploads environment
-	var NewMessageNewsFeedModalShownHandler = function()
+	var NewMessageNewsFeedModal_ShownHandler = function()
 	{
 		// --- globalUploadImageCounter used for disabling "Post" button during uploading images
 		globalUploadImageCounter = 0;
@@ -3746,28 +3630,30 @@ var news_feed = (function()
 	};
 
 	// --- clean-up picture uploads environment
-	var NewMessageNewsFeedModalHiddenHandler = function()
+	var MessageModal_HiddenHandler = function(e)
 	{
+		var	modal_tag = $(e.currentTarget);
+
 		// --- clean-up preview pictures in PostMessage modal window 
-		$("#PostMessage_PreviewImage").empty();
+		modal_tag.find(".__media_preview_area").empty();
 		globalPostMessageImageList = [];
 
 		// --- set progress bar to 0 length
-		$("#progress .progress-bar").css("width", "0%");
+		modal_tag.find(".__progress .progress-bar").css("width", "0%");
 
-		// --- clean-up error message div
-		$("#newsFeedNewMessageError").empty().removeClass();
+		// --- clean-up error message
+		modal_tag.find(".__alert").empty().removeClass();
 
 		// --- cleanup picture list from the posted message
 		$.getJSON("/cgi-bin/index.cgi?action=AJAX_cleanupFeedImages", {imageTempSet: imageTempSet})
 				.done(function(data) {
-					console.debug("AJAX_cleanupFeedImages: result = " + data.result);
+					console.debug("result = " + data.result);
 				});
 
 
 		// --- set var imageSet to NULL
 		imageTempSet = "";
-		$("#newMessageFileUpload").fileupload({formData: {imageTempSet: imageTempSet}});
+		modal_tag.find(".__file_upload").fileupload({formData: {imageTempSet: imageTempSet}});
 
 		// --- deactivate noSleep feature, reverse back to normal behavior
 		if(isMobile.phone) NoSleep_global.disable();

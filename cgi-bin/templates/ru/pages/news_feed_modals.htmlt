@@ -10,7 +10,7 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<!-- <label for="newsFeedMessageTitle">Заголовок:</label> -->
-							<input class="form-control" id="newsFeedMessageTitle" placeholder="Заголовок">
+							<input class="form-control __title" id="newsFeedMessageTitle" placeholder="Заголовок">
 						</div>
 						<div class="form-group">
 							<!-- <label for="newsFeedMessageLink">Ссылка:</label> -->
@@ -18,18 +18,18 @@
 							<!-- this grid needed to align input and button on the same line -->
 							<div class="row">
 								<div class="col-md-9 col-xs-12">
-									<input class="form-control" id="newsFeedMessageLink" placeholder="Ссылка">
+									<input class="form-control __link" id="newsFeedMessageLink" placeholder="Ссылка">
 								</div>
 								<div class="col-md-3 col-xs-12">
-									<button type="button" id="newsFeed_NewMessageLink_GetDataButton" class="btn btn-primary form-control" data-loading-text="Подождите" disabled>Получить данные</button>
+									<button type="button" id="newsFeed_NewMessageLink_GetDataButton" class="btn btn-primary form-control __get_from_link" data-loading-text="Подождите" disabled>Получить данные</button>
 								</div>
 							</div>
 
 						</div>
 						<div class="form-group">
-							<textarea id="newsFeedMessageText" class="form-control" rows="3" placeholder="Сообщение"></textarea>
+							<textarea id="newsFeedMessageText" class="form-control __text" rows="3" placeholder="Сообщение"></textarea>
 						</div>
-						<div class="" role="alert" id="newsFeedNewMessageError">
+						<div class="__alert" role="alert" id="newsFeedNewMessageError">
 						</div>
 						<div class="form-group">
 <!-- 
@@ -40,17 +40,17 @@
 									<i class="glyphicon glyphicon-picture"></i>
 									<span>Загрузить фото...</span>
 									<!-- The file input field used as target for the file upload widget -->
-									<input id="newMessageFileUpload" type="file" name="files[]" multiple accept="image/*, video/*">
+									<input id="newMessageFileUpload" type="file" name="files[]" multiple accept="image/*, video/*" class="__file_upload">
 							<!-- The global progress bar -->
 							</span> 
 					 
-							<div id="NewMessageProgress" class="progress" width="100%" style="position:relative">
+							<div id="NewMessageProgress" class="progress __progress" width="100%" style="position:relative">
 									<div class="progress-bar progress-bar-primary progress-bar-striped" ></div>
 									<div class="progress-string" ></div>
 							</div>
 
 						</div>
-						<div class="AccessRightButtons">
+						<div class="AccessRightButtons __access_rights">
 							<div class="radio">
 								<label>
 									<input type="radio" name="newsFeedAccessRights" id="newsFeedAccessRights" value="public" checked>
@@ -74,10 +74,10 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary" data-loading-text="Загрузка..." id="NewsFeedMessageSubmit">Написать</button>
+						<button type="submit" class="btn btn-primary __submit" data-loading-text="Загрузка..." id="NewsFeedMessageSubmit">Написать</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
 					</div>
-					<div id="PostMessage_PreviewImage" class="news_feed_preview_image"></div>
+					<div id="PostMessage_PreviewImage" class="news_feed_preview_image __media_preview_area"></div>
 					<!-- 2delete: debug function to check upload functionality -->
 					<div class="PostMessage_ListUnloaded news_feed_preview_image"></div>
 				<!-- </form> -->
@@ -99,31 +99,31 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="editNewsFeedMessageTitle">Заголовок:</label>
-							<input class="form-control" id="editNewsFeedMessageTitle" placeholder="Заголовок">
+							<input class="form-control __title" id="editNewsFeedMessageTitle" placeholder="Заголовок">
 						</div>
 						<div class="form-group">
 							<label for="editNewsFeedMessageLink">Ссылка:</label>
-							<input class="form-control" id="editNewsFeedMessageLink" placeholder="Ссылка">
+							<input class="form-control __link" id="editNewsFeedMessageLink" placeholder="Ссылка">
 						</div>
 						<div class="form-group">
-							<textarea id="editNewsFeedMessageText" class="form-control" rows="3" placeholder="Сообщение"></textarea>
+							<textarea id="editNewsFeedMessageText" class="form-control __text" rows="3" placeholder="Сообщение"></textarea>
 						</div>
-						<div class="" role="alert" id="newsFeedEditMessageError">
+						<div class="__alert" role="alert" id="newsFeedEditMessageError">
 						</div>
 						<div class="form-group">
 							<span id="editSpanForFileUploadButton" class="btn btn-default fileinput-button">
 									<i class="glyphicon glyphicon-picture"></i>
 									<span>Загрузить фото...</span>
 									<!-- The file input field used as target for the file upload widget -->
-									<input id="editFileupload" type="file" name="files[]" multiple accept="image/*, video/*">
+									<input id="editFileupload" type="file" name="files[]" multiple accept="image/*, video/*" class="__file_upload">
 							<!-- The global progress bar -->
 							</span> 
-							<div id="EditMessageProgress" class="progress" width="100%" style="position:relative">
+							<div id="EditMessageProgress" class="progress __progress" width="100%" style="position:relative">
 									<div class="progress-bar progress-bar-primary progress-bar-striped" ></div>
 									<div class="progress-string" ></div>
 							</div>
 						</div>
-						<div id="editNewsFeedAccessRights">
+						<div id="editNewsFeedAccessRights" class="__access_rights">
 							<div class="radio">
 								<label>
 									<input type="radio" name="editNewsFeedAccessRights" id="editNewsFeedAccessRightsPublic" value="public" checked>
@@ -145,11 +145,11 @@
 							</div>
 					</div>
 					<div class="modal-footer">
-						<button type="submit" class="btn btn-primary" id="editNewsFeedMessageSubmit">Редактировать</button>
+						<button type="submit" class="btn btn-primary __submit" id="editNewsFeedMessageSubmit">Редактировать</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
 					</div>
-				<!-- </form> -->
-					<div id="editPostMessage_PreviewImage" class="news_feed_preview_image"></div>
+					<!-- </form> -->
+					<div id="editPostMessage_PreviewImage" class="news_feed_preview_image __media_preview_area"></div>
 					<!-- 2delete: debug function to check upload functionality -->
 					<div class="PostMessage_ListUnloaded	news_feed_preview_image"></div>
 
@@ -188,7 +188,7 @@
 					<span id="divNewsFeedMessageReplyTo"></span>
 				</div>
 				<div class="modal-body">
-					<textarea class="form-control" rows="3" id="textareaNewsFeedViewMessage" placeholder="Напишите коментарий ..."></textarea>
+					<textarea class="form-control __text" rows="3" id="textareaNewsFeedViewMessage" placeholder="Напишите коментарий ..."></textarea>
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-primary animateClass" data-loading-text="<span class='fa fa-refresh fa-spin fa-fw animateClass'></span> Загрузка..." id="buttonNewsFeedViewMessageComment">Написать</button>
