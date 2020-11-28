@@ -164,8 +164,8 @@ var news_feed = (function()
 			});
 
 			// --- paste picture
-			$("#NewsFeedNewMessage").on("paste", AddImageClipbufferImage_PasteHandler);
-			$("#editNewsFeedMessage").on("paste", AddImageClipbufferImage_PasteHandler);
+			$("#NewsFeedNewMessage")	.on("paste", AddImageClipbufferImage_PasteHandler);
+			$("#editNewsFeedMessage")	.on("paste", AddImageClipbufferImage_PasteHandler);
 
 			// --- Is it require to update username ?
 			if($("#myUserID").data("myuserid") && $("#myUserID").attr("data-mylogin") && $("#myUserID").attr("data-mylogin").length && ($("#myUserID").attr("data-mylogin") != "Guest"))
