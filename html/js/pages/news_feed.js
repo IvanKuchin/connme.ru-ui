@@ -41,7 +41,7 @@ var news_feed = (function()
 			// --- News feed: New message: Link: GetData button
 			$("#newsFeed_NewMessageLink_GetDataButton").on("click", GetDataFromProvidedURL);
 			// --- Post message modal window show handler
-			$("#NewsFeedNewMessage").on("shown.bs.modal", NewMessageNewsFeedModal_ShownHandler);
+			$("#NewsFeedNewMessage").on("show.bs.modal", NewMessageNewsFeedModal_ShownHandler);
 			// --- Post message modal window hide handler
 			$("#NewsFeedNewMessage").on("hidden.bs.modal", MessageModal_HiddenHandler);
 
