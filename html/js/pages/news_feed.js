@@ -55,7 +55,7 @@ var news_feed = (function()
 			// --- messageAccessRights: 
 			// --- 		hide if posted from company/group, 
 			// --- 		unhide if posted from person
-			$("#NewsFeedNewMessage div.messageSrc").on("change", function() {
+			$("#NewsFeedNewMessage .__message_src").on("change", function() {
 				var	selectedValue = $("#srcEntity").val();
 
 				if(selectedValue == myProfile.firstName + " " + myProfile.lastName)
@@ -404,9 +404,11 @@ var news_feed = (function()
 	};
 
 	// --- initialize all fields in "edit form"
-	var EditNewsFeedModal_ShownHandler = function()
+	var EditNewsFeedModal_ShownHandler = function(e)
 	{
-		var		editMessageID = $("#editNewsFeedMessageSubmit").data("messageID");
+		var 	modal_tag = $(e.target);
+
+		var		editMessageID = modal_tag.find(".__submit").data("messageID");
 
 		// --- globalUploadImageCounter used for disabling "Post" button during uploading images
 		globalUploadImageCounter = 0;
@@ -416,19 +418,18 @@ var news_feed = (function()
 		globalUploadImage_UnloadedList = [];
 		Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
 
-		// $("#editNewsFeedMessageSubmit").button('reset');
-		$("#editNewsFeedMessageSubmit").text("Редактировать");
+		modal_tag.find(".__submit").text("Редактировать");
 
 		// --- clean-up preview pictures in PostMessage modal window 
-		$("#editPostMessage_PreviewImage").empty();
+		modal_tag.find(".__media_preview_area").empty();
 		globalPostMessageImageList = [];
 
 		// --- set progress bar to 0 length
-		$("div.progress .progress-bar").css("width", "0%");
+		modal_tag.find(".__progress").find(".progress-bar").css("width", "0%");
 
 		// --- set var imageTempSet to random
 		imageTempSet = Math.floor(Math.random()*99999999);
-		$("#editFileupload").fileupload({formData: {imageTempSet: imageTempSet, messageID: $("#editNewsFeedMessageSubmit").data("messageID")}});
+		modal_tag.find(".__file_upload").fileupload({formData: {imageTempSet: imageTempSet, messageID: modal_tag.find(".__submit").data("messageID")}});
 
 		globalNewsFeed.forEach(function(item)
 			{
@@ -437,30 +438,35 @@ var news_feed = (function()
 					if(editMessageID == item.messageId)
 					{
 						var		messageMessage		= item.messageMessage;
+						var		src_type			= item.srcObj.type; 
+						var		dst_type			= item.dstObj.type || ""; 
+						console.debug(src_type, " -> ", dst_type);
 						var 	containerPreview	= $("<div>")
 																.addClass("container-fluid")
 																.append(RenderMessageMedia(item));
 
 
 						// --- init all fields
-						$("#editNewsFeedMessageTitle").val(system_calls.ConvertHTMLToText(item.messageTitle));
-						$("#editNewsFeedMessageLink").val(item.messageLink);
-						$("#editNewsFeedMessageText").val(system_calls.ConvertHTMLToText(messageMessage));
+						modal_tag.find(".__title")	.val(system_calls.ConvertHTMLToText(item.messageTitle));
+						modal_tag.find(".__link")	.val(item.messageLink);
+						modal_tag.find(".__text")	.val(system_calls.ConvertHTMLToText(messageMessage));
 
-						if(item.messageAccessRights == "public")
+						modal_tag.find(".__access_rights").find("[value=\"" + item.messageAccessRights + "\"]").prop("checked", true);
+						if((src_type === "user") && (dst_type === ""))
 						{
-							$("#editNewsFeedAccessRightsPublic").prop("checked", true);
+							modal_tag.find(".__access_rights").show(300);
 						}
-						if(item.messageAccessRights == "private")
+						else
 						{
-							$("#editNewsFeedAccessRightsPrivate").prop("checked", true);
-						}
-						if(item.messageAccessRights == "friends")
-						{
-							$("#editNewsFeedAccessRightsFriends").prop("checked", true);
+							modal_tag.find(".__access_rights").hide(300);
 						}
 
-						$("#editPostMessage_PreviewImage").append(containerPreview);
+						modal_tag.find(".__media_preview_area").append(containerPreview);
+
+						if(src_type  == "company")
+						{
+							// --- good2go							
+						}
 					}
 				}
 			});
@@ -3534,8 +3540,10 @@ var news_feed = (function()
 	};
 
 	// --- clean-up picture uploads environment
-	var NewMessageNewsFeedModal_ShownHandler = function()
+	var NewMessageNewsFeedModal_ShownHandler = function(e)
 	{
+		var modal_tag = $(e.target);
+		
 		// --- globalUploadImageCounter used for disabling "Post" button during uploading images
 		globalUploadImageCounter = 0;
 		globalUploadImageTotal = 0;
@@ -3544,22 +3552,21 @@ var news_feed = (function()
 		globalUploadImage_UnloadedList = [];
 		Update_PostMessage_ListUnloaded(globalUploadImage_UnloadedList);
 
-		// $("#NewsFeedMessageSubmit").button('reset');
-		$("#NewsFeedMessageSubmit").text("Написать");
+		modal_tag.find(".__submit").text("Написать");
 
 		// --- clean-up preview pictures in PostMessage modal window 
-		$("#PostMessage_PreviewImage").empty();
+		modal_tag.find(".__media_preview_area").empty();
 		globalPostMessageImageList = [];
 
 		// --- set access rights to default value "public"
-		$("input#newsFeedAccessRights[value='public']").prop("checked", true);
+		modal_tag.find(".__access_rights").find("[value=\"public\"]").prop("checked", true);
 
 		// --- set progress bar to 0 length
-		$("#progress .progress-bar").css("width", "0%");
+		modal_tag.find(".__progress").find(".progress-bar").css("width", "0%");
 
 		// --- set var imageTempSet to random
 		imageTempSet = Math.floor(Math.random()*99999999);
-		$("#newMessageFileUpload").fileupload({formData: {imageTempSet: imageTempSet}});
+		modal_tag.find(".__file_upload").fileupload({formData: {imageTempSet: imageTempSet}});
 
 		// --- zeroize tempSet for user at image_news table
 		$.getJSON("/cgi-bin/index.cgi?action=AJAX_prepareFeedImages", {param1: ""})
@@ -3570,25 +3577,25 @@ var news_feed = (function()
 
 						// --- if user is administering companies build new select box for company news
 						myCompanies = data.companies;
-						$("#NewsFeedNewMessage div.messageSrc")	.empty()
-																.append("<label for=\"newsFeedMessageSrc\">Написать от имени:</label>")
-																.append(RenderSelectBoxWithUserAndCompanies(myProfile, myCompanies));
+						modal_tag.find(".__message_src")	.empty()
+															.append("<label for=\"newsFeedMessageSrc\">Написать от имени:</label>")
+															.append(RenderSelectBoxWithUserAndCompanies(myProfile, myCompanies));
 
 						if(action == "getGroupWall")
 						{
-							$("#NewsFeedNewMessage div.messageSrc").addClass("hidden");
-							$("#NewsFeedNewMessage div.AccessRightButtons").addClass("hidden");
+							modal_tag.find(".__message_src").hide(300);
+							modal_tag.find(".__access_rights").hide(300);
 						}
 						else if((action == "getCompanyWall") || (action == "view_company_profile"))
 						{
-							$("#NewsFeedNewMessage div.messageSrc").hide(300);
-							$("#NewsFeedNewMessage div.AccessRightButtons").hide(300);
+							modal_tag.find(".__message_src").hide(300);
+							modal_tag.find(".__access_rights").hide(300);
 							$("#srcEntity").val(GetCompanyName($("#news_feed").data("id"), data.companies));
 						}
 						else if(myCompanies.length)
-							$("#NewsFeedNewMessage div.messageSrc").removeClass("hidden");
+							modal_tag.find(".__message_src").show(300);
 						else
-							$("#NewsFeedNewMessage div.messageSrc").addClass("hidden");
+							modal_tag.find(".__message_src").hide(300);
 					}
 					else if(data.result == "error")
 					{
