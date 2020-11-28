@@ -481,7 +481,10 @@ var news_feed = (function()
 
 	var	AddImageClipbufferImage_PasteHandler = function(event)
 	{
-		var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+		var	curr_tag	= $(event.target);
+		var	modal_tag	= curr_tag.closest(".modal");
+		var	uploader	= modal_tag.find(".__file_upload");
+		var items		= (event.clipboardData || event.originalEvent.clipboardData).items;
 		console.log("PasteHandler:" + JSON.stringify(items)); // will give you the mime types
 
 		for (var idx in items) 
@@ -491,14 +494,8 @@ var news_feed = (function()
 			if (item.kind === "file") 
 			{
 				var blob = item.getAsFile();
-				var reader = new FileReader();
 
-				reader.onload = function(event)
-				{
-					console.log(event.target.result);
-				}; // data url!
-
-				reader.readAsDataURL(blob);
+				uploader.fileupload("add", {files: blob});
 			}
 		}
 	};
