@@ -451,6 +451,7 @@ var news_feed = (function()
 						modal_tag.find(".__link")	.val(item.messageLink);
 						modal_tag.find(".__text")	.val(system_calls.ConvertHTMLToText(messageMessage));
 
+						// --- access right block
 						modal_tag.find(".__access_rights").find("[value=\"" + item.messageAccessRights + "\"]").prop("checked", true);
 						if((src_type === "user") && (dst_type === ""))
 						{
@@ -461,11 +462,23 @@ var news_feed = (function()
 							modal_tag.find(".__access_rights").hide(300);
 						}
 
+						// --- media preview block
 						modal_tag.find(".__media_preview_area").append(containerPreview);
 
-						if(src_type  == "company")
+						// --- message destination block
+						if(src_type  == "user")
 						{
-							// --- good2go							
+							// --- this block will be triggered if message written to 
+							// --- a) personal feed  (src:user -> dst:)
+							// --- b) group feed     (src:user -> dst:group)
+							// --- then allow to change destination
+							modal_tag.find(".__message_dst").show(300);
+
+							RenderSelectBoxWithUserAndGroups(myProfile, modal_tag.find(".__message_dst"), item);
+						}
+						else
+						{
+							modal_tag.find(".__message_dst").hide(300);
 						}
 					}
 				}
@@ -3624,15 +3637,68 @@ var news_feed = (function()
 
 	var	RenderSelectBoxWithUserAndCompanies = function(user, companies)
 	{
-		var		resultTag = $("<select>", {id:"srcEntity", class:"form-control"});
+		var		result_tag = $("<select>", {id:"srcEntity", class:"form-control"});
 
-		resultTag.append($("<option>").append(user.firstName + " " + user.lastName).data("srcID", user.id).data("srcType", "user"));
+		result_tag.append($("<option>").append(user.firstName + " " + user.lastName).data("srcID", user.id).data("srcType", "user"));
 		companies.forEach(function(item) 
 		{
-			resultTag.append($("<option>").append((item.type + " " + item.name).trim()).data("srcID", item.id).data("srcType", "company"));
+			result_tag.append($("<option>").append((item.type + " " + item.name).trim()).data("srcID", item.id).data("srcType", "company"));
 		});
 
-		return resultTag;
+		return result_tag;
+	};
+
+
+	var SelectOptionAccordingToDstObj = function(hosting_tag, message)
+	{
+		return hosting_tag.find("select").find("[data-dst_type=\"" + (message.dstObj.type || "") + "\"][data-dst_id=\"" + (message.dstObj.id || "") + "\"]").prop("selected", true);
+	};
+
+	var	RenderSelectBoxWithUserAndGroups = function(user, append_to, message)
+	{
+		var	content = append_to.html();
+
+		if(content.length === 0)
+		{
+			$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_getGroupsOwnedByUser", {param1: ""})
+					.done(function(data) {
+						if(data.result == "success")
+						{
+							// --- build select-tag
+							var		select_tag = $("<select>", {class:"form-control"});
+
+							select_tag.append($("<option>").append("мою ленту").attr("data-dst_id", "").attr("data-dst_type", ""));
+							data.groups.forEach(function(item) 
+							{
+								select_tag.append($("<option>").append("Группа: " + item.title).attr("data-dst_id", item.id).attr("data-dst_type", "group"));
+							});
+					
+							// --- select proper option in select tag
+
+							append_to
+									.append($("<div>").append("Переместить в:"))
+									.append(select_tag);
+
+							SelectOptionAccordingToDstObj(append_to, message);
+						}
+						else if(data.result == "error")
+						{
+							system_calls.PopoverError(append_to, "ERROR: " + data.description);
+						}
+						else
+						{
+							system_calls.PopoverError(append_to, "ERROR: unknown status returned from server");
+						}
+					})
+					.fail(function() {
+						system_calls.PopoverError(append_to, "ERROR: parsing JSON response from server");
+					});
+		}
+		else
+		{
+			SelectOptionAccordingToDstObj(append_to, message);
+		}
+
 	};
 
 	// --- clean-up picture uploads environment
