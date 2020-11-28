@@ -1,5 +1,6 @@
 /*global PreviewImageControl*/
 /*global carousel_tools*/
+/*global NoSleep*/
 /*exported news_feed*/
 
 var news_feed = (function()
@@ -164,8 +165,8 @@ var news_feed = (function()
 			});
 
 			// --- paste picture
-			$("#NewsFeedNewMessage")	.on("paste", AddImageClipbufferImage_PasteHandler);
-			$("#editNewsFeedMessage")	.on("paste", AddImageClipbufferImage_PasteHandler);
+			$("#NewsFeedNewMessage")	.on("paste", AddImageClipBufferImage_PasteHandler);
+			$("#editNewsFeedMessage")	.on("paste", AddImageClipBufferImage_PasteHandler);
 
 			// --- Is it require to update username ?
 			if($("#myUserID").data("myuserid") && $("#myUserID").attr("data-mylogin") && $("#myUserID").attr("data-mylogin").length && ($("#myUserID").attr("data-mylogin") != "Guest"))
@@ -480,7 +481,7 @@ var news_feed = (function()
 	};
 
 
-	var	AddImageClipbufferImage_PasteHandler = function(event)
+	var	AddImageClipBufferImage_PasteHandler = function(event)
 	{
 		var	curr_tag	= $(event.target);
 		var	modal_tag	= curr_tag.closest(".modal");

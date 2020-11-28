@@ -269,3 +269,4 @@ zh
 zoomin
 zoomout
 zsimple
+stringify

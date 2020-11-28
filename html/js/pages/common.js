@@ -1556,7 +1556,7 @@ system_calls = (function()
 	};
 
 	// --- output:
-	//     if empy - URL is valid
+	//     if empty - URL is valid
 	//     if not empty - error message
 	var isValidURL = function(url)
 	{
