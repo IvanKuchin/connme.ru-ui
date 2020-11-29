@@ -3762,7 +3762,7 @@ var news_feed = (function()
 
 		if(content.length === 0)
 		{
-			$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_getGroupsOwnedByUserAndSubscriibedTo", {param1: ""})
+			$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_getGroupsOwnedByUserAndSubscribedTo", {param1: ""})
 					.done(function(data) {
 						if(data.result == "success")
 						{
