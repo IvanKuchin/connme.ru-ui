@@ -235,9 +235,9 @@ var PreviewImageControl = function ()
 // carousel attribute: data_ride_type="cycle|once" will play carouse indefinitely or just once
 var carousel_tools = (function()
 {
-	var	CAROUSEL_DELAY						= 1000; // --- must be greater than action_delay_after_slide
+	var	CAROUSEL_DELAY						= 3000; // --- must be greater than action_delay_after_slide
 	var	DELAY_AFTER_VIDEO_PLAYBACK			= 1000;
-	var	ACTION_DELAY_AFTER_SLIDE			= 700;
+	var	ACTION_DELAY_AFTER_SLIDE			= 500;
 	var	active_carousels_global 			= [];
 	var	main_cycle_timeout_handlers_global 	= []; // --- use it with caution , if not sure, create separate handler tracker
 	var	video_playing_global				= [];
