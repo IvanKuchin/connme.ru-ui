@@ -466,6 +466,7 @@ var news_feed = (function()
 						modal_tag.find(".__media_preview_area").append(containerPreview);
 
 						// --- message destination block
+						RenderSelectBoxWithUserAndGroups(myProfile, modal_tag.find(".__message_dst"), item);
 						if(src_type  == "user")
 						{
 							// --- this block will be triggered if message written to 
@@ -473,8 +474,6 @@ var news_feed = (function()
 							// --- b) group feed     (src:user -> dst:group)
 							// --- then allow to change destination
 							modal_tag.find(".__message_dst").show(300);
-
-							RenderSelectBoxWithUserAndGroups(myProfile, modal_tag.find(".__message_dst"), item);
 						}
 						else
 						{
@@ -809,6 +808,8 @@ var news_feed = (function()
 					{
 						action:							"AJAX_updateNewsFeedMessage",
 						newsFeedMessageID:				modal_tag.find(".__submit").data("messageID"),
+						newsFeedMessageDstType:			modal_tag.find(".__message_dst").find("option:checked").attr("data-dst_type"),
+						newsFeedMessageDstID:			modal_tag.find(".__message_dst").find("option:checked").attr("data-dst_id"),
 						newsFeedMessageTitle:			modal_tag.find(".__title").val(),
 						newsFeedMessageLink:			modal_tag.find(".__link").val(),
 						newsFeedMessageText:			modal_tag.find(".__text").val(),
@@ -3480,23 +3481,27 @@ var news_feed = (function()
 				})
 				.done(function(data) 
 				{
-					console.debug("success(): status - " + data[0].result);
+					console.debug("success(): status - " + data.result);
 
-					if(data[0].result == "error") 
+					if(data.result == "error") 
 					{
-						system_calls.AlertError(modal_tag.find(".__alert"), data[0].description);
+						system_calls.PopoverError(modal_tag.find(".__alert"), data.description);
 					}				
-					if(data[0].result == "success") 
+					else if(data.result == "success") 
 					{
 						ZeroizeNewMessageModal();
 						ZeroizeThenUpdateNewsFeedThenScrollTo("");
 
 						modal_tag.modal("hide");
-					}			
+					}
+					else
+					{
+						system_calls.PopoverError(modal_tag.find(".__alert"), "ошибка ответа сервера");
+					}		
 				})
 				.fail( function()
 				{
-					system_calls.AlertError(modal_tag.find(".__alert"), "ошибка ответа сервера");
+					system_calls.PopoverError(modal_tag.find(".__alert"), "ошибка ответа сервера");
 				})
 				.always(function() 
 				{
@@ -3651,7 +3656,7 @@ var news_feed = (function()
 
 	var SelectOptionAccordingToDstObj = function(hosting_tag, message)
 	{
-		return hosting_tag.find("select").find("[data-dst_type=\"" + (message.dstObj.type || "") + "\"][data-dst_id=\"" + (message.dstObj.id || "") + "\"]").prop("selected", true);
+		return hosting_tag.find("select").find("[data-dst_type=\"" + (message.dstObj.type || "") + "\"][data-dst_id=\"" + (message.dstObj.id || "0") + "\"]").prop("selected", true);
 	};
 
 	var	RenderSelectBoxWithUserAndGroups = function(user, append_to, message)
@@ -3667,7 +3672,7 @@ var news_feed = (function()
 							// --- build select-tag
 							var		select_tag = $("<select>", {class:"form-control"});
 
-							select_tag.append($("<option>").append("мою ленту").attr("data-dst_id", "").attr("data-dst_type", ""));
+							select_tag.append($("<option>").append("мою ленту").attr("data-dst_id", "0").attr("data-dst_type", ""));
 							data.groups.forEach(function(item) 
 							{
 								select_tag.append($("<option>").append("Группа: " + item.title).attr("data-dst_id", item.id).attr("data-dst_type", "group"));
