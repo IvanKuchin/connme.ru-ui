@@ -230,16 +230,23 @@ var PreviewImageControl = function ()
 	};
 };
 
+
+// carousel attribute: data_ride="carousel" will play carousel once visible
+// carousel attribute: data_ride_type="cycle|once" will play carouse indefinitely or just once
 var carousel_tools = (function()
 {
-	var	active_carousels_global = [];
-	var	timeout_handlers_global = [];
+	var	CAROUSEL_DELAY						= 1000; // --- must be greater than action_delay_after_slide
+	var	DELAY_AFTER_VIDEO_PLAYBACK			= 1000;
+	var	ACTION_DELAY_AFTER_SLIDE			= 700;
+	var	active_carousels_global 			= [];
+	var	main_cycle_timeout_handlers_global 	= []; // --- use it with caution , if not sure, create separate handler tracker
+	var	video_playing_global				= [];
 
 	var GetVisibleCarousels = function()
 	{
 		var		carousels = [];
 
-		$("div.carousel.slide[data-ride='carousel']").each(function(){
+		$("div.carousel[data_ride='carousel']").each(function(){
 			var	curr_tag = $(this);
 
 			if(system_calls.isTagFullyVisibleInWindowByHeight(curr_tag))
@@ -262,6 +269,8 @@ var carousel_tools = (function()
 		PlayNewlyVisibleCarousels(newly_visible_carousels);
 		StopInvisibleAnymoreCarousels(invisible_carousels);
 
+		StopInvisibleVideo(video_playing_global);
+
 		// --- store visible carousels only
 		active_carousels_global = visible_carousels;
 	};
@@ -270,8 +279,9 @@ var carousel_tools = (function()
 	{
 		if(carousels.length) console.debug("new carousels:", carousels);
 
-		for (var i = carousels.length - 1; i >= 0; i--) {
-			timeout_handlers_global[carousels[i]] = setTimeout(Player, 1000, carousels[i]);
+		for (var i = carousels.length - 1; i >= 0; i--) 
+		{
+			ScheduleItemSlide(carousels[i]);
 		}
 	};
 
@@ -279,15 +289,61 @@ var carousel_tools = (function()
 	{
 		if(carousels.length) console.debug("hidden carousels:", carousels);
 
-		for (var i = carousels.length - 1; i >= 0; i--) {
-			clearTimeout(timeout_handlers_global[carousels[i]]);
-			delete(timeout_handlers_global[carousels[i]]);
+		for (var i = carousels.length - 1; i >= 0; i--) 
+		{
+			console.debug("clear timeout ", carousels[i]);
+			clearTimeout(main_cycle_timeout_handlers_global[carousels[i]]);
+			delete(main_cycle_timeout_handlers_global[carousels[i]]);
+		}
+	};
+
+	var	StopInvisibleVideo = function(video_id_list)
+	{
+		var	video_tag;
+
+		for(var video_id in video_id_list)
+		{
+			video_tag = $("#" + video_id);
+
+			if(!system_calls.isTagFullyVisibleInWindowByHeight(video_tag))
+			{
+				console.debug("video tag ", video_tag, " not fully visible");
+
+				video_tag.get(0).pause();
+				delete(video_id_list[video_id]);
+			}
 		}
 	};
 
 	var	GetTotalNumberOfItems = function(carousel_id)
 	{
 		return $("#" + carousel_id).find(".item").length;
+	};
+
+	var	GetPlayedAttempts = function(tag)
+	{
+		var played_attempts = tag.attr("data_played_attempts") || 0;
+
+		return parseInt(played_attempts);
+	};
+
+	var	GetRideType = function(carousel_id)
+	{
+		var played_attempts = $("#" + carousel_id).attr("data_ride_type") || 0;
+
+		return parseInt(played_attempts);
+	};
+
+	var	SetPlayedAttempts = function(tag, attempts)
+	{
+		tag.attr("data_played_attempts", attempts);
+
+		return attempts;
+	};
+
+	var	GetActiveItem = function(carousel_id)
+	{
+		return $("#" + carousel_id).find(".item.active");
 	};
 
 	var	GetActiveItemIndex = function(carousel_id)
@@ -307,15 +363,128 @@ var carousel_tools = (function()
 		return active_item;
 	};
 
-	var	Player = function(carousel_id)
+	var	IncreasePlayedAttempts = function(tag)
 	{
-		var		active_idx	= GetActiveItemIndex(carousel_id);
-		var		next_idx	= (active_idx + 1) % GetTotalNumberOfItems(carousel_id);
+		var		current_counter	= GetPlayedAttempts(tag);
+
+		return SetPlayedAttempts(tag, current_counter + 1);
+	};
+
+	var	GetActiveItemType = function(carousel_id)
+	{
+		var	result = "";
+
+		if($("#" + carousel_id).find(".item.active").find("img").length)
+		{
+			result = "image";
+		}
+		else if($("#" + carousel_id).find(".item.active").find("video").length)
+		{
+			result = "video";
+		}
+		else
+		{
+			console.error("unknown carousel(#" + carousel_id + ") active item type");
+		}
+
+		return result;
+	};
+
+	// --- this is helper function
+	// --- use main function instead (w/o _____-postfix)
+	var ScheduleItemSlide_AfterVideoPlayed = function(carousel_id)
+	{
+		var	active_video	= GetActiveItem(carousel_id).find("video");
+		var	video_id		= active_video.attr("id");
+
+		if(GetPlayedAttempts(active_video) === 0)
+		{
+			video_playing_global[video_id] = 1;
+			active_video.get(0).play();
+			active_video.get(0).onended = function()
+										{
+											var	video_tag	= $(this);
+											var	video_id	= video_tag.attr("id");
+											var	carousel_id	= video_tag.closest(".carousel.slide").attr("id");
+											
+											delete(video_playing_global[video_id]);
+											IncreasePlayedAttempts(video_tag);
+
+											main_cycle_timeout_handlers_global[carousel_id] = setTimeout(SlideSingleCarousel, DELAY_AFTER_VIDEO_PLAYBACK, carousel_id);
+										};
+		}
+	};
+
+	// --- this is helper function
+	// --- use main function instead (w/o _____-postfix)
+	var ScheduleItemSlide_AfterTimeout = function(carousel_id)
+	{
+		main_cycle_timeout_handlers_global[carousel_id] = setTimeout(SlideSingleCarousel, CAROUSEL_DELAY, carousel_id);
+	};
+
+	var ScheduleItemSlide = function(carousel_id)
+	{
+		if(GetActiveItemType(carousel_id) == "image")
+		{
+			ScheduleItemSlide_AfterTimeout(carousel_id);
+		}
+		else if(GetActiveItemType(carousel_id) == "video")
+		{
+			ScheduleItemSlide_AfterVideoPlayed(carousel_id);
+		}
+		else
+		{
+			console.error("Carousel(#" + carousel_id + ") unknown active item type");
+		}
+	};
+
+	var	AfterSlideAction = function(carousel_id)
+	{
+		// if(main_cycle_timeout_handlers_global[carousel_id])
+		{
+			console.debug("after slide action (#" + carousel_id + ") -> " + GetActiveItemIndex(carousel_id));
+
+			return ScheduleItemSlide(carousel_id);
+		}
+	};
+
+	var	SlideSingleCarousel = function(carousel_id)
+	{
+		var		number_of_items	= GetTotalNumberOfItems(carousel_id);
+		var		active_idx		= GetActiveItemIndex(carousel_id);
+		var		next_idx		= (active_idx + 1) % number_of_items;
+		var		ride_type	 	= GetRideType(carousel_id) || "once";
 
 		console.debug("slide ", carousel_id, ", ", active_idx, " -> ", next_idx);
 
-		timeout_handlers_global[carousel_id] = setTimeout(Player, 1000, carousel_id);
+		if(ride_type == "once")
+		{
+			// --- play once
+			if(GetPlayedAttempts($("#" + carousel_id)) == 0)
+			{
+				if(active_idx < (number_of_items - 1))
+				{
+					$("#" + carousel_id).carousel(next_idx);
+					main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+				}
+				else
+				{
+					IncreasePlayedAttempts($("#" + carousel_id));
+				}
+			}
+		}
+		else if(ride_type == "cycle")
+		{
+			// --- play in cycle
+			$("#" + carousel_id).carousel(next_idx);
+			main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+		}
+		else
+		{
+			console.error("Carousel(#" + carousel_id + ") ride type(" + ride_type + ") is unknown");
+		}
 	};
+
 
 	return {
 		PlayVisibleCarousels: PlayVisibleCarousels,
