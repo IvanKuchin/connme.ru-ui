@@ -1376,7 +1376,8 @@ var news_feed = (function()
 
 			RefreshMessageCommentsList(messageID);
 
-			// LazyImageLoad();
+			// --- this call is required for message_comment_modal to properly display all images in carousel
+			LazyImageLoad();
 		}
 	};
 
