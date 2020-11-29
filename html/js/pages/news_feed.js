@@ -3581,7 +3581,7 @@ var news_feed = (function()
 
 					if(data.result == "error") 
 					{
-						system_calls.PopoverError(modal_tag.find(".__alert"), data.description);
+						system_calls.PopoverError(modal_tag.find(".__message_dst"), data.description);
 					}				
 					else if(data.result == "success") 
 					{
@@ -3592,12 +3592,12 @@ var news_feed = (function()
 					}
 					else
 					{
-						system_calls.PopoverError(modal_tag.find(".__alert"), "ошибка ответа сервера");
+						system_calls.PopoverError(modal_tag.find(".__message_dst"), "ошибка ответа сервера");
 					}		
 				})
 				.fail( function()
 				{
-					system_calls.PopoverError(modal_tag.find(".__alert"), "ошибка ответа сервера");
+					system_calls.PopoverError(modal_tag.find(".__message_dst"), "ошибка ответа сервера");
 				})
 				.always(function() 
 				{
@@ -3761,7 +3761,7 @@ var news_feed = (function()
 
 		if(content.length === 0)
 		{
-			$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_getGroupsOwnedByUser", {param1: ""})
+			$.getJSON("/cgi-bin/anyrole_1.cgi?action=AJAX_getGroupsOwnedByUserAndSubscriibedTo", {param1: ""})
 					.done(function(data) {
 						if(data.result == "success")
 						{
