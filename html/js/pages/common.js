@@ -499,6 +499,49 @@ system_calls = (function()
 	};
 
 
+	// --- input: format
+	// ---		YYYY - year (2012)
+	// ---		YYY - year, don't show if same as now
+	// ---		YY - year (12)
+	// ---		MM - month (08)
+	// ---		MMM - short month (Авг)
+	// ---		MMMM - spelled month (Августа)
+	// ---		DD - day
+	// ---		HH - hour
+	// ---		hh - hour
+	// ---		mm - mins
+	// ---		ss - seconds
+	var	GetFormattedDateFromSeconds = function(seconds, format)
+	{
+		var		result = "";
+
+		if(typeof(format) == "undefined")
+		{
+			console.error("format parameter mandatory");
+		}
+		else
+		{
+			var		timestamp = new Date(GetMsecSinceEpoch(seconds));
+			var		timestampNow = new Date();
+
+			result = format;
+
+			if(format.match(/\bYYYY\b/)) result = result.replace(/\bYYYY\b/g, timestamp.getFullYear());
+			if(format.match(/\bYYY\b/)) result = result.replace(/\bYYY\b/g, timestamp.getYear() == timestampNow.getYear() ? "" : timestamp.getFullYear());
+			if(format.match(/\bYY\b/)) result = result.replace(/\bYY\b/g, "'" + String(timestamp.getYear() - 100) );
+			if(format.match(/\bMM\b/)) result = result.replace(/\bMM\b/g, timestamp.getMonth() + 1);
+			if(format.match(/\bMMM\b/)) result = result.replace(/\bMMM\b/g, ConvertMonthNumberToAbbrName(timestamp.getMonth() + 1));
+			if(format.match(/\bMMMM\b/)) result = result.replace(/\bMMMM\b/g, ConvertMonthNumberToFullName(timestamp.getMonth() + 1));
+			if(format.match(/\bDD\b/)) result = result.replace(/\bDD\b/g, timestamp.getDate());
+			if(format.match(/\bHH\b/)) result = result.replace(/\bHH\b/g, timestamp.getHours());
+			if(format.match(/\bhh\b/)) result = result.replace(/\bhh\b/g, timestamp.getHours());
+			if(format.match(/\bmm\b/)) result = result.replace(/\bmm\b/g, (timestamp.getMinutes() < 10 ? "0" : "") + timestamp.getMinutes());
+			if(format.match(/\bss\b/)) result = result.replace(/\bss\b/g, (timestamp.getSeconds() < 10 ? "0" : "") + timestamp.getSeconds());
+		}
+
+		return result;
+	};
+
 
 	var	GetSQLFormatedDateNoTimeFromSeconds = function(seconds)
 	{
@@ -1571,7 +1614,7 @@ system_calls = (function()
 			result = "не указано http:// или https://";
 		}
 
-		return result
+		return result;
 	};
 
 	var	ArrayLeftIntersection = function(arr1, arr2)
@@ -1680,6 +1723,7 @@ system_calls = (function()
 		GetLocalizedDateInHumanFormatSecSince1970:GetLocalizedDateInHumanFormatSecSince1970,
 		GetLocalizedDateInHumanFormatMsecSinceEvent:GetLocalizedDateInHumanFormatMsecSinceEvent,
 		GetLocalizedRUFormatDateNoTimeFromSeconds: GetLocalizedRUFormatDateNoTimeFromSeconds,
+		GetFormattedDateFromSeconds: GetFormattedDateFromSeconds,
 		GetYearsSpelling: GetYearsSpelling,
 		GetGenderedPhrase: GetGenderedPhrase,
 		GetGenderedActionCategoryTitle: GetGenderedActionCategoryTitle,

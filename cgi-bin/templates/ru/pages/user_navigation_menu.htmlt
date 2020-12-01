@@ -80,11 +80,8 @@
 				</li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span id="myFirstName"><<vars:myFirstName>></span> <span id="myLastName"><<vars:myLastName>></span> <span class="caret"></span><span id="myUserID" data-myUserID="<<vars:loginUserID>>" data-myUserAvatar="<<vars:myUserAvatar>>" data-myLogin="<<vars:myLogin>>"></span></a>
-					<ul class="dropdown-menu" role="menu">
-						<li><a href="/user_account_properties?rand=<<vars:rand>>">Свойства аккаунта</a></li>
-						<li class="divider"></li>
-						<li><a href="/logout?rand=<<vars:rand>>">Выйти</a></li>
-					</ul>
+
+					<<template:templates/ru/pages/navigation_menu_profile.htmlt>>
 				</li>
 			</ul>
 		</div><!-- /.navbar-collapse -->
