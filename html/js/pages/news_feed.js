@@ -1124,21 +1124,25 @@ var news_feed = (function()
 	{
 		var	result = false;
 
-		arr.forEach(
-			function(item)
-			{
-				if(item.isMe == "yes")
+		if(arr)
+		{
+			arr.forEach(
+				function(item)
 				{
-					result = true;
+					if(item.isMe == "yes")
+					{
+						result = true;
+					}
 				}
-			}
-		);
+			);
+		}
+
 		return result;
 	};
 
 	var ButtonLikeRender = function(buttonLike)
 	{
-		var		listLikedUser = buttonLike.data("messageLikesUserList");
+		var		listLikedUser = buttonLike.data("messageLikesUserList") || [];
 		var		spanLike = $("<span>").addClass("fa fa-thumbs-" + (IsMeHere(listLikedUser) ? "" : "o-") + "up fa-lg");
 
 		if((buttonLike.data("messageLikeType") == "likeUniversityDegree") || (buttonLike.data("messageLikeType") == "likeCertification"))
@@ -1153,7 +1157,7 @@ var news_feed = (function()
 	var ButtonLikeTooltipTitle = function(buttonLike)
 	{
 		var		strUserList = "";
-		var		messageLikesUserList = buttonLike.data().messageLikesUserList;
+		var		messageLikesUserList = buttonLike.data().messageLikesUserList || [];
 		var		nameCounter = 0;
 
 		messageLikesUserList.forEach(
@@ -2227,7 +2231,7 @@ var news_feed = (function()
 		var		ratingItemsCount = 0;
 		var		ratingItemsSum = 0;
 
-		if(ratingArr.length)
+		if(ratingArr && ratingArr.length)
 		{
 			ratingArr.forEach(function(item) {
 				if(item > 0)
@@ -2247,9 +2251,12 @@ var news_feed = (function()
 	{
 		var		ratingItemsCount = 0;
 
-		ratingArr.forEach(function(item) {
-			if(item > 0) ratingItemsCount++;
-		});
+		if(ratingArr)
+		{
+			ratingArr.forEach(function(item) {
+				if(item > 0) ratingItemsCount++;
+			});
+		}
 
 		return ratingItemsCount;
 	};
@@ -3256,7 +3263,7 @@ var news_feed = (function()
 			divRow.append(tagDivMessage);
 			RenderCertificationBody(jsonMessage, tagDivMessage);
 		}
-		else if(jsonMessage.actionTypesId === "23")
+		else if((jsonMessage.actionTypesId === "23") || (jsonMessage.actionTypesId === "57"))
 		{
 			// --- course attending
 
