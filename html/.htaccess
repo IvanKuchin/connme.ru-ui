@@ -43,6 +43,11 @@ RewriteRule ^cookie_policy(.*)$ /cgi-bin/index.cgi?action=cookie_policy_wrapper_
 RewriteRule ^helpdesk_dashboard$ /cgi-bin/helpdesk.cgi?action=helpdesk_dashboard_template [QSA]
 
 #
+# Helpdesk actions
+#
+RewriteRule ^helpdesk_edit_profile$ /edit_profile [QSA]
+
+#
 # profile by id (number)
 #
 RewriteRule ^userprofile/(.*)$ /cgi-bin/index.cgi?action=view_profile&userid=$1
