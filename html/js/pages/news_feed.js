@@ -2118,6 +2118,14 @@ var news_feed = (function()
 		return result;
 	};
 
+	var __Add_Manual_Intervention_Attr = function()
+	{
+		var	curr_tag		= $(this);
+		var carousel_tag	= curr_tag.closest(".carousel");
+
+		carousel_tag.attr("data_manual_intervention", "yes");
+	};
+
 	// --- attach Carousel to DOMtag
 	// --- imageList - image list
 	// --- add_data_ride (true|false) - if true carousel will slide once visible, otherwise stands still
@@ -2145,11 +2153,15 @@ var news_feed = (function()
 			var		tagALeftCarouselControl = $("<a>")	.addClass("left carousel-control")
 														.attr("href", "#carousel" + uniqueID)
 														.attr("role", "button")
-														.attr("data-slide", "prev");
+														.attr("data-slide", "prev")
+														.on("click", __Add_Manual_Intervention_Attr)
+														;
 			var		tagARightCarouselControl = $("<a>")	.addClass("right carousel-control")
 														.attr("href", "#carousel" + uniqueID)
 														.attr("role", "button")
-														.attr("data-slide", "next");
+														.attr("data-slide", "next")
+														.on("click", __Add_Manual_Intervention_Attr)
+														;
 
 			tagDivCarousel = $("<div/>")				.addClass("carousel slide")
 														.attr("data_ride", add_data_ride ? "carousel" : "none")

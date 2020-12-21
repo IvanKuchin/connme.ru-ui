@@ -454,35 +454,56 @@ var carousel_tools = (function()
 		var		active_idx		= GetActiveItemIndex(carousel_id);
 		var		next_idx		= (active_idx + 1) % number_of_items;
 		var		ride_type	 	= GetRideType(carousel_id) || "once";
+		var		carousel_tag	= $("#" + carousel_id);
 
 		console.debug("slide ", carousel_id, ", ", active_idx, " -> ", next_idx);
 
-		if(ride_type == "once")
+		if(ManualIntervention(carousel_tag) == false)
 		{
-			// --- play once
-			if(GetPlayedAttempts($("#" + carousel_id)) == 0)
+			if(ride_type == "once")
 			{
-				if(active_idx < (number_of_items - 1))
+				// --- play once
+				if(GetPlayedAttempts(carousel_tag) == 0)
 				{
-					$("#" + carousel_id).carousel(next_idx);
-					main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
-				}
-				else
-				{
-					IncreasePlayedAttempts($("#" + carousel_id));
+					if(active_idx < (number_of_items - 1))
+					{
+						carousel_tag.carousel(next_idx);
+						main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+					}
+					else
+					{
+						IncreasePlayedAttempts(carousel_tag);
+					}
 				}
 			}
-		}
-		else if(ride_type == "cycle")
-		{
-			// --- play in cycle
-			$("#" + carousel_id).carousel(next_idx);
-			main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+			else if(ride_type == "cycle")
+			{
+				// --- play in cycle
+				carousel_tag.carousel(next_idx);
+				main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+			}
+			else
+			{
+				console.error("Carousel(#" + carousel_id + ") ride type(" + ride_type + ") is unknown");
+			}
 		}
 		else
 		{
-			console.error("Carousel(#" + carousel_id + ") ride type(" + ride_type + ") is unknown");
+			// --- don't play slides due to manual intervention
 		}
+	};
+
+	var	ManualIntervention = function(tag)
+	{
+		var	result = false;
+
+		if(tag.attr("data_manual_intervention"))
+		{
+			if(tag.attr("data_manual_intervention") == "yes")
+				result = true;
+		}
+
+		return result;
 	};
 
 
