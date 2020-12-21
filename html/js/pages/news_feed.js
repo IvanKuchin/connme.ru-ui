@@ -325,6 +325,8 @@ var news_feed = (function()
 				}
 			}
 		);
+
+		modal_tag.find(".__submit").button("reset");
 	};
 
 	var	BlueimpImageUploader_Done = function (e, data) 
@@ -359,6 +361,8 @@ var news_feed = (function()
 
 		// --- custom part of "add" handler
 		var	modal_tag			= $(e.target).closest(".modal");
+
+		modal_tag.find(".__submit").button("loading");
 
 		data.files.forEach(
 			function(item, i)
