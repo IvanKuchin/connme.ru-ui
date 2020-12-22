@@ -2198,6 +2198,7 @@ var news_feed = (function()
 			// --- render navigation buttons only if there is no video tag in the set
 			// --- video control could interfere with carousel control, 
 			// --- due to both controls are located at the same level
+			// --- navigation buttons at the bottom
 			if(!isVideoInMedia(imageArr))
 			{
 				// --- navigation buttons at the bottom
@@ -2215,7 +2216,7 @@ var news_feed = (function()
 					}
 				);
 			}
-
+			
 			// --- side navigation buttons
 			tagALeftCarouselControl.append(
 											$("<span>")	.addClass("glyphicon glyphicon-chevron-left")
@@ -2232,8 +2233,12 @@ var news_feed = (function()
 											$("<span>")	.addClass("sr-only").append("Next")
 									);
 
-			tagDivCarousel	.append(tagOlIndicator)
-							.append(tagDivCarouselInner)
+			tagDivCarousel
+							.append(tagDivCarouselInner);
+
+			if(imageArr.length > 1)
+				tagDivCarousel
+							.append(tagOlIndicator)
 							.append(tagALeftCarouselControl)
 							.append(tagARightCarouselControl);
 		} // --- end of carousel
