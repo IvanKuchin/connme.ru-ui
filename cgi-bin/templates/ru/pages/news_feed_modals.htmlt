@@ -181,6 +181,8 @@
 				</div>
 				<div class="modal-body" id="divNewsFeedMessageBody">
 				</div>
+				<div class="modal-body" id="divNewsFeedMessageLiked">
+				</div>
 				<div class="modal-body" id="divNewsFeedMessageComments">
 				</div>
 				<div class="modal-body padding_bottom_0px">

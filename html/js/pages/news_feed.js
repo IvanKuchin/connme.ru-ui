@@ -1384,8 +1384,22 @@ var news_feed = (function()
 
 			RefreshMessageCommentsList(messageID);
 
+			RenderLikedUsersList(messageObject.messageLikesUserList);
+
 			// --- this call is required for message_comment_modal to properly display all images in carousel
 			LazyImageLoad();
+		}
+	};
+
+	var	RenderLikedUsersList = function(users)
+	{
+		$("#divNewsFeedMessageLiked").empty();
+
+		if(users.length)
+		{
+			$("#divNewsFeedMessageLiked")
+				.append("Понравилось: ")
+				.append(system_calls.GetAvatarsList(users));
 		}
 	};
 
