@@ -1810,7 +1810,7 @@ var news_feed = (function()
 			}
 			else
 			{
-				console.error("ERROR returned from JSON_getCommentsOnMessage (" + data.description + ")");
+				console.error("ERROR returned from JSON_getCommentsOnBook (" + data.description + ")");
 			}
 		})
 		.fail(function() {
@@ -1847,7 +1847,7 @@ var news_feed = (function()
 			}
 			else
 			{
-				console.error("ERROR returned from JSON_getCommentsOnMessage (" + data.description + ")");
+				console.error("ERROR returned from JSON_getCommentsOnCertification (" + data.description + ")");
 			}
 		})
 		.fail(function() {
@@ -1882,7 +1882,7 @@ var news_feed = (function()
 			}
 			else
 			{
-				console.error("ERROR returned from JSON_getCommentsOnMessage (" + data.description + ")");
+				console.error("ERROR returned from JSON_getCommentsOnScienceDegree (" + data.description + ")");
 			}
 		})
 		.fail(function() {
@@ -1917,7 +1917,7 @@ var news_feed = (function()
 			}
 			else
 			{
-				console.error("ERROR returned from JSON_getCommentsOnMessage (" + data.description + ")");
+				console.error("ERROR returned from JSON_getCommentsOnCompany (" + data.description + ")");
 			}
 		})
 		.fail(function() {
@@ -1952,7 +1952,7 @@ var news_feed = (function()
 			}
 			else
 			{
-				console.error("ERROR returned from JSON_getCommentsOnMessage (" + data.description + ")");
+				console.error("ERROR returned from JSON_getCommentsOnLanguage (" + data.description + ")");
 			}
 		})
 		.fail(function() {
