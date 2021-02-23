@@ -1581,6 +1581,36 @@ system_calls = (function()
 		return bookRating;
 	};
 
+
+	var	GetActiveRibbon = function(ribbons)
+	{
+		return ribbons[0];
+	};
+
+	// --- canvas required to calculate proper ribbon size 
+	var	GetRibbon_DOM = function(ribbons, canvas)
+	{
+		var DrawRibbon = function(ribbon, canvas)
+		{
+			return $("<img>")
+							.attr("src", ribbon.image)
+							.css("position", "absolute")
+							.css("top", "50%")
+							.css("left", "50%")
+							.css("max-height", "50%")
+							.css("max-width", "50%")
+							;
+		};
+
+		if(ribbons && ribbons.length)
+		{
+			var ribbon = GetActiveRibbon(ribbons);
+
+			return DrawRibbon(ribbon, canvas);
+		}
+	};
+
+
 	var	ReplaceTextLinkToURL = function(srcText)
 	{
 		// --- url is everything before space or HTML-tag (for example: <br>)
@@ -1771,6 +1801,7 @@ system_calls = (function()
 		GetItemFromArrayByID:GetItemFromArrayByID, 
 
 		GetAvatarsList: GetAvatarsList,
+		GetRibbon_DOM: GetRibbon_DOM,
 
 		PopoverError: PopoverError,
 		PopoverInfo: PopoverInfo,
@@ -2170,36 +2201,9 @@ var	DrawCompanyLogoAvatar = function(context, imageURL, avatarSize)
 	};
 };
 
-var	GetActiveRibbon = function(ribbons)
-{
-	return ribbons[0];
-};
-
-
-var DrawRibbon = function(ctx, ribbon)
-{
-	var		pic = new Image();
-
-	pic.src = ribbon.image;
-	pic.onload = function() {
-		var canvas_width = ctx.canvas.width;
-		var canvas_height = ctx.canvas.height;
-		var ribbon_width_scaled = pic.width / Math.max(pic.width, pic.height) * canvas_width/2;
-		var ribbon_height_scaled = pic.height / Math.max(pic.width, pic.height) * canvas_height/2;
-
-		ctx.drawImage(pic, 0, 0, pic.width, pic.height, canvas_width - ribbon_width_scaled, canvas_height - ribbon_height_scaled, ribbon_width_scaled, ribbon_height_scaled);
-	}
-};
-
-var	GetRibbon_DOM = function(ribbons)
-{
-};
-
-var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast, ribbons)
+var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast)
 {
 	"use strict";
-
-	var ribbon;
 
 	if((avatarPath == "empty") || (avatarPath === ""))
 	{
@@ -2209,13 +2213,6 @@ var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast, ribbon
 	else
 	{
 		DrawPictureAvatar(canvas, avatarPath, canvas.canvas.width);
-	}
-
-	if(ribbons && ribbons.length)
-	{
-		ribbon = GetActiveRibbon(ribbons);
-
-		DrawRibbon(canvas, ribbon);
 	}
 };
 

@@ -3218,7 +3218,7 @@ var news_feed = (function()
 			hrefUsername.append(jsonMessage.srcObj.name + " " + jsonMessage.srcObj.nameLast)
 						.attr("href", GetHrefAttrFromSrcObj(jsonMessage));
 			hrefSrcObj	.attr("href", GetHrefAttrFromSrcObj(jsonMessage))
-						.append(system_calls.GetRibbon_DOM(jsonMessage.srcObj.ribbons));
+						.append(system_calls.GetRibbon_DOM(jsonMessage.srcObj.ribbons, divPhoto));
 
 		}
 
