@@ -3161,6 +3161,7 @@ var news_feed = (function()
 		var		tagDivMsgInfo;
 		var		canvasCtx; 				// --- used for transfer arg to function HandlerDrawPicture Avatar
 		var		jsonMessage = item;
+		var		ribbon;
 
 		divContainer 	= $("<div/>").addClass("container");
 		divRow 			= $("<div/>").addClass("row");
@@ -3212,11 +3213,13 @@ var news_feed = (function()
 		else
 		{
 			canvasSrcObj.addClass("canvas-big-avatar");
-			DrawUserAvatar(canvasCtx, jsonMessage.srcObj.avatar, jsonMessage.srcObj.name, jsonMessage.srcObj.nameLast);
+			DrawUserAvatar(canvasCtx, jsonMessage.srcObj.avatar, jsonMessage.srcObj.name, jsonMessage.srcObj.nameLast, jsonMessage.srcObj.ribbons);
 
 			hrefUsername.append(jsonMessage.srcObj.name + " " + jsonMessage.srcObj.nameLast)
 						.attr("href", GetHrefAttrFromSrcObj(jsonMessage));
-			hrefSrcObj	.attr("href", GetHrefAttrFromSrcObj(jsonMessage));
+			hrefSrcObj	.attr("href", GetHrefAttrFromSrcObj(jsonMessage))
+						.append(system_calls.GetRibbon_DOM(jsonMessage.srcObj.ribbons));
+
 		}
 
 		// --- message types parsing

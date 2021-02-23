@@ -1452,15 +1452,17 @@ system_calls = (function()
 	var	GetItemFromArrayByID = function(__array, id, id_fieldname)
 	{
 		var result = null;
+		var	item;
 
 		if(!id_fieldname) id_fieldname = "id";
 
 		if(__array)
 		{
 			for (var i = __array.length - 1; i >= 0; i--) {
-				if(__array[i].hasOwnProperty(id_fieldname) && __array[i][id_fieldname] == id)
+				item = __array[i];
+				if(Object.prototype.hasOwnProperty.call(item, id_fieldname) && item[id_fieldname] == id)
 				{
-					result = __array[i];
+					result = item;
 					break;
 				}
 			}
@@ -2168,9 +2170,36 @@ var	DrawCompanyLogoAvatar = function(context, imageURL, avatarSize)
 	};
 };
 
-var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast)
+var	GetActiveRibbon = function(ribbons)
+{
+	return ribbons[0];
+};
+
+
+var DrawRibbon = function(ctx, ribbon)
+{
+	var		pic = new Image();
+
+	pic.src = ribbon.image;
+	pic.onload = function() {
+		var canvas_width = ctx.canvas.width;
+		var canvas_height = ctx.canvas.height;
+		var ribbon_width_scaled = pic.width / Math.max(pic.width, pic.height) * canvas_width/2;
+		var ribbon_height_scaled = pic.height / Math.max(pic.width, pic.height) * canvas_height/2;
+
+		ctx.drawImage(pic, 0, 0, pic.width, pic.height, canvas_width - ribbon_width_scaled, canvas_height - ribbon_height_scaled, ribbon_width_scaled, ribbon_height_scaled);
+	}
+};
+
+var	GetRibbon_DOM = function(ribbons)
+{
+};
+
+var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast, ribbons)
 {
 	"use strict";
+
+	var ribbon;
 
 	if((avatarPath == "empty") || (avatarPath === ""))
 	{
@@ -2180,6 +2209,13 @@ var DrawUserAvatar = function(canvas, avatarPath, userName, userNameLast)
 	else
 	{
 		DrawPictureAvatar(canvas, avatarPath, canvas.canvas.width);
+	}
+
+	if(ribbons && ribbons.length)
+	{
+		ribbon = GetActiveRibbon(ribbons);
+
+		DrawRibbon(canvas, ribbon);
 	}
 };
 
