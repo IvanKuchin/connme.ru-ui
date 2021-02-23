@@ -1,6 +1,26 @@
 /* exported PreviewImageControl */
 /* exported carousel_tools */
 
+var common_connme = (function()
+{
+	var	SortUserSubscriptions = function(a, b)
+	{
+		var		titleA;
+		var		titleB;
+
+		if(a.entity_type == "company") titleA = system_calls.GetItemFromArrayByID(userProfile.subscribed_companies, a.entity_id, "id").name;
+		if(a.entity_type == "group")   titleA = system_calls.GetItemFromArrayByID(userProfile.groups, a.entity_id, "id").title;
+		if(b.entity_type == "company") titleB = system_calls.GetItemFromArrayByID(userProfile.subscribed_companies, b.entity_id, "id").name;
+		if(b.entity_type == "group")   titleB = system_calls.GetItemFromArrayByID(userProfile.groups, b.entity_id, "id").title;
+
+		return titleA.localeCompare(titleB);
+	}
+
+	return {
+		SortUserSubscriptions: SortUserSubscriptions,
+	};
+})();
+
 var PreviewImageControl = function ()
 {
 	"use strict";

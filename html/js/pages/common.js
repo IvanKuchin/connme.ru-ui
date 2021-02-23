@@ -1449,6 +1449,26 @@ system_calls = (function()
 		}
 	};
 
+	var	GetItemFromArrayByID = function(__array, id, id_fieldname)
+	{
+		var result = null;
+
+		if(!id_fieldname) id_fieldname = "id";
+
+		if(__array)
+		{
+			for (var i = __array.length - 1; i >= 0; i--) {
+				if(__array[i].hasOwnProperty(id_fieldname) && __array[i][id_fieldname] == id)
+				{
+					result = __array[i];
+					break;
+				}
+			}
+		}
+
+		return result;
+	};
+
 	var	GetAvatarsList = function(usersArray)
 	{
 		var		guestAvatarsList = $();
@@ -1745,6 +1765,8 @@ system_calls = (function()
 		GetDaysSpelling: GetDaysSpelling,
 		GetMonthsSpelling: GetMonthsSpelling,
 		GetTodaysYear: GetTodaysYear,
+
+		GetItemFromArrayByID:GetItemFromArrayByID, 
 
 		GetAvatarsList: GetAvatarsList,
 

@@ -1,3 +1,5 @@
+/* global DrawUserAvatar, userCache */
+
 var		view_profile = view_profile || {};
 
 view_profile = (function()
@@ -1161,6 +1163,19 @@ view_profile = (function()
 		$("div#BookPath").append(result);
 	};
 
+	var	SortUserSubscriptions = function(a, b)
+	{
+		var		titleA;
+		var		titleB;
+
+		if(a.entity_type == "company") titleA = system_calls.GetItemFromArrayByID(userProfile.subscribed_companies, a.entity_id, "id").name;
+		if(a.entity_type == "group")   titleA = system_calls.GetItemFromArrayByID(userProfile.groups, a.entity_id, "id").title;
+		if(b.entity_type == "company") titleB = system_calls.GetItemFromArrayByID(userProfile.subscribed_companies, b.entity_id, "id").name;
+		if(b.entity_type == "group")   titleB = system_calls.GetItemFromArrayByID(userProfile.groups, b.entity_id, "id").title;
+
+		return titleA.localeCompare(titleB);
+	};
+
 	var	RenderSubscriptionCompanies = function()
 	{
 		var		result = $();
@@ -1171,56 +1186,33 @@ view_profile = (function()
 		}
 
 		$("div#SubscriptionsCompany").empty();
-		userProfile.subscriptions.sort(function(a, b)
-			{
-				var		titleA;
-				var		titleB;
-				// var		result;
+		userProfile.subscriptions.sort(SortUserSubscriptions);
 
-				if(a.entity_type == "company") titleA = a.company[0].name;
-				if(a.entity_type == "group") titleA = a.group[0].title;
-				if(b.entity_type == "company") titleB = b.company[0].name;
-				if(b.entity_type == "group") titleB = b.group[0].title;
-
-/*				if(titleA == titleB) { result = 0; }
-				if(titleA > titleB) { result = -1; }
-				if(titleA < titleB) { result = 1; }
-*/
-				return titleA.localeCompare(titleB);
-			});
 		userProfile.subscriptions.forEach( function(item) {
 			if(item.entity_type == "company")
 			{
-				// var		companyID = item.company[0].id;
-
+				var		company = system_calls.GetItemFromArrayByID(userProfile.subscribed_companies, item.entity_id, "id");
 				var		divRow = $("<div>").addClass("row margin_top_10")
-											.attr("id", "company" + item.company[0].id);
+											.attr("id", "company" + company.id);
 				var		divCompany = $("<div>").addClass("col-xs-7 col-sm-11");
 				var		divCover = $("<div>").addClass("col-xs-5 col-sm-1");
 
 				var		paragraphCompany = $("<p>");
-				var		linkToCompany = $("<a>").attr("href", "/company/" + item.company[0].link + "?random=" + system_calls.GetUUID())
-												.append(item.company[0].name);
-				var		spanTitle = $("<span>").attr("data-id", item.company[0].id)
+				var		linkToCompany = $("<a>").attr("href", "/company/" + company.link + "?random=" + system_calls.GetUUID())
+												.append(company.name);
+				var		spanTitle = $("<span>").attr("data-id", company.id)
 												.attr("data-action", "updateCompanyTitle")
 												.attr("data-script", "company.cgi")
 												.addClass("companyTitle")
 												.append(linkToCompany);
-/*
-				var		spanTimestamp = $("<span>").addClass("companyReadTimestamp editableSpan formatDate")
-													.append(system_calls.GetLocalizedDateNoTimeFromSeconds(item.company[0].eventTimestamp))
-													.data("id", item.company[0].id)
-													.data("action", "updateCompanyReadTimestamp")
-													.data("script", "company.cgi");
-				var		currDate = new Date();
-*/
+
 				var		imgCover;
 
-				if((typeof(item.company[0].logo_folder) != "undefined") && (typeof(item.company[0].logo_filename) != "undefined") && (item.company[0].logo_folder.length) && (item.company[0].logo_filename.length))
+				if((typeof(company.logo_folder) != "undefined") && (typeof(company.logo_filename) != "undefined") && (company.logo_folder.length) && (company.logo_filename.length))
 					imgCover = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder")
-										.attr("src", "/images/companies/" + item.company[0].logo_folder + "/" + item.company[0].logo_filename)
+										.attr("src", "/images/companies/" + company.logo_folder + "/" + company.logo_filename)
 										.attr("data-type", "company")
-										.attr("data-title", item.company[0].name)
+										.attr("data-title", company.name)
 										.on("click", DisplaySpecifiedImageModal_Show);
 
 				else
@@ -1229,14 +1221,7 @@ view_profile = (function()
 											.attr("height", "50")
 											.attr("width", "50");
 
-					DrawUserAvatar(imgCover[0].getContext("2d"), "", item.company[0].name, item.company[0].nameLast);
-/*
-					imgCover = $("<img>").addClass("max_100percents_100px div_content_center_alignment scale_1_2")
-										.attr("src", "/images/pages/common/empty_2.png")
-										.attr("id", "editProfileCoverCompanyID" + item.company[0].id)
-										// .on("click", AddCompanyCoverUploadClickHandler)
-										.data("id", item.company[0].id);
-*/
+					DrawUserAvatar(imgCover[0].getContext("2d"), "", company.name, company.nameLast);
 				}
 
 				result = result.add(divRow);
@@ -1244,7 +1229,7 @@ view_profile = (function()
 				paragraphCompany.append(spanTitle);
 
 				divRow	.append(divCover.append(imgCover))
-						.append(divCompany.append(paragraphCompany));
+						.append(divCompany.append(paragraphCompany))
 						// .append(divTimestamp.append(system_calls.GetLocalizedDateInHumanFormatMsecSinceEvent(currDate.getTime() - item.eventTimestamp*1000)));
 			}
 		});
@@ -1262,56 +1247,31 @@ view_profile = (function()
 		}
 
 		$("div#SubscriptionsGroup").empty();
-		userProfile.subscriptions.sort(function(a, b)
-			{
-				var		titleA;
-				var		titleB;
-				// var		result;
-
-				if(a.entity_type == "company") titleA = a.company[0].name;
-				if(a.entity_type == "group") titleA = a.group[0].title;
-				if(b.entity_type == "company") titleB = b.company[0].name;
-				if(b.entity_type == "group") titleB = b.group[0].title;
-
-/*				if(titleA == titleB) { result = 0; }
-				if(titleA > titleB) { result = -1; }
-				if(titleA < titleB) { result = 1; }
-*/
-				return titleA.localeCompare(titleB);
-			});
+		userProfile.subscriptions.sort(SortUserSubscriptions);
 		userProfile.subscriptions.forEach( function(item) {
 			if(item.entity_type == "group")
 			{
-				// var		groupID = item.group[0].id;
-
+				var		group = system_calls.GetItemFromArrayByID(userProfile.groups, item.entity_id, "id");
 				var		divRow = $("<div>").addClass("row margin_top_10")
-											.attr("id", "group" + item.group[0].id);
+											.attr("id", "group" + group.id);
 				var		divGroup = $("<div>").addClass("col-xs-7 col-sm-11");
 				var		divCover = $("<div>").addClass("col-xs-5 col-sm-1");
 
 				var		paragraphGroup = $("<p>");
-				var		linkToGroup = $("<a>").attr("href", "/group/" + item.group[0].link + "?random=" + system_calls.GetUUID())
-												.append(item.group[0].title);
-				var		spanTitle = $("<span>").attr("data-id", item.group[0].id)
+				var		linkToGroup = $("<a>").attr("href", "/group/" + group.link + "?random=" + system_calls.GetUUID())
+												.append(group.title);
+				var		spanTitle = $("<span>").attr("data-id", group.id)
 												.attr("data-action", "updateGroupTitle")
 												.attr("data-script", "group.cgi")
 												.addClass("groupTitle")
 												.append(linkToGroup);
-/*
-				var		spanTimestamp = $("<span>").addClass("groupReadTimestamp editableSpan formatDate")
-													.append(system_calls.GetLocalizedDateNoTimeFromSeconds(item.group[0].eventTimestamp))
-													.data("id", item.group[0].id)
-													.data("action", "updateGroupReadTimestamp")
-													.data("script", "group.cgi");
-				var		currDate = new Date();
-*/
 				var		imgCover;
 
-				if((typeof(item.group[0].logo_folder) != "undefined") && (typeof(item.group[0].logo_filename) != "undefined") && (item.group[0].logo_folder.length) && (item.group[0].logo_filename.length))
+				if((typeof(group.logo_folder) != "undefined") && (typeof(group.logo_filename) != "undefined") && (group.logo_folder.length) && (group.logo_filename.length))
 					imgCover = $("<img>").addClass("max_100percents_100px div_content_center_alignment niceborder")
-										.attr("src", "/images/groups/" + item.group[0].logo_folder + "/" + item.group[0].logo_filename)
+										.attr("src", "/images/groups/" + group.logo_folder + "/" + group.logo_filename)
 										.attr("data-type", "group")
-										.attr("data-title", item.group[0].title)
+										.attr("data-title", group.title)
 										.on("click", DisplaySpecifiedImageModal_Show);
 
 				else
@@ -1320,15 +1280,8 @@ view_profile = (function()
 											.attr("height", "50")
 											.attr("width", "50");
 
-					system_calls.RenderCompanyLogo(imgCover[0].getContext("2d"), "", item.group[0].title, "");
-
-
-/*					imgCover = $("<img>").addClass("max_100percents_100px div_content_center_alignment scale_1_2")
-										.attr("src", "/images/pages/common/empty_2.png")
-										.attr("id", "editProfileCoverGroupID" + item.group[0].id)
-										// .on("click", AddGroupCoverUploadClickHandler)
-										.data("id", item.group[0].id);
-*/				}
+					system_calls.RenderCompanyLogo(imgCover[0].getContext("2d"), "", group.title, "");
+				}
 
 				result = result.add(divRow);
 
