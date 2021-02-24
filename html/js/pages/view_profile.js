@@ -202,8 +202,8 @@ view_profile = (function()
 					function(item, i)
 					{
 						var		hrefUserLink = $("<a>").attr("href", "/userprofile/" + item.id);
-						var		friendCanvas = $("<canvas>").attr("width", "40")
-															.attr("height", "40")
+						var		friendCanvas = $("<canvas>").attr("width", "80")
+															.attr("height", "80")
 															.addClass("canvas-big-avatar class-tooltip");
 						var		friendCanvasCtx = friendCanvas[0].getContext("2d");
 						var		fullName = "", name = "", nameLast = "";
@@ -1229,7 +1229,7 @@ view_profile = (function()
 				paragraphCompany.append(spanTitle);
 
 				divRow	.append(divCover.append(imgCover))
-						.append(divCompany.append(paragraphCompany))
+						.append(divCompany.append(paragraphCompany));
 						// .append(divTimestamp.append(system_calls.GetLocalizedDateInHumanFormatMsecSinceEvent(currDate.getTime() - item.eventTimestamp*1000)));
 			}
 		});

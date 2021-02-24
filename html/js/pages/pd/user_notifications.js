@@ -1,5 +1,5 @@
-
-var	user_notifications = user_notifications || {};
+/* exported  user_notifications */
+/* global DrawUserAvatar, DrawCompanyAvatar, navMenu_userNotification */
 
 var	user_notifications = (function()
 {
@@ -57,7 +57,7 @@ var	user_notifications = (function()
 		{
 			scrollLock = true;
 			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getUserNotification", {page: ++globalPageCounter})
-			 		.done(function(data) {
+					.done(function(data) {
 						usersNotificationArray = usersNotificationArray.concat(data);
 						BuildUserNotificationList(data);
 						scrollLock = false;
@@ -66,7 +66,7 @@ var	user_notifications = (function()
 		}
 	};
 
-	var	BuildUserNotificationSingleEntry = function(item, i, arr)
+	var	BuildUserNotificationSingleEntry = function(item)
 	{
 		var		divContainer 			= $("<div/>")	.addClass("container")
 														.attr("id", "notificationContainer" + item.notificationID);
@@ -143,7 +143,6 @@ var	user_notifications = (function()
 			var		messageVideo = $("<video>").addClass("max_100px div_content_center_alignment");
 			var		messageYoutubeVideo = $("<iframe>").addClass("max_100px div_content_center_alignment")
 														.attr("frameborder", "0");
-			var		messageMedia;
 
 			if((item.notificationCommentType == "message") || (item.notificationCommentType == "like"))
 			{
@@ -230,9 +229,9 @@ var	user_notifications = (function()
 			}
 			else if((item.notificationCommentType == "likeUniversityDegree"))
 			{
-				var		universityLocation = "";
-				var		studyPeriodMessage = "";
-				var		studyPeriodLength = 0;
+				universityLocation = "";
+				studyPeriodMessage = "";
+				studyPeriodLength = 0;
 
 				spanNotifTypeTitle.empty().append("поздравляет с получением научной степени");
 
@@ -387,12 +386,12 @@ var	user_notifications = (function()
 		// --- birthday
 		if(item.notificationTypeID == 58)
 		{
-			var		spanImg = $("<div>").addClass("col-xs-5 col-sm-3 col-md-2");
-			var		spanTitle = $("<div>").addClass("col-xs-7 col-sm-9 col-md-10"); // .append($("<h4>").append(item.notificationMessageTitle));
-			var		spanBody = $("<div>").addClass("col-xs-12 col-sm-9 col-md-10"); // .append(item.notificationMessageBody);
+			spanImg = $("<div>").addClass("col-xs-5 col-sm-3 col-md-2");
+			spanTitle = $("<div>").addClass("col-xs-7 col-sm-9 col-md-10"); // .append($("<h4>").append(item.notificationMessageTitle));
+			spanBody = $("<div>").addClass("col-xs-12 col-sm-9 col-md-10"); // .append(item.notificationMessageBody);
 
-			var		divNotificationBody = $("<div>").addClass("row");
-			var		messageImg = $("<img>").addClass("max_100px div_content_center_alignment")
+			divNotificationBody = $("<div>").addClass("row");
+			messageImg = $("<img>").addClass("max_100px div_content_center_alignment")
 											.attr("src", "/images/pages/notification/birthday.jpg");
 
 			// divMsgInfo.empty();
@@ -434,9 +433,9 @@ var	user_notifications = (function()
 		// --- company posession request
 		if(item.notificationTypeID == 60)
 		{
-			var		divImg = $("<div>").addClass("col-xs-5 col-sm-3 col-md-2");
-			var		divTitle = $("<div>").addClass("col-xs-7 col-sm-9 col-md-10"); // .append($("<h4>").append(item.notificationMessageTitle));
-			var		divBody = $("<div>").addClass("col-xs-12 form-group"); // .append(item.notificationMessageBody);
+			divImg = $("<div>").addClass("col-xs-5 col-sm-3 col-md-2");
+			divTitle = $("<div>").addClass("col-xs-7 col-sm-9 col-md-10"); // .append($("<h4>").append(item.notificationMessageTitle));
+			divBody = $("<div>").addClass("col-xs-12 form-group"); // .append(item.notificationMessageBody);
 			var		divOK = $("<div>").addClass("col-xs-6 col-sm-4 col-md-5");
 			var		buttonOK = $("<button>").addClass("btn btn-primary form-control")
 												.data("id", item.notificationID)
@@ -454,10 +453,10 @@ var	user_notifications = (function()
 												.attr("data-loading-text", "<span class='fa fa-refresh fa-spin fa-fw animateClass'></span>")
 												.on("click", AreYouSureClickHandler);
 
-			var		messageImg = $("<img>").addClass("max_100px div_content_center_alignment")
+			messageImg = $("<img>").addClass("max_100px div_content_center_alignment")
 											.attr("src", "/images/pages/notification/birthday.jpg");
 
-			var		divNotificationRow = $("<div>").addClass("row");
+			divNotificationRow = $("<div>").addClass("row");
 
 			divTitle.append();
 
@@ -486,12 +485,12 @@ var	user_notifications = (function()
 		// --- granted company posession request
 		if(item.notificationTypeID == 61)
 		{
-			var		divImg = $("<div>").addClass("col-xs-5 col-sm-3 col-md-2");
-			var		divTitle = $("<div>").addClass("col-xs-7 col-sm-9 col-md-10"); // .append($("<h4>").append(item.notificationMessageTitle));
-			var		divBody = $("<div>").addClass("col-xs-12 col-sm-9 col-md-10") // .append(item.notificationMessageBody);
+			divImg = $("<div>").addClass("col-xs-5 col-sm-3 col-md-2");
+			divTitle = $("<div>").addClass("col-xs-7 col-sm-9 col-md-10"); // .append($("<h4>").append(item.notificationMessageTitle));
+			divBody = $("<div>").addClass("col-xs-12 col-sm-9 col-md-10") // .append(item.notificationMessageBody);
 										.append($("<a>").attr("href", "edit_company?companyid=" + item.notificationFromCompany[0].id + "&rand=" + system_calls.GetUUID()).append("Редактировать данные компании"));
 
-			var		divNotificationRow = $("<div>").addClass("row");
+			divNotificationRow = $("<div>").addClass("row");
 
 			divTitle.append();
 
