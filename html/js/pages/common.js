@@ -1449,18 +1449,18 @@ system_calls = (function()
 		}
 	};
 
-	var	GetItemFromArrayByID = function(__array, id, id_fieldname)
+	var	GetItemFromArrayByID = function(__array, id, id_field_name)
 	{
 		var result = null;
 		var	item;
 
-		if(!id_fieldname) id_fieldname = "id";
+		if(!id_field_name) id_field_name = "id";
 
 		if(__array)
 		{
 			for (var i = __array.length - 1; i >= 0; i--) {
 				item = __array[i];
-				if(Object.prototype.hasOwnProperty.call(item, id_fieldname) && item[id_fieldname] == id)
+				if(Object.prototype.hasOwnProperty.call(item, id_field_name) && item[id_field_name] == id)
 				{
 					result = item;
 					break;
@@ -1588,9 +1588,9 @@ system_calls = (function()
 	};
 
 	// --- canvas required to calculate proper ribbon size 
-	var	GetRibbon_DOM = function(ribbons, canvas)
+	var	GetRibbon_DOM = function(ribbons)
 	{
-		var DrawRibbon = function(ribbon, canvas)
+		var DrawRibbon = function(ribbon)
 		{
 			return $("<img>")
 							.attr("src", ribbon.image)
@@ -1606,7 +1606,7 @@ system_calls = (function()
 		{
 			var ribbon = GetActiveRibbon(ribbons);
 
-			return DrawRibbon(ribbon, canvas);
+			return DrawRibbon(ribbon);
 		}
 	};
 

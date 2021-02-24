@@ -1,6 +1,7 @@
 /*global PreviewImageControl*/
 /*global carousel_tools*/
 /*global NoSleep*/
+/*global DrawCompanyAvatar, DrawUserAvatar*/
 /*exported news_feed*/
 
 var news_feed = (function()
@@ -3161,7 +3162,6 @@ var news_feed = (function()
 		var		tagDivMsgInfo;
 		var		canvasCtx; 				// --- used for transfer arg to function HandlerDrawPicture Avatar
 		var		jsonMessage = item;
-		var		ribbon;
 
 		divContainer 	= $("<div/>").addClass("container");
 		divRow 			= $("<div/>").addClass("row");
@@ -3218,7 +3218,7 @@ var news_feed = (function()
 			hrefUsername.append(jsonMessage.srcObj.name + " " + jsonMessage.srcObj.nameLast)
 						.attr("href", GetHrefAttrFromSrcObj(jsonMessage));
 			hrefSrcObj	.attr("href", GetHrefAttrFromSrcObj(jsonMessage))
-						.append(system_calls.GetRibbon_DOM(jsonMessage.srcObj.ribbons, divPhoto));
+						.append(system_calls.GetRibbon_DOM(jsonMessage.srcObj.ribbons));
 
 		}
 
