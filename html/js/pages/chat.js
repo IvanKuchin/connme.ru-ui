@@ -10,7 +10,6 @@ chat = (function()
 
 	var		IMAGE_CHAT_DIRECTORY = "/images/chat/";
 	var		CHAT_MAX_IMAGE_SIZE = 524228;
-	var		SESSION_LEN = 60;
 	var		myUserID = "";
 	var		activeUserID = "";
 	var		contactList = [];
@@ -57,8 +56,8 @@ chat = (function()
 	// --- scrollLock used to avoid requesting to much data from server during single scrolling
 	var		scrollLock = false; 
 
-	var escapable = /[\x00-\x1f\ud800-\udfff\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufff0-\uffff]/g;
 /*
+	var escapable = /[\x00-\x1f\ud800-\udfff\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufff0-\uffff]/g;
 	function filterUnicode(quoted){
 
 	  escapable.lastIndex = 0;
@@ -75,7 +74,7 @@ chat = (function()
 
 		$("#loadingModal").modal("show");
 		loadingModalState = "loading";
-		$("#loadingModal").on("shown.bs.modal", function(e) { 
+		$("#loadingModal").on("shown.bs.modal", function() { 
 			if(loadingModalState === "requireToHide")
 			{
 				$("#loadingModal").modal("hide");
@@ -86,7 +85,7 @@ chat = (function()
 				loadingModalState = "shown";
 			}
 		});
-		$("#loadingModal").on("hidden.bs.modal", function(e) { 
+		$("#loadingModal").on("hidden.bs.modal", function() { 
 			loadingModalState = "hidden";
 		});
 
@@ -136,7 +135,7 @@ chat = (function()
 		if(window.File && window.FileList && window.FileReader && window.Blob && window.URL)
 		{
 			// --- image send control buttons
-			$("#ControlButtonPhoto").on("click", function(e)
+			$("#ControlButtonPhoto").on("click", function()
 				{
 					$("#FileSendButton_1").click();
 				});
@@ -203,7 +202,7 @@ chat = (function()
 			}
 			else
 			{
-			 	currentState = ($("#ChatHeightCorrecter").attr("class").indexOf("_correcter_") < 0 ? false : true);
+				currentState = ($("#ChatHeightCorrecter").attr("class").indexOf("_correcter_") < 0 ? false : true);
 			}
 
 			if(currentState ^ onScreenKeyboardDisplay)
@@ -224,16 +223,12 @@ chat = (function()
 
 	var MessageToSendFocusHandler = function()
 	{
-		var d1 = new Date();
-
 		onScreenKeyboardDisplay = true;
 		UpdateLayoutOnScreenKeyboard();
 	};
 
 	var MessageToSendBlurHandler = function()
 	{
-		var	d1 = new Date();
-
 		onScreenKeyboardDisplay = false;
 		setTimeout(function() 
 			{
@@ -275,7 +270,7 @@ chat = (function()
 				$("#messageToSend").attr("placeholder", "Сообщение...");
 				$("#messageToSend").removeAttr("disabled");
 
-				if(typeof(obj.RequestType))
+				if((typeof(obj) == "object") && (typeof(obj.RequestType) == "string"))
 				{
 					if(obj.RequestType === "SendMessage")
 					{
@@ -349,8 +344,6 @@ chat = (function()
 
 						if(obj.status == "ok")
 						{
-							var	friendID = obj.friendID;
-
 							// --- add received messages to messageList
 							messageList = messageList.concat(obj.messageArray);
 
@@ -363,7 +356,7 @@ chat = (function()
 							if(activeUserID == obj.friendID)
 							{
 								// --- update GUI
-								obj.messageArray.forEach(function(item, i, arr) {
+								obj.messageArray.forEach(function(item) {
 									AddSingleMessageToMessageList($("#MessageListContainer"), item, 0 /*no animate*/, 0 /*prepend*/);
 								});
 
@@ -437,7 +430,7 @@ chat = (function()
 					{
 						if(obj.status == "ok")
 						{
-							obj.presenceCache.forEach(function(item, i, arr)
+							obj.presenceCache.forEach(function(item)
 							{
 								var		tmpUserID = (Object.keys(item))[0];
 								var		tmpLastonlineSecondSinceY2k = item[tmpUserID];
