@@ -1,3 +1,5 @@
+/* global DrawUserAvatar */
+
 // --- change it in (chat.js, common.js, localy.h)
 var FREQUENCY_ECHO_REQUEST = 60;
 var WS_RECONNECT_TIMEOUT = 60 * 1000;
@@ -439,8 +441,6 @@ chat = (function()
 								var		nowDate = new Date();
 								var		nowSecondsSinceY2k = (nowDate.getTime() - y2kDate) / 1000;
 
-								var		userPresenceStatus = (nowSecondsSinceY2k - tmpLastonlineSecondSinceY2k);
-
 								if(tmpUserID)
 								{
 									UpdatePresenceIndicator(tmpUserID, (nowSecondsSinceY2k - tmpLastonlineSecondSinceY2k));
@@ -461,11 +461,11 @@ chat = (function()
 						console.debug("WebSocket.onmessage: ERROR: unsupported RequestType: " + obj.RequestType);
 					}
 				}
-				else if(typeof(obj.ResponseType))
+				else if((typeof(obj) == "object") && (typeof(obj.ResponseType) == "string"))
 				{
 					if(obj.ResponseType === "")
 					{
-
+						/* good 2 go */
 					}
 					else
 					{
@@ -500,7 +500,7 @@ chat = (function()
 	{
 		var	tmpUserList = "";
 
-		contactList.forEach(function(item, i, arr)
+		contactList.forEach(function(item)
 			{
 				tmpUserList += (tmpUserList.length ? "," : "") + item.id;
 			});
@@ -547,15 +547,6 @@ chat = (function()
 
 	var	GetPresenceIndicator = function(user)
 	{
-		var		tmpUserID = user.id;
-		var		tmpLastonlineSecondSinceY2k = user.last_onlineSecondsSinceY2k;
-
-		var 	y2kDate = 946684800 * 1000; // --- ms till Y2k UTC
-		var		nowDate = new Date();
-		var		nowSecondsSinceY2k = (nowDate.getTime() - y2kDate) / 1000;
-
-		var		userPresenceStatus = (nowSecondsSinceY2k - tmpLastonlineSecondSinceY2k);
-
 		return $("<img>").attr("src", "/images/pages/common/" + (user.last_online_diff < FREQUENCY_ECHO_REQUEST ? "presence_online.png" : "presence_offline.png"));
 	};
 
@@ -583,7 +574,7 @@ chat = (function()
 	{
 		var		countOfUnreadMessages = 0;
 
-		messageList.forEach(function(item, i, arr)
+		messageList.forEach(function(item)
 			{
 				if((item.fromID === userID) && (item.messageStatus === "delivered"))
 				{
@@ -596,7 +587,7 @@ chat = (function()
 
 	var UpdateUnreadMessagesBadge = function()
 	{
-		contactList.forEach(function(item, i, arr)
+		contactList.forEach(function(item)
 			{
 				var		user = item;
 				var		currentNumberOfUnreadMessages = $("div[data-userid=" + user.id + "] span.numberOfUnreadMessages:first").text();
@@ -630,7 +621,7 @@ chat = (function()
 	{
 		var		divContainerFluid = $("<div>").addClass("container-fluid").appendTo(DOMPlacement);
 
-		contactList.forEach(function(item, i, arr)
+		contactList.forEach(function(item)
 			{
 				var		user = item;
 				var		divRow = $("<div>").addClass("row")
@@ -663,7 +654,7 @@ chat = (function()
 			});
 	};
 
-	var	MessageSendLoadingLayout = function(messageObj)
+	var	MessageSendLoadingLayout = function(/*messageObj*/)
 	{
 		$("#MessageListSendButton_1").button("loading");
 		$("#MessageListSendButton_2").button("loading");
@@ -746,6 +737,7 @@ chat = (function()
 		var		messageType = messageObj.messageType;
 
 		var		messageBody;
+		var		currScrollTop;
 
 		if(messageType == "text")
 			messageBody = messageText;
@@ -815,7 +807,7 @@ chat = (function()
 			}
 			else
 			{
-				var		currScrollTop = $("#MessageList").scrollTop();
+				currScrollTop = $("#MessageList").scrollTop();
 
 				DOMPlacement.prepend(divRow);
 				$("#MessageList").scrollTop(currScrollTop + divRow.outerHeight(true));
@@ -866,7 +858,7 @@ chat = (function()
 			}
 			else
 			{
-				var		currScrollTop = $("#MessageList").scrollTop();
+				currScrollTop = $("#MessageList").scrollTop();
 
 				DOMPlacement.prepend(divRow);
 				$("#MessageList").scrollTop(currScrollTop + divRow.outerHeight(true));
@@ -900,7 +892,7 @@ chat = (function()
 
 	var ChangeMessageStatusInternally = function(obj, newStatus)
 	{
-		messageList.forEach(function(item, i, arr) 
+		messageList.forEach(function(item) 
 			{
 				if((item.id == obj.id) && (item.messageStatus != newStatus))
 				{
@@ -914,7 +906,7 @@ chat = (function()
 		activeUserMessages = messageList.filter(function(item) { return ((item.fromID == activeUserID) || (item.toID == activeUserID)); });
 		activeUserMessages = activeUserMessages.sort(function(item1, item2) { return ((parseFloat(item1.id) < parseFloat(item2.id)) ? -1 : 1); });
 
-		activeUserMessages.forEach(function(item, i, arr) 
+		activeUserMessages.forEach(function(item) 
 			{
 				if((item.messageStatus != "read") && (item.toID == myUserID))
 				{
@@ -929,7 +921,7 @@ chat = (function()
 	// --- all messages sent to user will change status to Delivered
 	var	UpdateMessageArrayFromSentToDelivered = function()
 	{
-		messageList.forEach(function(item, i, arr) 
+		messageList.forEach(function(item) 
 			{
 				if((typeof(item.toID) != "undefined") && (item.toID == myUserID) && (typeof(item.messageStatus) != "undefined") && (item.messageStatus == "sent"))
 				{
@@ -961,7 +953,7 @@ chat = (function()
 
 			UpdateActiveUserMessagesArray();
 
-			activeUserMessages.forEach(function(item, i, arr)
+			activeUserMessages.forEach(function(item)
 				{
 					AddSingleMessageToMessageList(DOMPlacement, item, 0 /*no animate*/, 1 /*append*/);
 				});
@@ -981,7 +973,7 @@ chat = (function()
 	{
 		var		resultText = srcText;
 
-		emojiArray.forEach(function(item, i, arr)
+		emojiArray.forEach(function(item)
 		{
 			resultText = resultText.replaceAll(item.shortcut, "<img src=\"" + item.image + "\" class=\"height_34px\">");
 		});
@@ -994,11 +986,9 @@ chat = (function()
 		return "".concat(srcString.substr(0, pos) + subString, srcString.substr(pos+2));
 	};
 
-	var	PostMessageToServer = function(event)
+	var	PostMessageToServer = function(/*event*/)
 	{
-		var		btn = $(this);
 		var		clearedMessage = $("#messageToSend").val();
-		var		tempMessage;
 		var		messageRecipient = activeUserID;
 
 /*
@@ -1013,9 +1003,9 @@ chat = (function()
 */
 		clearedMessage = clearedMessage.replace(/\\/g, "");
 		clearedMessage = clearedMessage.replace(/[\t ]+/g, " ");
-		clearedMessage = clearedMessage.replace(/\"/g, "&quot;");
-		clearedMessage = clearedMessage.replace(/\</g, "&lt;");
-		clearedMessage = clearedMessage.replace(/\>/g, "&gt;");
+		clearedMessage = clearedMessage.replace(/"/g, "&quot;");
+		clearedMessage = clearedMessage.replace(/</g, "&lt;");
+		clearedMessage = clearedMessage.replace(/>/g, "&gt;");
 		clearedMessage = clearedMessage.replace(/^\s*/, "");
 		clearedMessage = clearedMessage.replace(/\s*$/, "");
 		clearedMessage = clearedMessage.replace(/\n/, "<br>");
@@ -1031,7 +1021,7 @@ chat = (function()
 			// --- first smiley - grinning face 55357 56832
 			// --- last  smiley - passenger ship 55357 56845
 			if((clearedMessage.charCodeAt(i) >= 55357) && (clearedMessage.charCodeAt(i) <= 55357) &&
-			   (clearedMessage.charCodeAt(i+1) >= 56832) && (clearedMessage.charCodeAt(i+1) <= 56845)) clearedMessage = ReplaceTwoSymbolsToSubstring(clearedMessage, i, "");
+				(clearedMessage.charCodeAt(i+1) >= 56832) && (clearedMessage.charCodeAt(i+1) <= 56845)) clearedMessage = ReplaceTwoSymbolsToSubstring(clearedMessage, i, "");
 		}
 
 		if(clearedMessage.length)
@@ -1048,8 +1038,6 @@ chat = (function()
 
 	var HandlerWindowScroll = function()
 	{
-		var		windowPosition	= $(window).scrollTop();
-		var		clientHeight	= document.documentElement.clientHeight;
 		var		divPosition		= $("#MessageListContainer").position().top;
 
 		if((divPosition > -10) && (! scrollLock))
@@ -1077,8 +1065,7 @@ chat = (function()
 			//IE support
 			if (document.selection) {
 				myField.focus();
-				sel = document.selection.createRange();
-				sel.text = myValue;
+				document.selection.createRange().text = myValue;
 			}
 			//MOZILLA and others
 			else if (myField.selectionStart || myField.selectionStart == "0") {
@@ -1117,7 +1104,7 @@ chat = (function()
 		var		maxEmojiOnSingleLine = 6;
 		var		breakLineCounter = 0;
 
-		emojiArray.forEach(function(item, i, arr) 
+		emojiArray.forEach(function(item) 
 		{
 			if(breakLineCounter && !(breakLineCounter % maxEmojiOnSingleLine)) emojiListHTML += "<br>";
 
@@ -1134,7 +1121,7 @@ chat = (function()
 	{
 		var		messageRecipient = activeUserID;
 		var		filesArr = Array.prototype.slice.call(input.target.files);
-		filesArr.forEach( function(file, i, arr)
+		filesArr.forEach( function(file, i)
 		{
 			var		img = new Image();
 			var		url = URL.createObjectURL(input.target.files[i]);
