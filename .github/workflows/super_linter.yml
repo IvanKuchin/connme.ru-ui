@@ -55,5 +55,6 @@ jobs:
           VALIDATE_JAVASCRIPT_ES: true
           DEFAULT_BRANCH: master
           FILTER_REGEX_INCLUDE: html/js/pages/.*\.js
+          LINTER_RULES_PATH: .github/actions/linters
           TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.yaml
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
