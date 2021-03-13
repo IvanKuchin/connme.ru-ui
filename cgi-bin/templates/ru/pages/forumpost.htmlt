@@ -1,0 +1,338 @@
+<<template:templates/ru/pages/header.htmlt>>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                      <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr>
+                            <td height="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td height="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td height="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                          </tr>
+                          <tr>
+                            <td width="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td bgcolor="#FFFFFF">
+
+<style type="text/css">
+input { text-indent : 2px; }
+.genmed { font-size : 11px; }
+.gensmall { font-size : 10px; }
+.gen,.genmed,.gensmall { color : #000000; }
+
+input.button {
+	background-color : #EFEFEF;
+	color : #000000;
+	font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+</style>
+
+
+<SCRIPT language="JavaScript">
+<!--
+// bbCode control by
+// subBlue design
+// www.subBlue.com
+
+// Startup variables
+var imageTag = false;
+var theSelection = false;
+
+// Check for Browser & Platform for PC & IE specific bits
+// More details from: http://www.mozilla.org/docs/web-developer/sniffer/browser_type.html
+var clientPC = navigator.userAgent.toLowerCase(); // Get client info
+var clientVer = parseInt(navigator.appVersion); // Get browser version
+
+var is_ie = ((clientPC.indexOf("msie") != -1) && (clientPC.indexOf("opera") == -1));
+var is_nav  = ((clientPC.indexOf('mozilla')!=-1) && (clientPC.indexOf('spoofer')==-1)
+                && (clientPC.indexOf('compatible') == -1) && (clientPC.indexOf('opera')==-1)
+                && (clientPC.indexOf('webtv')==-1) && (clientPC.indexOf('hotjava')==-1));
+
+var is_win   = ((clientPC.indexOf("win")!=-1) || (clientPC.indexOf("16bit") != -1));
+var is_mac    = (clientPC.indexOf("mac")!=-1);
+
+
+bbcode = new Array();
+bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/images]','[url]','[/url]');
+imageTag = false;
+
+// Shows the help msgs in the helpline window
+function helpline(help) {
+	document.form1.helpbox.value = eval(help + "_help");
+}
+
+
+// Replacement for arrayname.length property
+function getarraysize(thearray) {
+	for (i = 0; i < thearray.length; i++) {
+		if ((thearray[i] == "undefined") || (thearray[i] == "") || (thearray[i] == null))
+			return i;
+		}
+	return thearray.length;
+}
+
+// Replacement for arrayname.push(value) not implemented in IE until version 5.5
+// Appends element to the array
+function arraypush(thearray,value) {
+	thearray[ getarraysize(thearray) ] = value;
+}
+
+// Replacement for arrayname.pop() not implemented in IE until version 5.5
+// Removes and returns the last element of an array
+function arraypop(thearray) {
+	thearraysize = getarraysize(thearray);
+	retval = thearray[thearraysize - 1];
+	delete thearray[thearraysize - 1];
+	return retval;
+}
+
+
+function checkForm() {
+
+	formErrors = false;
+
+	if (document.form1.msg.value.length < 2) {
+		formErrors = "Вы должны ввести текст сообщения";
+	}
+        if (document.form1.name.value.length < 2) {  
+                formErrors = "Вы должны ввести свое имя";  
+        }  
+        if (document.form1.topic.value.length < 2) {  
+                formErrors = "Вы должны ввести тему сообщения";  
+        }  
+
+
+	if (formErrors) {
+		alert(formErrors);
+		return false;
+	} else {
+		bbstyle(-1);
+		document.form1.submit();
+		return true;
+	}
+}
+
+function emoticon(text) {
+	text = ' ' + text + ' ';
+	if (document.form1.msg.createTextRange && document.form1.msg.caretPos) {
+		var caretPos = document.form1.msg.caretPos;
+		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? text + ' ' : text;
+		document.form1.msg.focus();
+	} else {
+	document.form1.msg.value  += text;
+	document.form1.msg.focus();
+	}
+}
+
+function bbfontstyle(bbopen, bbclose) {
+	if ((clientVer >= 4) && is_ie && is_win) {
+		theSelection = document.selection.createRange().text;
+		if (!theSelection) {
+			document.form1.msg.value += bbopen + bbclose;
+			document.form1.msg.focus();
+			return;
+		}
+		document.selection.createRange().text = bbopen + theSelection + bbclose;
+		document.form1.msg.focus();
+		return;
+	} else {
+		document.form1.msg.value += bbopen + bbclose;
+		document.form1.msg.focus();
+		return;
+	}
+	storeCaret(document.form1.msg);
+}
+
+
+function bbstyle(bbnumber) {
+
+	donotinsert = false;
+	theSelection = false;
+	bblast = 0;
+
+	if (bbnumber == -1) { // Close all open tags & default button names
+		while (bbcode[0]) {
+			butnumber = arraypop(bbcode) - 1;
+			document.form1.msg.value += bbtags[butnumber + 1];
+			buttext = eval('document.form1.addbbcode' + butnumber + '.value');
+			eval('document.form1.addbbcode' + butnumber + '.value ="' + buttext.substr(0,(buttext.length - 1)) + '"');
+		}
+		imageTag = false; // All tags are closed including image tags :D
+		document.form1.msg.focus();
+		return;
+	}
+
+	if ((clientVer >= 4) && is_ie && is_win)
+		theSelection = document.selection.createRange().text; // Get text selection
+
+	if (theSelection) {
+		// Add tags around selection
+		document.selection.createRange().text = bbtags[bbnumber] + theSelection + bbtags[bbnumber+1];
+		document.form1.msg.focus();
+		theSelection = '';
+		return;
+	}
+
+	// Find last occurance of an open tag the same as the one just clicked
+	for (i = 0; i < bbcode.length; i++) {
+		if (bbcode[i] == bbnumber+1) {
+			bblast = i;
+			donotinsert = true;
+		}
+	}
+
+	if (donotinsert) {		// Close all open tags up to the one just clicked & default button names
+		while (bbcode[bblast]) {
+				butnumber = arraypop(bbcode) - 1;
+				document.form1.msg.value += bbtags[butnumber + 1];
+				buttext = eval('document.form1.addbbcode' + butnumber + '.value');
+				eval('document.form1.addbbcode' + butnumber + '.value ="' + buttext.substr(0,(buttext.length - 1)) + '"');
+				imageTag = false;
+			}
+			document.form1.msg.focus();
+			return;
+	} else { // Open tags
+
+		if (imageTag && (bbnumber != 14)) {		// Close image tag before adding another
+			document.form1.msg.value += bbtags[15];
+			lastValue = arraypop(bbcode) - 1;	// Remove the close image tag from the list
+			document.form1.addbbcode14.value = "Img";	// Return button back to normal state
+			imageTag = false;
+		}
+
+		// Open tag
+		document.form1.msg.value += bbtags[bbnumber];
+		if ((bbnumber == 14) && (imageTag == false)) imageTag = 1; // Check to stop additional tags after an unclosed image tag
+		arraypush(bbcode,bbnumber+1);
+		eval('document.form1.addbbcode'+bbnumber+'.value += "*"');
+		document.form1.msg.focus();
+		return;
+	}
+	storeCaret(document.form1.msg);
+}
+
+function storeCaret(textEl) {
+	if (textEl.createTextRange) textEl.caretPos = document.selection.createRange().duplicate();
+}
+//-->
+</SCRIPT>
+
+  <table border=0 cellpadding=0 cellspacing=0 width=100%>
+    <tr>
+      <td align=left width=50% height=20>
+      [ <a href="/cgi-bin/index.cgi?forum=y">В начало</a> ] 
+	  </td>
+    </tr>
+  </table>
+<span class=red><b>Ответ</b></span>
+<form name="form1" method="post" action="/cgi-bin/index.cgi">
+<input type=hidden name="pid" value="<<vars:parentID>>">
+<a href="../../forum/index.php"></a>
+
+<table border=0 cellpadding=0 cellspacing=2>
+<tr>
+  <td><b> * Ваше имя:</b></td>
+  <td><input type=text name=name value="<<vars:name>>" size=50 maxlength=50></td>
+</tr>
+<tr>
+  <td><b>Ваш e-mail:</b></td>
+  <td><input type=text name=email value="<<vars:email>>" size=50 maxlength=50></td>
+</tr>
+<tr>
+  <td width=80 height=18><b>* Тема:</b></td>
+  <td height=18><input type=text size=50 name=topic value="<<vars:topic>>" maxlength=150></td>
+</tr>
+<tr>
+	<td colspan="2"><br></td>
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	<td>
+
+<table border=0 cellpadding=0 cellspacing=2>
+<tr>
+	<td>
+<a href="javascript:emoticon(':D')"><img src="/images/icons/icon_biggrin.gif" border="0" alt="Very Happy" title="Very Happy" /></a>&nbsp;<a href="javascript:emoticon(':)')"><img src="/images/icons/icon_smile.gif" border="0" alt="Smile" title="Smile" /></a>&nbsp;<a href="javascript:emoticon(':(')"><img src="/images/icons/icon_sad.gif" border="0" alt="Sad" title="Sad" /></a>&nbsp;<a href="javascript:emoticon(':o')"><img src="/images/icons/icon_surprised.gif" border="0" alt="Surprised" title="Surprised" /></a>&nbsp;<a href="javascript:emoticon('8O')"><img src="/images/icons/icon_eek.gif" border="0" alt="Shocked" title="Shocked" /></a>&nbsp;<a href="javascript:emoticon(':?')"><img src="/images/icons/icon_confused.gif" border="0" alt="Confused" title="Confused" /></a>&nbsp;<a href="javascript:emoticon('8)')"><img src="/images/icons/icon_cool.gif" border="0" alt="Cool" title="Cool" /></a>&nbsp;<a href="javascript:emoticon(':lol:')"><img src="/images/icons/icon_lol.gif" border="0" alt="Laughing" title="Laughing" /></a>&nbsp;<a href="javascript:emoticon(':x')"><img src="/images/icons/icon_mad.gif" border="0" alt="Mad" title="Mad" /></a>&nbsp;<a href="javascript:emoticon(':P')"><img src="/images/icons/icon_razz.gif" border="0" alt="Razz" title="Razz" /></a>&nbsp;<br><a href="javascript:emoticon(':oops:')"><img src="/images/icons/icon_redface.gif" border="0" alt="Embarassed" title="Embarassed" /></a>&nbsp;<a href="javascript:emoticon(':cry:')"><img src="/images/icons/icon_cry.gif" border="0" alt="Crying or Very sad" title="Crying or Very sad" /></a>&nbsp;<a href="javascript:emoticon(':evil:')"><img src="/images/icons/icon_evil.gif" border="0" alt="Evil or Very Mad" title="Evil or Very Mad" /></a>&nbsp;<a href="javascript:emoticon(':twisted:')"><img src="/images/icons/icon_twisted.gif" border="0" alt="Twisted Evil" title="Twisted Evil" /></a>&nbsp;<a href="javascript:emoticon(':roll:')"><img src="/images/icons/icon_rolleyes.gif" border="0" alt="Rolling Eyes" title="Rolling Eyes" /></a>&nbsp;<a href="javascript:emoticon(':wink:')"><img src="/images/icons/icon_wink.gif" border="0" alt="Wink" title="Wink" /></a>&nbsp;<a href="javascript:emoticon(':!:')"><img src="/images/icons/icon_exclaim.gif" border="0" alt="Exclamation" title="Exclamation" /></a>&nbsp;<a href="javascript:emoticon(':?:')"><img src="/images/icons/icon_question.gif" border="0" alt="Question" title="Question" /></a>&nbsp;<a href="javascript:emoticon(':idea:')"><img src="/images/icons/icon_idea.gif" border="0" alt="Idea" title="Idea" /></a>&nbsp;<a href="javascript:emoticon(':arrow:')"><img src="/images/icons/icon_arrow.gif" border="0" alt="Arrow" title="Arrow" /></a>	
+	</td>
+	<td>
+<span class="genmed">
+			  <input type="button" class="button" accesskey="b" name="addbbcode0" value=" B " style="font-weight:bold; width: 30px" onClick="bbstyle(0)" />
+			  </span>	
+	</td>
+	<td>
+	<span class="genmed">
+			  <input type="button" class="button" accesskey="i" name="addbbcode2" value=" i " style="font-style:italic; width: 30px" onClick="bbstyle(2)" />
+			  </span>
+	</td>
+	<td>
+	<span class="genmed">
+			  <input type="button" class="button" accesskey="u" name="addbbcode4" value=" u " style="text-decoration: underline; width: 30px" onClick="bbstyle(4)" />
+			  </span>
+	</td>
+</tr>
+<tr>
+	<td colspan="4">
+	Размер шрифта:<select name="addbbcode20" onChange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]')">
+					  <option value="7" class="genmed">Очень маленький</option>
+					  <option value="9" class="genmed">Маленький</option>
+					  <option value="12" selected class="genmed">Обычный</option>
+					  <option value="18" class="genmed">Большой</option>
+					  <option  value="24" class="genmed">Огромный</option>
+					</select>
+	</td>
+</tr>
+</table>	
+
+	</td>
+</tr>
+<tr>
+  <td width=120><b>* Сообщение:</b><p>&nbsp;&nbsp;<p>&nbsp;<p>&nbsp;<p>&nbsp;</td>
+  <td><textarea name=msg rows=10 cols=40 maxlength=2000><<vars:msg>></textarea></td>
+</tr>
+<tr>
+  <td width=80 height=18><b>Ссылка на URL:</b></td>
+  <td height=18><input type=text name=url size=50 maxlength=512 value="<<vars:url>>"></td>
+</tr> 
+<tr>
+  <td width=80 height=18><b>Название ссылки:</b></td>
+  <td height=18><input type=text name=url_name size=50 maxlength=256 value="<<vars:url_name>>"></td>
+</tr> 
+<tr>
+  <td width=80 height=18><b>Security code:</b></td>
+  <td height=18><img src="/images/<<vars:securityStr>>"></td>
+</tr> 
+<tr>
+  <td width=80 height=18><b>Введите защитный код:</b></td>
+  <td height=18><input type=text name=securityStr size=50 maxlength=256 value=""></td>
+</tr> 
+<tr>
+	<td>&nbsp;</td>
+	<td>* Поля, обязательные для заполнения</td>
+</tr>
+<tr>
+	<td colspan="2"><input type=hidden name=submitforummes value="y"></td>
+</tr>
+<tr>
+  <td width=80 height=18></td>
+  <td height=18><input type=reset value="  Очистить  "><input type="button"  value="  Добавить  "  onClick="checkForm()" /></td>
+</tr>
+</table>
+</form>
+
+                            </td>
+                            <td width="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                          </tr>
+                          <tr>
+                            <td bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                          </tr>
+                        </table>
+                       </td>
+                      </tr>
+                     </table>
+
+
+<<template:templates/ru/pages/footer.htmlt>>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <<template:templates/ru/pages/header.htmlt>>
+    <script src="/js/pages/my_network.js"></script>
+    
+    <title><<vars:title_head>></title>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/pages/my_network.css" rel="stylesheet">
+
+    <script>
+      $(document).ready(function() {
+        my_network.Init();
+      });
+    </script>
+
+  </head>
+
+  <body>
+
+  <<template:templates/ru/pages/<<vars:user_type>>_navigation_menu.htmlt>>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <h3>
+            <center>
+              <<vars:title_head>>
+            </center>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div id="my_network" data-action="<<vars:action>>">
+    </div>
+    <div id="scrollerToShow"></div>
+
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="SearchStringError" id="SearchStringError" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+                <!-- <form> -->
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <label for="newsFeedMessageTitle">Заголовок:</label>
+                      <input class="form-control" id="newsFeedMessageTitle" placeholder="Заголовок">
+          Для поиска нужно более 2-ух символов
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="newsFeedMessageSubmit">OK</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                  </div>
+                <!-- </form> -->
+        </div>
+      </div>
+    </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="DialogFriendshipRemovalYesNo">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Вы уверены в том, что хотите прекратить дружбу ?</h4>
+        </div>
+  <!--
+         <div class="modal-body">
+          <p>Вы уверены в том, что хотите прекратить дружбу ?</p>
+        </div>
+   -->
+         <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Нет</button>
+          <button type="button" class="btn btn-danger" id="ButtonFriendshipRemovalYes">Уверен</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <<template:templates/ru/pages/footer.htmlt>>
+
+  </body>
+</html>

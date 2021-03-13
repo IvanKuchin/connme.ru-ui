@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+	    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="/css/addtohomescreen/addtohomescreen.css">
+		<script src="/js/addtohomescreen/addtohomescreen.js"></script> 	
+		<script>
+			addToHomescreen({
+				startDelay: 5
+			});
+		</script>
+	</head> 
+	<body>
+	</body>
+</html>

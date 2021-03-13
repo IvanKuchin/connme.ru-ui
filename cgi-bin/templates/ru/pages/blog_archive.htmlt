@@ -1,0 +1,66 @@
+<<template:templates/ru/pages/header.htmlt>>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr> 
+                      <td>&nbsp;</td>
+                    </tr>
+
+                    <tr> 
+                      <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                          <tr> 
+                            <td height="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td height="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td height="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                          </tr>
+                          <tr> 
+                            <td width="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td bgcolor="#FFFFFF">
+
+<form action="/cgi-bin/index.cgi">
+<table class=plain cellpadding=5>
+<tr><td class=blue>Архив сайта:</td><td>		<input name="data" id="data" type="text" size=15 value="">
+		<button id="trigger">...</button>
+<script type="text/javascript">
+  Calendar.setup(
+      {
+        inputField  : "data",         // ID of the input field
+	ifFormat    : "%Y-%m-%d",    // the date format
+        button      : "trigger"       // ID of the button
+      }
+    );
+</script>
+</td></tr>
+<input class=fild type=hidden name=parentID value=<<vars:parentID>>>
+<input class=fild type=hidden name=action value=blog_archive_list>
+<input class=fild type=hidden name=rand value=<<vars:rand>>></td></tr>
+<tr><td></td><td><input type=submit class=fild_but value="Посмотреть"></td></tr>
+</table></form>
+<br><br>
+Некоторая статистика:
+Всего в блоге <<vars:rootTotal>> постов,
+и <<vars:commentTotal>> коментариев.
+<br>
+<<vars:mostOfDay>> написано больше всего постов
+<<vars:mostOfDayCount>>.
+<br>
+<<vars:mostOfDayComment>> написано больше всего комментариев
+<<vars:mostOfDayCountComment>>.
+<br>
+Номер последнего сообщения <<vars:postLastNumber>> а всего сообщений
+<<vars:postTotal>>. Значит
+<<vars:postDeleted>> сообщений удалено.
+<br>
+                            </td>
+                            <td width="1" bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                          </tr>
+                          <tr> 
+                            <td bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                            <td bgcolor="D0C487"><img src="/images/1.gif" width="1" height="1"></td>
+                          </tr>
+                        </table>
+		       </td>
+		      </tr>
+		     </table>
+
+<<template:templates/ru/pages/footer.htmlt>>

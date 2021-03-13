@@ -1,0 +1,60 @@
+<<template:templates/ru/pages/header.htmlt>>
+
+
+
+<table width="100%" border="0" cellspacing="10" cellpadding="0">
+                          <tr> 
+                            <td valign="top" class="plain">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                  <td width="13" height="34"><img src="/images/w_c1.gif" width="13" height="34"></td>
+                                  <td align="center" background="/images/w_upback.gif" class="red_big">
+Добавление товара в корзину</td>
+                                  <td width="13"><img src="/images/w_c2.gif" width="13" height="34"></td>
+                                </tr>
+                                <tr>
+                                  <td background="/images/w_left.gif">&nbsp;</td>
+                                  <td bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="10">
+                                      <tr> 
+                                        <td width="200" align="center" valign="top">
+
+
+
+
+
+<table  width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+<tr valign=top>
+<td width=1>
+<img width=100 class=img hspace=10 src="/images/goods/<<vars:image>>">
+</td>
+<td class=black nowrap>
+
+<span class=red_big><<vars:price>></span>
+<form action="/cgi-bin/index.cgi">
+<b>Количество <input class=item style="width:20" type=text name=quantity value=1><input  type=hidden name="goodID" value="<<vars:p>>"><input type=hidden name="action" value="submit_bucket_add"> <input class=item type=submit value="Добавить"> <img src=/images/tovar_add.gif align=absmiddle>
+</form>
+</td>
+</tr>
+</table>
+
+
+
+
+
+</td>
+                                      </tr>
+  
+                                    </table></td>
+                                  <td background="/images/w_right.gif">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                  <td><img src="/images/w_c4.gif" width="13" height="13"></td>
+                                  <td background="/images/w_down.gif"><img src="/images/1.gif" width="1" height="1"></td>
+                                  <td width="13" height="13"><img src="/images/w_c3.gif" width="13" height="13"></td>
+                                </tr>
+                              </table></td></tr></table>
+
+
+
+
+<<template:templates/ru/pages/footer.htmlt>>

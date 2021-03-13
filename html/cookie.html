@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+
+	<!-- jQuery 3.2.1 -->
+	<script src="http://www.connme.ru/js/jquery/jquery-3.2.1.min.js"></script>
+
+	<script>
+	var SetCookie = function(name, value)
+	{
+		document.cookie = [name, "=", value, "; path=/"].join("");
+	};
+
+	$(document).ready(function()
+	{
+		var		cookieVal = Math.random() * 1234567890;
+		$("#butt1").on("click", function()
+			{
+				cookieVal = Math.random() * 1234567890;
+				$("#pane1").empty();
+				SetCookie("sessid", cookieVal);
+				window.location.replace("/cookie.html?rand=" + Math.random()*98765432123456);
+			});
+		$("#butt2").on("click", function()
+			{
+				cookieVal = Math.random() * 1234567890;
+				$("#pane1").empty();
+				SetCookie("sessid", cookieVal);
+			});
+		$("#butt3").on("click", function()
+			{
+				$("#pane1").empty();
+			});
+
+		setInterval(function()
+			{
+				$("#pane1").append(document.cookie + ".<br>");
+			}, 500);
+	});
+	</script>
+	</head>
+
+	<body>
+		<button id="butt1">change cookie and reload</button>
+		<button id="butt2">change cookie</button>
+		<button id="butt3">clear screen</button>
+		<div id="pane1"></div>
+	</body>
+</html>

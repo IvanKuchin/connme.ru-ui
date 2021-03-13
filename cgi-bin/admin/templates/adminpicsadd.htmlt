@@ -1,0 +1,12 @@
+<<template:templates/adminheader.htmlt>> 
+
+<span class="plain">
+<form action="/cgi-bin/admin/resource.cgi" method=POST enctype="multipart/form-data"> 
+    <input type=hidden name=act value=submitpic>
+    <!--Имя картинки на сервере: <input type=text name=name><br>-->
+    Выберите картинку: <input type=file name=file> <br>
+    Поставить водяной знак: <input type=checkbox name=watermark><br>
+    <input type=submit> 
+</form>
+</span>
+<<template:templates/adminfooter.htmlt>> 

@@ -1,0 +1,466 @@
+<!doctype html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+  <meta charset="windows-1251">
+  <title>Quality Assurance testing</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css">
+  <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
+
+  <!-- jQuery -->
+  <script src="/js/jquery/jquery-2.1.3.js"></script>
+
+  <!-- unveil.patched (lazy load) -->
+  <script src="/js/unveil/jquery.unveil.patched.js"></script>
+
+  <!-- jQuery UI -->
+  <link href="/css/jquery-ui/jquery-ui.css" rel="stylesheet">
+  <script src="/js/jquery-ui/jquery-ui-1.11.4.js"></script>
+
+  <!-- jQuery.cookie -->
+  <script src="/js/jquery.cookie/jquery.cookie.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script src="/js/bootstrap/bootstrap.min.js"></script>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <script src="/js/getbootstrap/ie10-viewport-bug-workaround.js"></script>
+
+  <!-- Common part -->
+  <script src="/js/pages/common.js"></script>
+  <!-- <script src="/js/pages/chat.js"></script> -->
+
+  <script>
+  // $(document).ready(function() 
+  // {
+
+  var testUser1SessionID = "1__________________________________________________________1";
+  var testUser1Email = "notccie1@gmail.com";
+  var testUser1UserID = "25";
+  var testUser1Login = "notccie1@gmail.com";
+  var testUser2SessionID = "2__________________________________________________________2";
+  var testUser2Email = "notccie2@gmail.com";
+  var testUser2UserID = "26";
+  var testUser2Login = "notccie2@gmail.com";
+
+
+  QUnit.test("Chat Protocol Message (OpenSession with testUser1)", function( assert ) {
+    'use strict';
+
+    var wsStatus = "disconnected";
+    var result = "initial value";
+    var resultMessage = "ws close";
+    var asyncDone = assert.async(3);
+    assert.expect(3);
+
+    // ChatProtocolMessageTest1 = function()
+    // {
+      var   ws;
+
+      ws = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+
+      ws.onopen = function() {
+        ws.send("{ \"RequestType\":\"OpenSession\", \"RequestID\":\"" + Math.floor(Math.random() * 1000000000) + "\", \"sessid\":\"" + testUser1SessionID + "\" }");
+        
+        assert.ok(1, "ws open");
+        asyncDone();
+      };
+
+      ws.onmessage = function(event) {
+        assert.ok(1, "ws message");
+        asyncDone();
+
+        var   obj = JSON.parse(event.data);
+        if(typeof(obj.RequestType))
+        {
+            if(obj.RequestType === "OpenSession")
+            {
+              if(obj.status == "ok")
+              {
+                result = "true";
+              }
+              else
+              {
+                result = "false";
+                resultMessage += obj.status + " " + obj.description;
+              }
+              ws.close();
+            }
+        }
+
+      };
+
+      ws.onclose = function(){
+        wsStatus = "closed";
+
+        assert.strictEqual(result, "true", resultMessage);
+
+        asyncDone();
+      };
+
+      return result;
+    // }();
+
+  }); // --- test 1
+ 
+  QUnit.test("Chat Protocol Message (DDoS protection with testUser1)", function( assert ) {
+    'use strict';
+
+    var wsStatus = "disconnected";
+    var result = "initial value";
+    var resultMessage = "initial value";
+    var   ws1, ws2, ws3;
+    var asyncDone = assert.async(5);
+    assert.expect(5);
+
+    var ws1OnOpen = function() {
+      assert.ok(1, "ws1 open");
+      asyncDone();
+
+      ws1.send("{ \"RequestType\":\"OpenSession\", \"RequestID\":\"" + Math.floor(Math.random() * 1000000000) + "\", \"sessid\":\"" + testUser1SessionID + "\" }");
+    };
+
+    var ws1OnMessage = function(event) {
+        assert.ok(1, "ws1 message");
+        asyncDone();
+
+        var   obj = JSON.parse(event.data);
+        if(typeof(obj.RequestType))
+        {
+            if(obj.RequestType === "OpenSession")
+            {
+              if(obj.status == "ok")
+              {
+                result = "true";
+              }
+              else
+              {
+                result = "false";
+                resultMessage = obj.status + " " + obj.description;
+              }
+              ws1.close();
+            }
+        }
+    };
+
+    var ws2OnOpen = function() {
+      ws2.send("{ \"RequestType\":\"OpenSession\", \"RequestID\":\"" + Math.floor(Math.random() * 1000000000) + "\", \"sessid\":\"" + testUser1SessionID + "\" }");
+
+      assert.ok(1, "ws2 open");
+      asyncDone();
+    };
+
+    var ws2OnMessage = function(event) {
+        assert.ok(1, "ws2 message");
+        asyncDone();
+
+        var   obj = JSON.parse(event.data);
+        if(typeof(obj.RequestType))
+        {
+            if(obj.RequestType === "OpenSession")
+            {
+              if(obj.status == "ok")
+              {
+                result = "true";
+              }
+              else
+              {
+                result = "false";
+                resultMessage = obj.status + " " + obj.description;
+              }
+              ws2.close();
+            }
+        }
+    };
+
+
+    var wsOnClose = function(){
+        wsStatus = "closed";
+
+        assert.ok(1, "ws close");
+        asyncDone();
+      };
+
+
+    // ChatProtocolMessageTest2 = function()
+    // {
+
+      ws1 = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+      ws2 = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+
+      ws1.onopen = ws1OnOpen;
+      ws1.onmessage = ws1OnMessage;
+      ws1.onclose = wsOnClose;
+
+      ws2.onopen = ws2OnOpen;
+      ws2.onmessage = ws2OnMessage;
+      ws2.onclose = wsOnClose;
+
+      return result;
+    // }();
+
+  }); // --- test 2 
+
+  QUnit.test("Chat Protocol Message exchange (testUser1 exchanging with testUser2)", function( assert ) {
+    'use strict';
+
+    var wsStatus = "disconnected";
+    var result = "initial value";
+    var resultMessage = "initial value";
+    var ws1, ws2;
+    var asyncDone = assert.async(13);
+    var sentRequestID;
+    assert.expect(13);
+
+    var ws1OnOpen = function() {
+      assert.ok(1, "ws1 open");
+      asyncDone();
+
+      ws1.send("{ \"RequestType\":\"OpenSession\", \"RequestID\":\"" + Math.floor(Math.random() * 1000000000) + "\", \"sessid\":\"" + testUser1SessionID + "\" }");
+    };
+
+    var ws1OnMessage = function(event) {
+        var   obj = JSON.parse(event.data);
+
+        if(typeof(obj.RequestType))
+        {
+            if(obj.RequestType === "OpenSession")
+            {
+              if(obj.status == "ok")
+              {
+                assert.ok(1, "ws1 session opened");
+                result = "true";
+                asyncDone();
+              }
+              else
+              {
+                assert.ok(0, "ws1 session open error: " + obj.description);
+                asyncDone();
+              }
+            }
+        }
+    };
+
+    var ws2OnOpen = function() {
+      ws2.send("{ \"RequestType\":\"OpenSession\", \"RequestID\":\"" + Math.floor(Math.random() * 1000000000) + "\", \"sessid\":\"" + testUser2SessionID + "\" }");
+
+      assert.ok(1, "ws2 open");
+      asyncDone();
+    };
+
+    var ws2OnMessage = function(event) {
+        var   obj = JSON.parse(event.data);
+        if(typeof(obj.RequestType))
+        {
+            if(obj.RequestType === "OpenSession")
+            {
+              assert.strictEqual(obj.status, "ok", "ws2 session opened");
+              asyncDone();
+
+              if(obj.status == "ok")
+              {
+
+                sentRequestID = Math.floor(Math.random() * 1000000000);
+                ws1.send("{ \"RequestType\":\"SendMessage\", \"RequestID\":\"" + sentRequestID + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\", \"messageType\":\"text\", \"message\":\"`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./\" }");
+                ws1.send("{ \"RequestType\":\"SendMessage\", \"RequestID\":\"" + (sentRequestID + 1) + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\", \"messageType\":\"text\", \"message\":\"~!@#$%^&*()_+QWERTYUIOP{{{{{}|ASDFGHJKL:ZXCVBNM?\" }");
+                ws1.send("{ \"RequestType\":\"SendMessage\", \"RequestID\":\"" + (sentRequestID + 2) + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\", \"messageType\":\"text\", \"message\":\"ё1234567890-=цукенгшщзхххъфывапролджэячсмитьбю...\" }");
+                ws1.send("{ \"RequestType\":\"SendMessage\", \"RequestID\":\"" + (sentRequestID + 3) + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\", \"messageType\":\"text\", \"message\":\"Ё!№;%:?*()_+ЙЦУКЕНГШЩХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,\" }");
+                ws1.send("{ \"RequestType\":\"SendMessage\", \"RequestID\":\"" + (sentRequestID + 4) + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\", \"messageType\":\"text\", \"message\":\"<b>bold</b>\" }");
+                ws1.send("{ \"RequestType\":\"SendMessage\", \"RequestID\":\"" + (sentRequestID + 5) + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\", \"messageType\":\"text\", \"message\":\"quote checking 'test quoted'\" }");
+                ws1.send("{ \"RequestType\":\"MessageTypingNotification\", \"RequestID\":\"" + (sentRequestID + 6) + "\", \"toType\":\"toUser\", \"toID\":\"" + testUser2UserID + "\" }");
+
+              }
+            }
+            if(obj.RequestType === "SendMessage")
+            {
+              if(parseFloat(obj.RequestID) == sentRequestID)
+              {
+                assert.strictEqual(obj.message, "`1234567890-=qwertyuiop[]asdfghjkl;'zxcvbnm,./", "message1 received");
+                asyncDone();
+              }
+              else if((parseFloat(obj.RequestID)) == (sentRequestID + 1))
+              {
+                assert.strictEqual(obj.message, "~!@#$%^&*()_+QWERTYUIOP{{{{{}|ASDFGHJKL:ZXCVBNM?", "message2 received");
+                asyncDone();
+              }
+              else if((parseFloat(obj.RequestID)) == (sentRequestID + 2))
+              {
+                assert.strictEqual(obj.message, "ё1234567890-=цукенгшщзхххъфывапролджэячсмитьбю...", "message3 received");
+                asyncDone();
+              }
+              else if((parseFloat(obj.RequestID)) == (sentRequestID + 3))
+              {
+                assert.strictEqual(obj.message, "Ё!№;%:?*()_+ЙЦУКЕНГШЩХЪ/ФЫВАПРОЛДЖЭЯЧСМИТЬБЮ,", "message4 received");
+                asyncDone();
+              }
+              else if((parseFloat(obj.RequestID)) == (sentRequestID + 4))
+              {
+                assert.notStrictEqual(obj.message, "<b>bold</b>", "message5 received");
+                asyncDone();
+              }
+              else if((parseFloat(obj.RequestID)) == (sentRequestID + 5))
+              {
+                assert.strictEqual(obj.message, "quote checking 'test quoted'", "message6 received");
+                asyncDone();
+              }
+            }
+            if(obj.RequestType === "MessageTypingNotification")
+            {
+              if((parseFloat(obj.RequestID)) == (sentRequestID + 6))
+              {
+                assert.notStrictEqual(obj.message, "message typing notification");
+                asyncDone();
+                ws1.close();
+                ws2.close();
+              }
+            }
+        }
+    };
+
+
+    var wsOnClose = function(){
+        wsStatus = "closed";
+
+        assert.ok(1, "ws close");
+        asyncDone();
+      };
+
+
+    // ChatProtocolMessageTest3 = function()
+    // {
+
+      setTimeout(function(){
+        ws1 = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+        ws2 = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+
+        ws1.onopen = ws1OnOpen;
+        ws1.onmessage = ws1OnMessage;
+        ws1.onclose = wsOnClose;
+
+        ws2.onopen = ws2OnOpen;
+        ws2.onmessage = ws2OnMessage;
+        ws2.onclose = wsOnClose;
+      }, 6000);
+
+      return result;
+    // }();
+
+  }); // --- test 3
+
+  QUnit.test("Chat status-protocol (get cnx list)", function( assert ) {
+    'use strict';
+
+    var wsStatus = "disconnected";
+    var result = "initial value";
+    var resultMessage = "initial value";
+    var ws1;
+    var asyncDone = assert.async(3);
+    var sentRequestID;
+    assert.expect(3);
+
+    var ws1OnOpen = function() {
+      assert.ok(1, "ws open");
+      asyncDone();
+
+      ws1.send("get_cnx_list");
+    };
+
+    var ws1OnMessage = function(event) {
+        var   obj = JSON.parse(event.data);
+
+        if(typeof(obj.type))
+        {
+            assert.strictEqual(obj.type, "statusResponse", "connection list received");
+            asyncDone();
+        }
+        else
+        {
+          assert.ok(0, "error receiving message");
+          asyncDone();
+        }
+
+        ws1.close();
+    };
+
+
+    var wsOnClose = function(){
+        wsStatus = "closed";
+
+        assert.ok(1, "ws close");
+        asyncDone();
+      };
+
+    // ChatProtocolMessageTest4 = function()
+    // {
+
+      ws1 = new WebSocket("wss://" + window.location.hostname + ":7681", "status-protocol");
+
+      ws1.onopen = ws1OnOpen;
+      ws1.onmessage = ws1OnMessage;
+      ws1.onclose = wsOnClose;
+    // }();
+
+  }); // --- test 4
+
+  </script>
+</head>
+<body>
+ 
+<div id="qunit"></div>
+<div id="qunit-fixture">
+
+     <div class="container single_block box-shadow--6dp">
+    <div class="row">
+      <div id="ContactList" class="col-lg-3 col-md-3 col-sm-3 col-xs-4 " data-activeuserid="25"> <!--- contact list -->
+      </div>
+      <div id="MessageList" class="col-lg-9 col-md-9 col-sm-9 col-xs-8 message_pane_div_space "> <!--- messagelist -->
+        <div id="MessageListContainer" class="container-fluid">
+        </div>
+      </div>
+      <div id="SendingMessage" class="col-lg-9 col-md-9 col-sm-9 col-xs-8 message_pane_div_space message_send_overflow_hidden animateClass ">  <!--- sending message -->
+        <div id="MessageTyping" class="message_pane_div_typing animateClass">
+           <img src="/images/pages/chat/typing.gif" height=10px> пишет сообщение
+        </div>
+        <div class="container-flex message_pane_div_message">
+          <div class="row">
+            <div class="col-lg-10 col-md-10 col-sm-9 col-xs-10">
+              <textarea id="messageToSend" class="form-control" maxlength="1500" placeholder="Сообщение..."></textarea>
+            </div>
+            <div class=" col-lg-2 col-md-2 col-sm-3 col-xs-2 padding_0px hidden-xs">
+              <button id="MessageListSendButton_1" class=" btn btn-primary animateClass " data-loading-text="Отправка...">Отправить</button>
+            </div>
+            <div class=" col-lg-2 col-md-2 col-sm-3 col-xs-2 padding_0px visible-xs">
+              <button id="MessageListSendButton_2" class=" btn btn-primary animateClass message_send_padding_5px " data-loading-text="..."><span id="MessageListSendButton_2" class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- /row -->
+    </div> <!-- /container -->
+
+          <!-- Contact to site owner -->
+         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" id="ContactAdministrationDialog" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Обнаружена необычная ситуация, необходимо отправить письмо владельцу сайта ! </h4>
+                </div>
+                <!-- <form> -->
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger" id="ContactAdministrationButton">Сообщить</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                  </div>
+                <!-- </form> -->
+              </div>
+            </div>
+          </div>
+
+      <div id="ReservedDiv"></div>
+
+</div> <!-- qunit-fixture -->
+ 
+</body>
+</html>

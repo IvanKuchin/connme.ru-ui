@@ -1,0 +1,6 @@
+AuthType Basic
+AuthName "By invitation only"
+AuthUserFile /home/httpd/dev.connme.ru/cgi-bin/admin/.htpasswd
+#AuthUserFile .htpasswd
+Require valid-user
+

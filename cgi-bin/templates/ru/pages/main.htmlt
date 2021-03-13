@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <<template:templates/ru/pages/header.htmlt>>
+    <script src="/js/pages/main.js"></script>
+    <script src="/js/pages/login.js"></script>
+    <script src="/js/sha512/sha512.js"></script>
+    
+    <title><<vars:title>></title>
+
+    <!-- Custom styles for this template -->
+    <link href="/css/pages/main.css" rel="stylesheet">
+    <link href="/css/pages/main_carousel.css" rel="stylesheet">
+
+    <!--
+        loading circles
+        they put in-body to load as fast as possible
+        document.onload event will fire as soon as DOM-model ready.
+        window.onload event fire when all external dependencies loaded.
+     -->
+    <script>
+    $(document).ready(function() 
+    {
+      login_page.Init();
+      main_page.Init();
+    });
+    </script>
+  </head>
+
+ <body>
+      <<template:templates/ru/pages/login_header.htmlt>>
+  <!-- 
+    <div class="container-fluid login_block">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-offset-6 col-md-2 col-lg-offset-6 col-lg-2">
+              <input type="email" id="signinInputLogin" name="signinInputEmail" value="" class="form-control" placeholder="e-mail / логин / телефон" autocomplete="username" autofocus>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+              <input type="password" id="signinInputPassword" name="signinInputPassword" class="form-control" placeholder="Пароль" autocomplete="current-password">
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+              <input hidden type="checkbox" value="remember-me" id="signinRemember" checked>
+              <button class="btn btn-md btn-primary btn-block" id="signinSubmit" type="submit" data-loading-text="Вход...">Вход</button>
+        </div>
+      </div>
+    </div>
+ -->
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
+        <li data-target="#myCarousel" data-slide-to="4"></li>
+        <li data-target="#myCarousel" data-slide-to="5"></li>
+        <li data-target="#myCarousel" data-slide-to="6"></li>
+        <li data-target="#myCarousel" data-slide-to="7"></li>
+        <li data-target="#myCarousel" data-slide-to="8"></li>
+        <li data-target="#myCarousel" data-slide-to="9"></li>
+        <li data-target="#myCarousel" data-slide-to="10"></li>
+        <li data-target="#myCarousel" data-slide-to="11"></li>
+        <li data-target="#myCarousel" data-slide-to="12"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <img class="first-slide" src="/images/pages/main/underwater-lake-divers-austria-bubbles-water-1920x1280.jpg" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Нaши представления о том, кaк всe должно быть, мeшaют нaм нaслaждaться тeм, кaк всe eсть.</p>
+                  <footer style="color:white">Анджелина Джоли</footer>
+                </blockquote>
+              </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="second-slide" src="/images/pages/main/snowboarding-snowboards-snow-sports-winter-1600x1200.jpg" alt="Second slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Те, кто оказались на вершине, не с неба туда упали.</p>
+                  <footer style="color:white">М.Уошлинг.</footer>
+                </blockquote>
+              </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="third-slide" src="/images/pages/main/bike-sport-boy-water-spray-1920x1200.jpg" alt="Third slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Чтобы иметь то, что никогда не имел, нужно делать то, чего никогда не делал</p>
+                  <footer style="color:white">Коко Шанель</footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="fourth-slide" src="/images/pages/main/downhill-1920x1080.jpg" alt="Fourth slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Если у других не получилось, это не значит, что тебе не стоит пробовать !</p>
+                  <footer style="color:white"></footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="fifth-slide" src="/images/pages/main/running-winter-feet-snow-sport-4760x3177.jpg" alt="Fifth slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Большинство неправильных шагов совершаются стоя на месте.</p>
+                  <footer style="color:white">Томас Роберт Дюар</footer>
+                </blockquote>
+              </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="sixth-slide" src="/images/pages/main/underwater-lake-divers-austria-trees-green-leaves-water-2048x1366.jpg" alt="Sixth slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Живя в реальном мире стремись к невероятному</p>
+                  <footer style="color:white">Эрнесто Че Гевара</footer>
+                </blockquote>
+              </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="seventh-slide" src="/images/pages/main/man-climbing-a-rock-wall-over-the_1920x1080_432-hd-1920x460.jpg" alt="Seventh slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Если ты чувствуешь, что сдаешься - вспомни, ради чего ты держался до этого.</p>
+                  <footer style="color:white">Джаред Лето</footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="eighth-slide" src="/images/pages/main/street-boy-girl-bicycles-love-hearts-city-smile-happy-1680x1050.jpg" alt="8 slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Ты счастлив не потому, что все хорошо, а всё хорошо потому, что ты счастлив.</p>
+                  <footer style="color:white">Альберт Камю</footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="nineth-slide" src="/images/pages/main/skateboard-wheels-speed-sport-hd-wallpaper-1920x1200.jpg" alt="9 slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Лучше начать действовать, совершая ошибки, чем медлить,стремясь к безошибочности.</p>
+                  <footer style="color:white"></footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="item">
+          <img class="tenth-slide" src="/images/pages/main/everest.jpeg" alt="10 slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Чем выше вы поднимаетесь, тем труднее другим понять, делаете вы свою работу или не делаете.</p>
+                  <footer style="color:white">Аллан Коэн</footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="eleventh-slide" src="/images/pages/main/hq-wallpapers_ru_moto_26960_1920x1200.jpg" alt="11 slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Помни о том, что раньше, ты лишь надеялся получить то, чем обладаешь сейчас.</p>
+                  <footer style="color:white"></footer>
+              </blockquote>
+            </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="twelve-slide" src="/images/pages/main/0a297883902744cb864edc07de7a8b2d.jpg" alt="12 slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Лучший способ сделать карьеру - работать с тем, кто делает карьеру.</p>
+                  <footer style="color:white">Марион Келлог</footer>
+                </blockquote>
+              </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img class="thirteen-slide" src="/images/pages/main/running.jpg" alt="13 slide">
+          <div class="container">
+            <div class="carousel-caption">
+              <h1></h1>
+              <div class="well" style="background-color: rgba(45,45,45,0.35);">
+                <blockquote style="text-align:left">
+                  <p>Устал идти - беги.</p>
+                  <footer style="color:white"></footer>
+                </blockquote>
+              </div>
+              <p><a class="btn btn-lg btn-primary" href="/login?rand=<<vars:rand>>" role="button">Регистрация</a></p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div><!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+      <!-- Three columns of text below the carousel -->
+<!--  
+      <div class="row">
+        <div class="col-lg-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <h2>Heading</h2>
+          <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+          <img class="img-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+      <hr class="featurette-divider">
+ -->
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Будь уверен в себе,  <span class="text-muted">а не в своих страхах.</span></h2>
+          <p class="lead">Один предприниматель был по уши в долгах и не видел выхода. Кредиторы наседали на него. Поставщики требовали оплаты. Он сидел на скамейке в парке, опустив голову на руки, гадая, что же может спасти компанию от банкротства. Вдруг перед ним появился какой-то старик. <a href="" class="read-more-href">(читать дальше ...)</a>
+            <span class="read-more-span">
+              <br>- Я вижу, что вас что-то тревожит, - сказал он. После того как он выслушал предпринимателя старик сказал, <br>- "Думаю, я могу вам помочь". Он спросил у предпринимателя его имя, выписал чек и сунул его в руку, говоря : "Возьмите эти деньги. Встретимся здесь ровно через год, и вы сможете отдать мне их в это время." Затем он повернулся и исчез так же быстро, как и появился.<br>
+              <br>
+              Предприниматель увидел в руке чек на сумму $500 000, подписанный Джон Рокфеллер, в то время одним из самых богатых людей в мире!<br>
+              <br>
+              Я могу покончить со своими проблемами в одно мгновение! - подумал он. Но вместо этого, предприниматель решил положить безналичный чек в свой сейф. Одна только мысль о его существовании давала ему силы выработать способ сохранить свой бизнес.<br>
+              <br>
+              С вновь возросшим оптимизмом он заключил выгодные сделки и расширил условия оплаты. Ему удалось совершить несколько больших продаж. В течение нескольких месяцев он выбрался из долгов и снова стал зарабатывать деньги.<br>
+              <br>
+              Ровно год спустя, он вернулся в парк с тем самым безналичным чеком. В уговоренное время старик опять появился. И в тот момент когда предприниматель хотел уже вернуть чек и поделиться своей историей успеха подбежала медсестра и схватила старика. Я так рада что я поймала его! - воскликнула она. - Я надеюсь, он не беспокоил вас. Он всегда убегает из дому, и рассказывает, что он Джон Рокфеллер.<br>
+              <br>
+              Удивляясь, предприниматель просто стоял ошеломленный. В течение всего года он крутился и делал бизнес, покупая и продавая, убежденный, что у него было полмиллиона долларов.<br>
+              <br>
+              Внезапно он понял, что это не деньги, реальные или воображаемые, перевернули его жизнь. Это была его новая уверенность которая дала ему силы, чтобы добиться всего того что он теперь имеет.<br>
+              <br>
+              Вы должны взять на себя инициативу и играть в вашу игру. В решающий момент уверенность играет решающую роль. <br>
+              <br>
+              - Крис Эверт
+            </span>
+          </p>
+        </div>
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive center-block" src="/images/pages/main/mainFeaturette1.jpg" style="margin-top:30px;" alt="Generic placeholder image">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7 col-md-push-5">
+          <h2 class="featurette-heading">Работа в удовольствие. <span class="text-muted">See for yourself.</span></h2>
+          <p class="lead">
+            <span>
+              На одном из заводов Генри Форда бригада работников получала деньги за то, что отдыхала.
+            </span>
+            <a class="read-more-href">(читать дальше ...)</a>
+            <span class="read-more-span" >
+              <br>Это была сервисная бригада, которая отвечала за бесперебойную работу конвейера. Проще говоря — ремонтники. Они получали зарплату, только когда сидели в комнате отдыха. Как только зажигалась красная лампа поломки линии сборки, останавливался счетчик, начислявший им деньги.<br>
+              <br>
+              Во-первых, они всегда оперативно делали ремонт, чтобы быстрее вернуться в комнату отдыха. Во-вторых, они делали ремонт всегда качественно, чтобы им не приходилось покидать комнату в ближайшее время из-за той же неисправности.
+            </span>
+          </p>
+        </div>
+        <div class="col-md-5 col-md-pull-7">
+          <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Терпение. <span class="text-muted">Checkmate.</span></h2>
+            <p class="lead">
+            Однажды, У миллионера спросили: в чём секрет его успеха?<br> 
+  - В терпении, мой друг. <br>
+  Но я могу назвать массу областей, где это не срабатывает,- сказал собеседник. <br>
+  - Например? - спросил миллионер. <br>
+  - Ну, например, носить воду в решете! <br>
+  - Вы не правы, - возразил миллионер, 
+            <a class="read-more-href">(читать дальше ...)</a>
+            <span class="read-more-span" >
+  - Просто надо взять решето и дождаться зимы.
+            </span>
+          </p>
+        </div>
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive center-block" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; Connme &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <<vars:content>>
+
+
+    <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="loadingModalHeader">Подождите секунду ...</h4>
+          </div>
+          <div class="modal-body">
+            <div class="cssload-jumping">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <<template:templates/ru/pages/sms_confirmation.htmlt>>
+    <<template:templates/ru/pages/footer.htmlt>>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<<template:templates/ru/pages/header.htmlt>>
+
+
+<form action="/cgi-bin/index.cgi">
+<table class=plain cellpadding=5>
+<!--
+<tr><td colspan=2><<vars:isPermit>><br>
+на вашем счету <span class=red_i><<vars:balls>> очков</span></td></tr>
+<tr><td colspan=2>За вас проголосовали <<vars:web_click>> раз.</span></td></tr>
+-->
+<tr><td class=blue>Login:</td><td class=red><<vars:loginUser>></td></tr>
+<tr><td class=blue>Пароль:</td><td><input type=password name=pass class=fild value="<<vars:pass>>"></td></tr>
+<tr><td class=blue>Имя:</td><td><input class=fild type=text name=name value="<<vars:name>>"></td></tr>
+<tr><td class=blue>Фамилия:</td><td><input class=fild type=text name=nameLast value="<<vars:nameLast>>"></td></tr>
+<tr><td class=blue>E-mail:</td><td><input class=fild type=text name=email value="<<vars:email>>"></td></tr>
+<tr><td class=blue>Телефон:</td><td class=red>+7<input class=fild type=text name=phone value="<<vars:phone>>"></td></tr>
+<tr><td class=blue>Адрес:</td><td><input class=fild type=text name=address value="<<vars:address>>"></td></tr>
+<tr><td class=blue>Описание:</td><td><textarea  style="height:100" class=fild name=description><<vars:description>></textarea></td></tr>
+<input class=fild type=hidden name=action value=submit_editinfo>
+<input class=fild type=hidden name=rand value=<<vars:rand>>></td></tr>
+<tr><td></td><td><input type=submit class=fild_but value="Изменить"></td></tr>
+</table></form>
+
+<!--
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="plain">
+<<vars:show_images>>
+                            <tr align="center" valign="top"> 
+                              <td><br> <table width="1" height="1" border="0" cellpadding="0" cellspacing="0">
+                                  <tr> 
+                                    <td width="1" height="1"><img src="images/b_c1.gif" width="7" height="7"></td>
+                                    <td background="images/b_up.gif"><img src="images/1.gif" width="1" height="1"></td>
+                                    <td width="1"><img src="images/b_c2.gif" width="7" height="7"></td>
+                                  </tr>
+                                  <tr> 
+                                    <td background="images/b_left.gif"><img src="images/1.gif" width="1" height="1"></td>
+                                    <td><a href="/addpersonalphoto&rand=<<vars:rand>>"><img src="images/nofoto.gif" width="55" height="80" border="0"></a></td>
+                                    <td background="images/b_right.gif"><img src="images/1.gif" width="1" height="1"></td>
+                                  </tr>
+                                  <tr> 
+                                    <td width="1" height="1"><img src="images/b_c4.gif" width="7" height="7"><img src="images/1.gif" width="1" height="1"></td>
+                                    <td background="images/b_down.gif"><img src="images/1.gif" width="1" height="1"></td>
+                                    <td><img src="images/b_c3.gif" width="7" height="7"></td>
+                                  </tr>
+                                </table></td>
+                              <td align="left" valign="middle"><a href="/delete_picture&pic=123_3961385568.jpeg&rand=<<vars:rand>>">
+			      <img src="images/plus.gif" width="16" height="15" hspace="2" vspace="2" border="0" align="absmiddle"></a>
+			      <a href="/addpersonalphoto&rand=<<vars:rand>>">Добавить фото</a></td>
+                            </tr>
+</table>
+-->
+<br>
+<center><a href="/index&action=delete_anketa&random=<<vars:rand>>">Удалить анкету.</a></center>
+
+<<template:templates/ru/pages/footer.htmlt>>

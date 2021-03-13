@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Редактирование <<vars:categoryTitle>></title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+
+<style type="text/css">@import url(/jscalendar/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="/jscalendar/calendar.js"></script>
+<script type="text/javascript" src="/jscalendar/lang/calendar-en.js"></script>
+<script type="text/javascript" src="/jscalendar/calendar-setup.js"></script>
+
+<script type="text/javascript">
+ _editor_url = "/htmlarea/";
+ _editor_lang = "en";
+</script>
+<script type="text/javascript" src="/htmlarea/htmlarea.js"></script>
+<script type="text/javascript">
+
+// load the plugin files
+HTMLArea.loadPlugin("TableOperations");
+
+var editor = null;
+HTMLArea.loadPlugin("CSS");
+
+
+
+function initEditor() {
+  // create an editor for the "ta" textbox
+    editor = new HTMLArea("ta");
+    editor1 = new HTMLArea("tb");
+    editor2 = new HTMLArea("tc");
+
+    var cfg = editor1.config;
+
+function clickHandler(editor, buttonID) 
+{
+    switch(buttonID)
+    {
+	case "m1" :
+	    editor.setHTML("m1");
+	    break;
+	case "m2" :
+	    editor.setHTML("m2");
+	    break;
+	case "m3" :
+	    editor.setHTML("m3");
+	    break;
+	case "m4" :
+	    editor.setHTML('<b> test me again</b>');
+	    break;
+    };
+};
+
+    cfg.registerButton("m1", "menu1 tip", "img1.gif", false, clickHandler);
+    cfg.registerButton("m2", "menu2 tip", "img1.gif", false, clickHandler);
+    cfg.registerButton("m3", "menu3 tip", "img1.gif", false, clickHandler);
+    cfg.registerButton("m4", "menu4 tip", "img1.gif", false, clickHandler);
+
+    cfg.toolbar.push(["linebreak", "m1", "m2", "m3", "m4"]);
+//    editor1.replace("textAreaID", cfg);
+    
+// register the TableOperations plugin with our editor
+    editor.registerPlugin(TableOperations);
+
+    editor.config.pageStyle = "@import url(/style.css);";
+    editor.registerPlugin(CSS, {
+        combos : [
+        { label: "Styles",
+          options: {    "None": "",
+			"Обычный": "plain",
+			"Заголовок": "header",
+			"Сноска": "bread"
+                  }
+          }
+          ]
+      });
+															  
+
+  editor.generate();
+  editor1.generate();
+  editor2.generate();
+    return false;
+}
+</script>
+<link href="/style_admin.css" rel="stylesheet" type="text/css">
+	    
+</head>
+
+<body  onload="initEditor();" leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
+<table width="100%" height="255" border="0" cellspacing="1" bgcolor=#5a6163>
+  <tr> 
+    <td colspan="2"  bgcolor="#FE8738"><img align=absmiddle src="/images/co_logo.gif"> <strong><font color=white>Администрирование <<template:templates/domain.htmlt>>
+    (Редактирование <<vars:categoryTitle>>)</font></strong></td>
+  </tr>
+  <tr valign=top bgcolor="#d2e9fc"> 
+    <<template:templates/menu.htmlt>>
+    <td width="76%" bgcolor=white>
+	<form method="post" action="/cgi-bin/admin/parts.cgi">
+	<table width="100%" border="0" cellspacing="5" class=plain>
+		<tr> 
+			<td width="23%">Дата</td>
+			<td width="77%"><input name="date" id=data style="width:500px" value="<<vars:date>>">
+<button id="trigger">...</button>
+<script type="text/javascript">
+  Calendar.setup(
+      {
+        inputField  : "data",         // ID of the input field
+	ifFormat    : "%Y-%m-%d",    // the date format
+        button      : "trigger"       // ID of the button
+      }
+    );
+</script>
+			</td>
+		</tr>
+		<tr> 
+			<td width="23%">Заголовок</td>
+			<td width="77%"><input name="title" type="text" style="width:500px" value="<<vars:title>>"></td>
+		</tr>
+		<tr>
+			<td height="100%">
+			Краткое описание:
+			</td>
+			<td>
+				<div align="center"> 
+				<textarea id="tb" name="brief" style="width:100%; bgcolor:#00A0A0" rows="50" cols="60"><<vars:brief>></textarea>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td height="100%" colspan="2">
+				<div align="center"> 
+				<textarea id="ta" name="content" style="width:100%; bgcolor:#00A0A0" rows="50" cols="80"><<vars:content>></textarea>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td height="100%">
+			Картинка:
+			</td>
+			<td>
+				<div align="center">
+				<textarea id="tc" name="image" style="width:100%; bgcolor:#00A0A0" rows="50" cols="60"><<vars:image>></textarea>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><div align="center">
+			<input type="hidden" name="act" value="submit_partspictureitem_edit">
+			<input name="id" type="hidden" readonly="true" style="width:50px" value="<<vars:id>>">
+			<input name="category" type="hidden" readonly="true" style="width:50px" value="<<vars:category>>">
+			<input type="submit" name="Submit" value="Сохранить"> <img src="/images/button_save.png" align=absmiddle>
+			</div></td>
+		</tr>
+	</table>
+	</form>
+	</td>
+</tr>
+</table>
+
+</body>
+</html>
