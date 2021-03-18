@@ -35,7 +35,7 @@ system_calls = (function()
 		$("#imageLogo").on("mouseout", function() { $(this).removeClass("box-shadow--8dp"); });
 
 		// --- Friendship buttons
-		$("#ButtonFriendshipRemovalYes").on("click", ButtonFriendshipRemovalYesHandler);
+		$("#DialogFriendshipRemovalYesNo .__submit").on("click", ButtonFriendshipRemovalYesHandler);
 		$("#DialogFriendshipRemovalYesNo").on("shown.bs.modal", 
 			function()
 			{
@@ -1110,6 +1110,53 @@ system_calls = (function()
 		return result;
 	};
 
+	var GlobalBuildFoundFriendSingleBlock = function(item)
+	{
+		var 	tagDiv1, tagDiv2, tagDiv3, tagA3, tagImg3, tagDiv4, tagA5, tag_lg_layout, tagCanvas3, tagUl5;
+		var		tag_xs_layout;
+
+		tagDiv1 		= $("<div/>")	.addClass("container");
+		tagDiv2 		= $("<div/>")	.addClass("row container");
+		tagDiv3 		= $("<div/>")	.addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3 margin_top_bottom_15_0");
+		tagA3   		= $("<a>")		.attr("href", "/userprofile/" + item.id);
+
+		tagCanvas3		= $("<canvas>")	.attr("width", "80")
+										.attr("height", "80")
+										.addClass("canvas-big-avatar");
+		tagDiv4 		= $("<div/>")	.addClass("col-md-10 col-xs-12  single_block box-shadow--6dp padding_top_bottom_5px");
+		tagA5   		= $("<a>")		.attr("href", "/userprofile/" + item.id);
+		tagUl5			= $("<dl/>")	.addClass("margin_bottom_0"); //.addClass("dl-horizontal");
+		tag_lg_layout	= $("<span>")	.addClass("hidden-xs float_right");
+		tag_xs_layout	= $("<div>")	.addClass("col-xs-9 visible-xs-inline margin_top_bottom_15_0");
+
+		RenderFriendshipButtons(item, tag_lg_layout, false);
+		RenderFriendshipButtons(item, tag_xs_layout, false);
+		RenderChatButton(item, tag_lg_layout);
+		RenderChatButton(item, tag_xs_layout);
+
+		tagDiv1.append(tagDiv2);
+		tagDiv2 .append(tagDiv3)
+				.append(tag_xs_layout)
+				.append(tagDiv4);
+		tagDiv3.append(tagA3);
+		tagA3.append(tagImg3);
+		tagA3.append(tagCanvas3);
+		tagDiv4.append(tag_lg_layout);
+		tagDiv4.append(tagA5);
+		tagA5.append("<span><h4>" + item.name + " " + item.nameLast + "</h4></span>");
+
+		tagDiv4.append(tagUl5);
+		item.currentEmployment.forEach(function(item) 
+			{
+				tagUl5.append("<dt>" + item.company + "</dt>");
+				tagUl5.append("<dd>" + item.title + "</dd>");
+			});
+
+		DrawUserAvatar(tagCanvas3[0].getContext("2d"), item.avatar, item.name, item.nameLast);
+
+		return tagDiv1;
+	};
+
 	// --- build "management" buttons and put it into DOM-model
 	// --- input
 	// ---		companyInfo - info from GetUserListInJSONFormat
@@ -1159,7 +1206,7 @@ system_calls = (function()
 		buttonCompany1.on("click", callbackFunc);
 
 		housingTag.append(buttonCompany1);
-	}; // --- RenderFriendshipButtons
+	};
 
 	// --- build "management" buttons and put it into DOM-model
 	// --- input
@@ -1188,7 +1235,7 @@ system_calls = (function()
 			housingTag.append(buttonGroup1);
 		}
 
-	}; // --- RenderFriendshipButtons
+	};
 
 	// --- input:
 	//			callbackFunc - function called on click event
@@ -1274,11 +1321,93 @@ system_calls = (function()
 		return divContainer;
 	};
 
+	var FriendshipButtonClickHandler = function() 
+	{
+		"use strict";
+		var		handlerButton = $(this);
+
+		if(handlerButton.data("action") == "disconnectDialog")
+		{
+			$("#DialogFriendshipRemovalYesNo").modal("show");
+			$("#DialogFriendshipRemovalYesNo .__submit").data("clickedButton", handlerButton);
+		}
+		else
+		{
+			handlerButton.addClass("disabled");
+			handlerButton.text("Ожидайте ...");
+
+			$.getJSON(
+				"/cgi-bin/index.cgi",
+				{action:"AJAX_setFindFriend_FriendshipStatus", friendID:handlerButton.data("id"), status:handlerButton.data("action")})
+				.done(function(data) {
+						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
+
+						if(data.result == "success")
+						{
+							console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
+
+							handlerButton.removeClass("disabled");
+							if(handlerButton.data("action") == "requested")
+							{
+								handlerButton.text("Отменить запрос дружбы");
+								handlerButton.removeClass().addClass("btn").addClass("btn-default");
+								handlerButton.data("action", "disconnect");
+							}
+							else if(handlerButton.data("action") == "requesting")
+							{
+								handlerButton.text("Добавить в друзья");
+								handlerButton.removeClass().addClass("btn").addClass("btn-primary");
+								handlerButton.data("action", "requested");
+							}
+							else if(handlerButton.data("action") == "disconnect")
+							{
+								handlerButton.text("Добавить в друзья");
+								handlerButton.removeClass().addClass("btn").addClass("btn-primary");
+								handlerButton.data("action", "requested");
+
+								// --- remove "accept" buttonAccept
+								handlerButton.siblings().remove();
+							}
+							else if(handlerButton.data("action") == "confirm")
+							{
+								handlerButton.text("Убрать из друзей");
+								handlerButton.removeClass().addClass("btn").addClass("btn-default");
+								handlerButton.data("action", "disconnect");
+
+								// --- remove "reject" buttonAccept
+								handlerButton.siblings().remove();
+							}
+							else
+							{
+								console.debug("AJAX_setFindFriend_FriendshipStatus.done(): unknown friendship status button");
+								handlerButton.text("Добавить в друзья");
+								handlerButton.removeClass().addClass("btn").addClass("btn-primary");
+								handlerButton.data("action", "requested");
+							}
+								
+							
+						}
+						else
+						{
+							console.debug("AJAX_setFindFriend_FriendshipStatus.done(): " + data.result + " [" + data.description + "]");
+
+							handlerButton	.text("Ошибка");
+							handlerButton	.removeClass("btn-default")
+											.removeClass("btn-primary")
+											.addClass("btn-danger", 300);
+							
+							console.debug("AJAX_setFindFriend_FriendshipStatus.done(): need to notify the Requester");
+						}
+
+					}); // --- getJSON.done()
+		}
+	};
+
 	// --- build "friendship" buttons and put them into DOM-model
 	// --- input
 	// ---		friendInfo - info from GetUserListInJSONFormat
 	// ---		housingTag - tag where buttons have to be placed to
-	var RenderFriendshipButtons = function(friendInfo, housingTag)
+	var RenderFriendshipButtons = function(friendInfo, housingTag, renderBreakupButton)
 	{
 		var	tagButtonFriend1 = $("<button/>").data("action", "");
 		var	tagButtonFriend2 = $("<button/>").data("action", "");
@@ -1298,9 +1427,11 @@ system_calls = (function()
 			}
 			else if(friendInfo.userFriendship == "confirmed") 
 			{ 
-				tagButtonFriend1.addClass("btn btn-default float_right")
-								.append("<span class=\"fa fa-times\">")
+				tagButtonFriend1.addClass("btn btn-link color_red")
+								.append("Остановить дружбу")
 								.data("action", "disconnectDialog");
+				if(!renderBreakupButton)
+					tagButtonFriend1.addClass("hidden");
 			}
 			else if(friendInfo.userFriendship == "requested") 
 			{ 
@@ -1349,56 +1480,8 @@ system_calls = (function()
 			}
 		}
 
-	}; // --- RenderFriendshipButtons
-
-
-	var GlobalBuildFoundFriendSingleBlock = function(item)
-	{
-		var 	tagDiv1, tagDiv2, tagDiv3, tagA3, tagImg3, tagDiv4, tagA5, tagSpan5, tagCanvas3, tagUl5;
-		var		tagDivButtons;
-
-		tagDiv1 	= $("<div/>").addClass("container");
-		tagDiv2 	= $("<div/>").addClass("row container");
-		tagDiv3 	= $("<div/>").addClass("col-lg-1 col-md-1 col-sm-2 col-xs-3 margin_top_bottom_15_0");
-		tagA3   	= $("<a>").attr("href", "/userprofile/" + item.id);
-		// tagImg3 	= $("<img>").attr("src", item["avatar"])
-		//						 .attr("height", "80");
-		tagCanvas3	= $("<canvas>").attr("width", "80")
-									.attr("height", "80")
-									.addClass("canvas-big-avatar");
-		tagDiv4 	= $("<div/>").addClass("col-md-10 col-xs-12  single_block box-shadow--6dp padding_top_bottom_5px");
-		tagA5   	= $("<a>").attr("href", "/userprofile/" + item.id);
-		tagSpan5	= $("<span>").addClass("hidden-xs float_right");
-		tagUl5		= $("<dl/>").addClass("margin_bottom_0"); //.addClass("dl-horizontal");
-		tagDivButtons = $("<div>").addClass("col-xs-9 visible-xs-inline margin_top_bottom_15_0");
-
-		RenderFriendshipButtons(item, tagSpan5);
-		RenderFriendshipButtons(item, tagDivButtons);
-		RenderChatButton(item, tagSpan5);
-		RenderChatButton(item, tagDivButtons);
-
-		tagDiv1.append(tagDiv2);
-		tagDiv2 .append(tagDiv3)
-				.append(tagDivButtons)
-				.append(tagDiv4);
-		tagDiv3.append(tagA3);
-		tagA3.append(tagImg3);
-		tagA3.append(tagCanvas3);
-		tagDiv4.append(tagSpan5);
-		tagDiv4.append(tagA5);
-		tagA5.append("<span><h4>" + item.name + " " + item.nameLast + "</h4></span>");
-
-		tagDiv4.append(tagUl5);
-		item.currentEmployment.forEach(function(item) 
-			{
-				tagUl5.append("<dt>" + item.company + "</dt>");
-				tagUl5.append("<dd>" + item.title + "</dd>");
-			});
-
-		DrawUserAvatar(tagCanvas3[0].getContext("2d"), item.avatar, item.name, item.nameLast);
-
-		return tagDiv1;
 	};
+
 
 	var DrawCompanyImage = function(context, imageURL, avatarSize)
 	{
@@ -1782,9 +1865,10 @@ system_calls = (function()
 		GetGenderedActionTypeTitle: GetGenderedActionTypeTitle,
 		GetSQLFormatedDateNoTimeFromSeconds: GetSQLFormatedDateNoTimeFromSeconds,
 		UpdateInputFieldOnServer: UpdateInputFieldOnServer,
+		FriendshipButtonClickHandler: FriendshipButtonClickHandler,
+		GlobalBuildFoundFriendSingleBlock: GlobalBuildFoundFriendSingleBlock,
 		BuildCompanySingleBlock: BuildCompanySingleBlock,
 		BuildGroupSingleBlock: BuildGroupSingleBlock,
-		GlobalBuildFoundFriendSingleBlock: GlobalBuildFoundFriendSingleBlock,
 		RenderFriendshipButtons: RenderFriendshipButtons,
 		PrebuiltInitValue:PrebuiltInitValue,
 		ScrollWindowToElementID: ScrollWindowToElementID,
@@ -1995,88 +2079,6 @@ var	ButtonFriendshipRemovalYesHandler = function()
 	clickedButton.data("action", "disconnect");
 	$("#DialogFriendshipRemovalYesNo").modal("hide");
 	clickedButton.click();
-};
-
-var FriendshipButtonClickHandler = function() 
-{
-	"use strict";
-	var		handlerButton = $(this);
-
-	if(handlerButton.data("action") == "disconnectDialog")
-	{
-		$("#ButtonFriendshipRemovalYes").data("clickedButton", handlerButton);
-		$("#DialogFriendshipRemovalYesNo").modal("show");
-	}
-	else
-	{
-		handlerButton.addClass("disabled");
-		handlerButton.text("Ожидайте ...");
-
-		$.getJSON(
-			"/cgi-bin/index.cgi",
-			{action:"AJAX_setFindFriend_FriendshipStatus", friendID:handlerButton.data("id"), status:handlerButton.data("action")})
-			.done(function(data) {
-					console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
-
-					if(data.result == "success")
-					{
-						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): success");
-
-						handlerButton.removeClass("disabled");
-						if(handlerButton.data("action") == "requested")
-						{
-							handlerButton.text("Отменить запрос дружбы");
-							handlerButton.removeClass().addClass("btn").addClass("btn-default");
-							handlerButton.data("action", "disconnect");
-						}
-						else if(handlerButton.data("action") == "requesting")
-						{
-							handlerButton.text("Добавить в друзья");
-							handlerButton.removeClass().addClass("btn").addClass("btn-primary");
-							handlerButton.data("action", "requested");
-						}
-						else if(handlerButton.data("action") == "disconnect")
-						{
-							handlerButton.text("Добавить в друзья");
-							handlerButton.removeClass().addClass("btn").addClass("btn-primary");
-							handlerButton.data("action", "requested");
-
-							// --- remove "accept" buttonAccept
-							handlerButton.siblings().remove();
-						}
-						else if(handlerButton.data("action") == "confirm")
-						{
-							handlerButton.text("Убрать из друзей");
-							handlerButton.removeClass().addClass("btn").addClass("btn-default");
-							handlerButton.data("action", "disconnect");
-
-							// --- remove "reject" buttonAccept
-							handlerButton.siblings().remove();
-						}
-						else
-						{
-							console.debug("AJAX_setFindFriend_FriendshipStatus.done(): unknown friendship status button");
-							handlerButton.text("Добавить в друзья");
-							handlerButton.removeClass().addClass("btn").addClass("btn-primary");
-							handlerButton.data("action", "requested");
-						}
-							
-						
-					}
-					else
-					{
-						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): " + data.result + " [" + data.description + "]");
-
-						handlerButton	.text("Ошибка");
-						handlerButton	.removeClass("btn-default")
-										.removeClass("btn-primary")
-										.addClass("btn-danger", 300);
-						
-						console.debug("AJAX_setFindFriend_FriendshipStatus.done(): need to notify the Requester");
-					}
-
-				}); // --- getJSON.done()
-	}
 };
 
 // --- avatar part start
@@ -2298,8 +2300,8 @@ var BuildUserRequestList = function()
 						buttonAccept.data(itemChild, userInfo[itemChild]);
 					});
 
-					buttonReject.on("click", FriendshipButtonClickHandler);
-					buttonAccept.on("click", FriendshipButtonClickHandler);
+					buttonReject.on("click", system_calls.FriendshipButtonClickHandler);
+					buttonAccept.on("click", system_calls.FriendshipButtonClickHandler);
 
 
 					resultDOM = resultDOM.add(liUser);

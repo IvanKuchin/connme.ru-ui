@@ -1,9 +1,7 @@
-var	find_friends = find_friends || {};
+/* exported find_friends */
 
 var find_friends = (function() 
 {
-
-	var JSON_FindFriendsList_Autocomplete;
 	var JSON_FindFriendsList;
 
 	var Init = function() 
@@ -63,7 +61,7 @@ var find_friends = (function()
 	var	JSON_getFindFriendByID = function (event, ui) 
 	{
 		var	selectedID = ui.item.id;
-		var selectedLabel = ui.item.label;
+		// var selectedLabel = ui.item.label;
 
 		SendRequestAndRefreshList("JSON_getFindFriendByID", selectedID);
 	};
