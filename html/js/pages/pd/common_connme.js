@@ -1,9 +1,9 @@
+/* exported common_connme */
 /* exported PreviewImageControl */
 /* exported carousel_tools */
 
 var common_connme = (function()
 {
-
 	return {
 	};
 })();

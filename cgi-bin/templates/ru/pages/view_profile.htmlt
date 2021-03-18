@@ -98,7 +98,7 @@
 				<p> <h6><small>Зарегистрирован(а) на сайте <<vars:friendActivatedDifferenceFromNow>></small></h6></p>
 			</div>
 		</div> <!-- row (photo + name + main info) -->
-	</div> <!-- /container -->
+	</div>
 
 <p></p>
 
@@ -113,7 +113,7 @@
 							<p></p>
 						</div>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -131,7 +131,7 @@
 				<div id="CarrierPath">
 					<<vars:carrierPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -149,7 +149,7 @@
 				<div id="CertificationPath">
 					<<vars:CertificationPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -167,7 +167,7 @@
 				<div id="CoursePath">
 					<<vars:CoursePath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -185,7 +185,7 @@
 				<div id="UniversityPath">
 					<<vars:UniversityPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -203,7 +203,7 @@
 				<div id="SchoolPath">
 					<<vars:SchoolPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -221,7 +221,7 @@
 				<div id="LanguagePath">
 					<<vars:LanguagePath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 <p></p>
 
@@ -239,7 +239,7 @@
 				<div id="SkillPath">
 					<<vars:SkillPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 		<div class="container single_block box-shadow--6dp">
 				<div class="row">
@@ -255,7 +255,7 @@
 				<div id="BookPath">
 					<<vars:BookPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 		<div class="container single_block box-shadow--6dp">
 				<div class="row">
@@ -265,7 +265,7 @@
 				</div>
 				<div id="SubscriptionsCompany">
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 		<div class="container single_block box-shadow--6dp">
 				<div class="row">
@@ -275,7 +275,7 @@
 				</div>
 				<div id="SubscriptionsGroup">
 				</div>
-		</div> <!-- /container -->
+		</div>
 
 		<div class="container single_block box-shadow--6dp">
 				<div class="row">
@@ -326,7 +326,15 @@
 				<div id="RecommendationPath">
 					<<vars:RecommendationPath>>
 				</div>
-		</div> <!-- /container -->
+		</div>
+
+		<div class="container single_block __friendship_finish box-shadow--6dp">
+				<div class="row">
+						<div class="col-xs-12 __button_placement text_align_center">
+						</div>
+				</div>
+		</div>
+
 
 		<!-- "Are you sure ?" modal	-->
 		<div class="modal fade" id="AreYouSure" tabindex="-1" role="dialog">
@@ -358,7 +366,7 @@
  -->
 			 <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Нет</button>
-				<button type="button" class="btn btn-danger" id="ButtonFriendshipRemovalYes">Уверен</button>
+				<button type="button" class="btn btn-danger __submit">Уверен</button>
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->

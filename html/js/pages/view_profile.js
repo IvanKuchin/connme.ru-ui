@@ -356,6 +356,11 @@ view_profile = (function()
 		console.debug("DrawPathFromUser1ToUser2: end");
 	};
 
+	var ShouldFriendshipBreakupBlockBeRendered = function(friendInfo)
+	{
+		return friendInfo.userFriendship == "confirmed";
+	};
+
 	var	HandShakers = function()
 	{
 		var		my_user_id = $("#myUserID").data("myuserid");
@@ -371,7 +376,17 @@ view_profile = (function()
 						if(data.user1.id != data.user2.id)
 						{
 							DrawPathFromUser1ToUser2(data);
-							system_calls.RenderFriendshipButtons(data.user2, $("#viewProfileFriendshipButton"));
+
+							if(ShouldFriendshipBreakupBlockBeRendered(data.user2))
+							{
+								system_calls.RenderFriendshipButtons(data.user2, $(".__friendship_finish .__button_placement"), true);
+								$(".__friendship_finish").removeClass("hidden")
+							}
+							else
+							{
+								system_calls.RenderFriendshipButtons(data.user2, $("#viewProfileFriendshipButton"), false);
+								$(".__friendship_finish").addClass("hidden")
+							}
 						}
 					}
 					else
