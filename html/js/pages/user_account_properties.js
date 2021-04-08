@@ -628,7 +628,7 @@ user_account_properties = (function()
 
 		system_calls.copyToClipboard(feed_link);
 
-		system_calls.PopoverInfo(curr_tag, "OK");
+		system_calls.PopoverInfo(curr_tag, "Copied.");
 	};
 
 	return {
