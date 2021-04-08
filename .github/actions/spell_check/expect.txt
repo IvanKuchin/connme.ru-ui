@@ -276,3 +276,5 @@ bmm
 bss
 hh
 YYY
+javascript
+Microsoft

@@ -3763,16 +3763,18 @@ var	AddCoverUploadClickHandler = function(e)
 
 	$("#AddGeneralCoverButton").data("uploadCoverID", currTag.data("id"));
 	$("#AddGeneralCoverButton").data("uploadCoverType", currTag.data("type"));
+	$("#AddGeneralCoverButton").data("uploadTagID", currTag.attr("id"));
 	$("#AddGeneralCoverButton").click();
 };
 
 var	AddGeneralCoverUploadChangeHandler = function(e)
 {
-	var		tmpCanvas = $("<canvas>");
-	var		tmpURLObj = URL.createObjectURL(e.target.files[0]);
-	var		imgOriginal = new Image();
-	var		uploadCoverID = $("#AddGeneralCoverButton").data("uploadCoverID");
-	var		uploadCoverType = $("#AddGeneralCoverButton").data("uploadCoverType");
+	var		tmpCanvas		= $("<canvas>");
+	var		tmpURLObj		= URL.createObjectURL(e.target.files[0]);
+	var		imgOriginal		= new Image();
+	var		uploadCoverID	= $("#AddGeneralCoverButton").data("uploadCoverID");
+	var		uploadCoverType	= $("#AddGeneralCoverButton").data("uploadCoverType");
+	var		uploadTagID		= $("#AddGeneralCoverButton").data("uploadTagID");
 
 	imgOriginal.onload = function(e)
 	{
@@ -3814,124 +3816,135 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 			type: "post",
 			success: function(data) {
 				var		jsonObj = JSON.parse(data);
-				console.debug("AddGeneralCoverUploadChangeHandler:upload:successHandler: URL /images/" + uploadCoverType + "/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-				if(uploadCoverType == "certification")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverCertificationID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-					$("img#editProfileCoverCourseID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.certifications.length; i++)
-						if(userProfile.certifications[i].certificationInternalID == uploadCoverID)
-						{
-							userProfile.certifications[i].certificationPhotoFolder = jsonObj[0].logo_folder;
-							userProfile.certifications[i].certificationPhotoFilename = jsonObj[0].logo_filename;
-						}
-					for(var i = 0; i < userProfile.courses.length; i++)
-						if(userProfile.courses[i].courseInternalID == uploadCoverID)
-						{
-							userProfile.courses[i].coursePhotoFolder = jsonObj[0].logo_folder;
-							userProfile.courses[i].coursePhotoFilename = jsonObj[0].logo_filename;
-						}
+				if(
+					(jsonObj.result && jsonObj.result == "success") ||
+					(jsonObj[0] && jsonObj[0].result && jsonObj[0].result == "success")
+					)
+				{
+					console.debug("AddGeneralCoverUploadChangeHandler:upload:successHandler: URL /images/" + uploadCoverType + "/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+					if(uploadCoverType == "certification")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverCertificationID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+						$("img#editProfileCoverCourseID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.certifications.length; i++)
+							if(userProfile.certifications[i].certificationInternalID == uploadCoverID)
+							{
+								userProfile.certifications[i].certificationPhotoFolder = jsonObj[0].logo_folder;
+								userProfile.certifications[i].certificationPhotoFilename = jsonObj[0].logo_filename;
+							}
+						for(var i = 0; i < userProfile.courses.length; i++)
+							if(userProfile.courses[i].courseInternalID == uploadCoverID)
+							{
+								userProfile.courses[i].coursePhotoFolder = jsonObj[0].logo_folder;
+								userProfile.courses[i].coursePhotoFilename = jsonObj[0].logo_filename;
+							}
+					}
+					if(uploadCoverType == "course")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverCertificationID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+						$("img#editProfileCoverCourseID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.certifications.length; i++)
+							if(userProfile.certifications[i].certificationInternalID == uploadCoverID)
+							{
+								userProfile.certifications[i].certificationPhotoFolder = jsonObj[0].logo_folder;
+								userProfile.certifications[i].certificationPhotoFilename = jsonObj[0].logo_filename;
+							}
+						for(var i = 0; i < userProfile.courses.length; i++)
+							if(userProfile.courses[i].courseInternalID == uploadCoverID)
+							{
+								userProfile.courses[i].coursePhotoFolder = jsonObj[0].logo_folder;
+								userProfile.courses[i].coursePhotoFilename = jsonObj[0].logo_filename;
+							}
+					}
+					if(uploadCoverType == "university")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverUniversityID" + uploadCoverID).attr("src", "/images/universities/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.university.length; i++)
+							if(userProfile.university[i].universityInternalID == uploadCoverID)
+							{
+								userProfile.university[i].universityPhotoFolder = jsonObj[0].logo_folder;
+								userProfile.university[i].universityPhotoFilename = jsonObj[0].logo_filename;
+							}
+					}
+					if(uploadCoverType == "school")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverSchoolID" + uploadCoverID).attr("src", "/images/schools/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.school.length; i++)
+							if(userProfile.school[i].schoolInternalID == uploadCoverID)
+							{
+								userProfile.school[i].schoolPhotoFolder = jsonObj[0].logo_folder;
+								userProfile.school[i].schoolPhotoFilename = jsonObj[0].logo_filename;
+							}
+					}
+					if(uploadCoverType == "language")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverLanguageID" + uploadCoverID).attr("src", "/images/flags/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.languages.length; i++)
+							if(userProfile.languages[i].languageInternalID == uploadCoverID)
+							{
+								userProfile.languages[i].languagePhotoFolder = jsonObj[0].logo_folder;
+								userProfile.languages[i].languagePhotoFilename = jsonObj[0].logo_filename;
+							}
+					}
+					if(uploadCoverType == "book")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverBookID" + uploadCoverID).attr("src", "/images/books/" + jsonObj[0].coverPhotoFolder + "/" + jsonObj[0].coverPhotoFilename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.books.length; i++)
+							if(userProfile.books[i].bookID == uploadCoverID)
+							{
+								userProfile.books[i].bookCoverPhotoFolder = jsonObj[0].coverPhotoFolder;
+								userProfile.books[i].bookCoverPhotoFilename = jsonObj[0].coverPhotoFilename;
+							}
+					}
+					if(uploadCoverType == "company")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverCompanyID" + uploadCoverID).attr("src", "/images/companies/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.companies.length; i++)
+							if(userProfile.companies[i].companyInternalID == uploadCoverID)
+							{
+								userProfile.companies[i].companyPhotoFolder = jsonObj[0].logo_folder;
+								userProfile.companies[i].companyPhotoFilename = jsonObj[0].logo_filename;
+							}
+					}
+					if(uploadCoverType == "gift")
+					{
+						// --- update GUI with image
+						$("img#editProfileCoverGiftID" + uploadCoverID).attr("src", "/images/gifts/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
+
+						// --- update userProfile structure w/ new image
+						for(var i = 0; i < userProfile.gifts.length; i++)
+							if(userProfile.gifts[i].id == uploadCoverID)
+							{
+								userProfile.gifts[i].logo_folder = jsonObj[0].logo_folder;
+								userProfile.gifts[i].logo_filename = jsonObj[0].logo_filename;
+							}
+					}
 				}
-				if(uploadCoverType == "course")
+				else
 				{
-					// --- update GUI with image
-					$("img#editProfileCoverCertificationID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-					$("img#editProfileCoverCourseID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.certifications.length; i++)
-						if(userProfile.certifications[i].certificationInternalID == uploadCoverID)
-						{
-							userProfile.certifications[i].certificationPhotoFolder = jsonObj[0].logo_folder;
-							userProfile.certifications[i].certificationPhotoFilename = jsonObj[0].logo_filename;
-						}
-					for(var i = 0; i < userProfile.courses.length; i++)
-						if(userProfile.courses[i].courseInternalID == uploadCoverID)
-						{
-							userProfile.courses[i].coursePhotoFolder = jsonObj[0].logo_folder;
-							userProfile.courses[i].coursePhotoFilename = jsonObj[0].logo_filename;
-						}
-				}
-				if(uploadCoverType == "university")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverUniversityID" + uploadCoverID).attr("src", "/images/universities/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.university.length; i++)
-						if(userProfile.university[i].universityInternalID == uploadCoverID)
-						{
-							userProfile.university[i].universityPhotoFolder = jsonObj[0].logo_folder;
-							userProfile.university[i].universityPhotoFilename = jsonObj[0].logo_filename;
-						}
-				}
-				if(uploadCoverType == "school")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverSchoolID" + uploadCoverID).attr("src", "/images/schools/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.school.length; i++)
-						if(userProfile.school[i].schoolInternalID == uploadCoverID)
-						{
-							userProfile.school[i].schoolPhotoFolder = jsonObj[0].logo_folder;
-							userProfile.school[i].schoolPhotoFilename = jsonObj[0].logo_filename;
-						}
-				}
-				if(uploadCoverType == "language")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverLanguageID" + uploadCoverID).attr("src", "/images/flags/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.languages.length; i++)
-						if(userProfile.languages[i].languageInternalID == uploadCoverID)
-						{
-							userProfile.languages[i].languagePhotoFolder = jsonObj[0].logo_folder;
-							userProfile.languages[i].languagePhotoFilename = jsonObj[0].logo_filename;
-						}
-				}
-				if(uploadCoverType == "book")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverBookID" + uploadCoverID).attr("src", "/images/books/" + jsonObj[0].coverPhotoFolder + "/" + jsonObj[0].coverPhotoFilename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.books.length; i++)
-						if(userProfile.books[i].bookID == uploadCoverID)
-						{
-							userProfile.books[i].bookCoverPhotoFolder = jsonObj[0].coverPhotoFolder;
-							userProfile.books[i].bookCoverPhotoFilename = jsonObj[0].coverPhotoFilename;
-						}
-				}
-				if(uploadCoverType == "company")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverCompanyID" + uploadCoverID).attr("src", "/images/companies/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.companies.length; i++)
-						if(userProfile.companies[i].companyInternalID == uploadCoverID)
-						{
-							userProfile.companies[i].companyPhotoFolder = jsonObj[0].logo_folder;
-							userProfile.companies[i].companyPhotoFilename = jsonObj[0].logo_filename;
-						}
-				}
-				if(uploadCoverType == "gift")
-				{
-					// --- update GUI with image
-					$("img#editProfileCoverGiftID" + uploadCoverID).attr("src", "/images/gifts/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
-
-					// --- update userProfile structure w/ new image
-					for(var i = 0; i < userProfile.gifts.length; i++)
-						if(userProfile.gifts[i].id == uploadCoverID)
-						{
-							userProfile.gifts[i].logo_folder = jsonObj[0].logo_folder;
-							userProfile.gifts[i].logo_filename = jsonObj[0].logo_filename;
-						}
+					system_calls.PopoverError($("#" + uploadTagID), jsonObj.textStatus);
 				}
 			},
 			error: function(data) {
