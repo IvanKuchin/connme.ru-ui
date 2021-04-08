@@ -279,30 +279,30 @@ system_calls = (function()
 	// --- https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
 	var copyToClipboard = function(text) 
 	{
-	    if (window.clipboardData && window.clipboardData.setData) 
-	    {
-	        // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
-	        return window.clipboardData.setData("Text", text);
+		if (window.clipboardData && window.clipboardData.setData) 
+		{
+			// Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+			return window.clipboardData.setData("Text", text);
 
-	    }
-	    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) 
-	    {
-	        var textarea = document.createElement("textarea");
-	        textarea.textContent = text;
-	        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
-	        document.body.appendChild(textarea);
-	        textarea.select();
-	        try {
-	            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
-	        }
-	        catch (ex) {
-	            console.warn("Copy to clipboard failed.", ex);
-	            return false;
-	        }
-	        finally {
-	            document.body.removeChild(textarea);
-	        }
-	    }
+		}
+		else if (document.queryCommandSupported && document.queryCommandSupported("copy")) 
+		{
+			var textarea = document.createElement("textarea");
+			textarea.textContent = text;
+			textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+			document.body.appendChild(textarea);
+			textarea.select();
+			try {
+				return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+			}
+			catch (ex) {
+				console.warn("Copy to clipboard failed.", ex);
+				return false;
+			}
+			finally {
+				document.body.removeChild(textarea);
+			}
+		}
 	};
 
 	var FilterUnsupportedUTF8Symbols = function(plainText)
@@ -1764,8 +1764,8 @@ system_calls = (function()
 	};
 
 	// --- output:
-	//     if empty - URL is valid
-	//     if not empty - error message
+	//	 if empty - URL is valid
+	//	 if not empty - error message
 	var isValidURL = function(url)
 	{
 		var	result = "";

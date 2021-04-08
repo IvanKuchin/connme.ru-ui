@@ -19,7 +19,6 @@
 		{
 			<<template:templates/ru/pages/autologin_vars.htmlt>>
 
-
 			var		Init = function()
 			{
 				CheckSessionCookieVSPersistence();
@@ -42,7 +41,7 @@
 							if (this.readyState == 4 && this.status == 200)
 							{
 								var		data = JSON.parse(this.responseText);
-										
+
 								if((typeof(data.result) != "undefined") && (data.result == "success"))
 								{
 									setTimeout(function()
