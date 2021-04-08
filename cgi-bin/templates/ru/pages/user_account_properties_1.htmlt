@@ -8,7 +8,13 @@
       </div>
 	  <div class="row">
         <div class="col-xs-12 col-md-6 form-group has-feedback"> <!--- main information -->
-          <input type="input" class="form-control" id="linkToWall" value="" disabled="">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="input" class="form-control" id="linkToWall" value="" disabled="">
+              <div class="input-group-addon"><span id="copyLinkToWall" class="glyphicon glyphicon-copy cursor_pointer" aria-hidden="true"></span></div>
+            </div>
+          </div>
+
         </div>
         <div class="hidden-xs hidden-sm col-md-2"> <!--- main information -->
         </div>
