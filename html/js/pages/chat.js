@@ -869,7 +869,9 @@ chat = (function()
 
 	var	ScrollMessageListToMessageID = function(messageID)
 	{
-			if(activeUserMessages.length)
+		if(activeUserMessages.length)
+		{
+			if($("div[data-messageID=" + messageID + "]").length)
 			{
 				var	messageOffset 			= $("div[data-messageID=" + messageID + "]").position().top;
 				var	messageClientHeight 	= $("div[data-messageID=" + messageID + "]")[0].clientHeight;
@@ -877,15 +879,33 @@ chat = (function()
 				var	messageListClientHeight	= $("#MessageList")[0].clientHeight;
 				var	scrollTop = (messageListScrollTop + 20) + ((messageOffset + messageClientHeight) - (messageListClientHeight));
 				
-				$("#MessageList").animate({scrollTop: (messageListScrollTop + 20) + ((messageOffset + messageClientHeight) - (messageListClientHeight)) }, 300);
-				if(Math.abs(scrollTop - messageListScrollTop) > 10) setTimeout(ScrollMessageListToMessageID, 700, messageID);
+				$("#MessageList").animate({scrollTop: scrollTop }, 300);
+				if((scrollTop - messageListScrollTop) > 10)
+				{
+					setTimeout(ScrollMessageListToMessageID, 700, messageID);
+
+					console.debug("next schedule, scrolling to (" + messageID + "): " + (scrollTop - messageListScrollTop));
+				}
+				else
+				{
+					console.debug("stop, scrolling to (" + messageID + "): " + (scrollTop - messageListScrollTop));
+				}
 			}
+			else
+			{
+				// --- for information purposes only
+				// --- this branch can be taken , when same func been scheduled via timeout
+				// --- and
+				// --- browser changed chat user
+			}
+		}
 	};
 
 	var	ScrollMessageListToLastMessage = function()
 	{
 		if(activeUserMessages.length)
 		{
+			console.debug("from ScrollMessageListToLastMessage call ScrollMessageListToMessageID(" + activeUserMessages[activeUserMessages.length - 1].id + ")");
 			ScrollMessageListToMessageID(activeUserMessages[activeUserMessages.length - 1].id);
 		}
 	};
