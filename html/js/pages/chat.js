@@ -968,7 +968,6 @@ chat = (function()
 		}
 		else
 		{
-
 			$("#SendingMessage").show(500);
 
 			UpdateActiveUserMessagesArray();
