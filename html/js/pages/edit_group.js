@@ -6,21 +6,15 @@ edit_group = (function()
 	"use strict";
 
 	var		groupProfile = {};
-	var 	JSON_groupPosition = [];
-	var		JSON_geoLocality = [];
-	var		JSON_language = [];
-	var		JSON_skill = [];
 
 	var	Init = function()
 	{
 		groupProfile.id = $("#groupInfo").data("id");
 
-
-		$("#AreYouSure #Remove").on("click", AreYouSureRemoveHandler);
-		$("#groupBlock")		.on("click", BlockButtonClickHandler);
-		$("#canvasForGroupLogo").on("click", function() { $("#fileupload").click(); });
-
-
+		$("#AreYouSure #Remove")	.on("click", AreYouSureRemoveHandler);
+		$("#groupBlock")			.on("click", BlockButtonClickHandler);
+		$("#canvasForGroupLogo")	.on("click", function() { $("#fileupload").click(); });
+		$("#group_delete button")	.on("click", GroupDelete_ClickHandler);
 
 		$.getJSON("/cgi-bin/group.cgi?action=AJAX_getGroupProfile", {id: groupProfile.id})
 			.done(function(data) 
@@ -101,118 +95,6 @@ edit_group = (function()
 
 	};
 
-	var	AutocompleteCallbackChange = function (event, ui) 
-	{
-		var		currTag = $(this);
-
-		console.debug ("AutocompleteCallbackChange: change event handler"); 
-
-		if(currTag.val() == "")
-		{
-			currTag.parent().removeClass("has-success").addClass("has-feedback has-error");
-		}
-		else
-		{
-			currTag.parent().removeClass("has-error").addClass("has-feedback has-success");
-			currTag.data("id", (ui.item ? ui.item.id : "0"));
-		}
-
-		setTimeout(function() { 
-			currTag.parent().removeClass("has-feedback has-success has-error"); 
-		}, 3000);
-	};
-
-	// --- create autocomplete
-	// --- input:
-	// ---	   elem - for ex ("input#ID")
-	// --- 		 srcData - array of {id:"id", label:"label"}
-	// ---	   callbackChange - function(event, ui)
-	var	CreateAutocompleteWithChangeCallback = function(elem, srcData, callbackChange)
-	{
-		if($(elem).length && srcData.length)
-		{
-			$(elem).autocomplete({
-				delay : 300,
-				source: srcData,
-				minLength: 3,
-				change: callbackChange,
-				close: function (event, ui) 
-				{ 
-					// console.debug ("CreateAutocompleteWithChangeCallback: close event handler"); 
-				},
-				create: function () {
-					// console.debug ("CreateAutocompleteWithChangeCallback: _create event handler"); 
-				},
-				_renderMenu: function (ul, items)  // --- requires plugin only
-				{
-					var	that = this;
-					currentCategory = "";
-					$.each( items, function( index, item ) {
-						var li;
-						if ( item.category != currentCategory ) {
-							ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>");
-							currentCategory = item.category;
-						}
-						li = that._renderItemData( ul, item );
-						if ( item.category ) {
-							li.attr( "aria-label", item.category + " : " + item.label );
-						}
-					});
-				}
-			});
-		}
-		else
-		{
-			console.debug("CreateAutocompleteWithChangeCallback:ERROR: srcData or '" + elem + "' is empty");
-		}
-	};
-
-	var AddDataForProfileCollapsibleInit = function()
-	{
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancyTitle", JSON_groupPosition, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancyCity", JSON_geoLocality, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancyLanguage1", JSON_language, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancyLanguage2", JSON_language, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancyLanguage3", JSON_language, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancySkill1", JSON_skill, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancySkill2", JSON_skill, AutocompleteCallbackChange);
-		CreateAutocompleteWithChangeCallback("input#CreateOpenVacancySkill3", JSON_skill, AutocompleteCallbackChange);
-
-		// --- Initialize autocomplete after initial loading data
-		if(typeof(groupProfile.open_vacancies) != "undefined")
-			groupProfile.open_vacancies.forEach(function(item, i, arr)
-			{
-				if($("input#OpenVacancy" + item.id + "Edit_Title").length)		CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Title", JSON_groupPosition, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_City").length) 		CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_City", JSON_geoLocality, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_Language1").length) 	CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Language1", JSON_language, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_Language2").length) 	CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Language2", JSON_language, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_Language3").length) 	CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Language3", JSON_language, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_Skill1").length) 	CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Skill1", JSON_skill, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_Skill2").length) 	CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Skill2", JSON_skill, AutocompleteCallbackChange);
-				if($("input#OpenVacancy" + item.id + "Edit_Skill3").length) 	CreateAutocompleteWithChangeCallback("input#OpenVacancy" + item.id + "Edit_Skill3", JSON_skill, AutocompleteCallbackChange);
-			});
-
-	};
-
-	var	InputKeyupHandler = function(e)
-	{
-		var		keyPressed = e.keyCode;
-		var		currentTag = $(this);
-
-		if(currentTag.data("action") == "AJAX_addEditGroupAddGroupFounder")
-		{
-			if(keyPressed == 13) AddGroupFounder("", currentTag.val());
-		}
-		if(currentTag.data("action") == "AJAX_addEditGroupAddGroupOwner")
-		{
-			if(keyPressed == 13) AddGroupOwner("", currentTag.val());
-		}
-		if(currentTag.data("action") == "AJAX_addEditGroupAddGroupIndustry")
-		{
-			if(keyPressed == 13) AddGroupIndustry("", currentTag.val());
-		}
-	};
-
 	var	BlockButtonClickHandler = function()
 	{
 		var		currTag = $(this);
@@ -221,11 +103,11 @@ edit_group = (function()
 
 		if(currTag.data("action") == "AJAX_unblockGroup")
 		{
-
+			// --- pass
 		}
 		else if(currTag.data("action") == "AJAX_blockGroup")
 		{
-
+			// --- pass
 		}
 
 		$.getJSON("/cgi-bin/group.cgi?action=" + currTag.data("action"), {id: currTag.data("id"), rand: Math.random() * 1234567890})
@@ -296,19 +178,6 @@ edit_group = (function()
 	};
 
 
-	var removeGeneralPreparation = function()
-	{
-		var		currTag = $(this);
-
-		$("#AreYouSure #Remove").removeData(); 
-
-		Object.keys(currTag.data()).forEach(function(item) { 
-			$("#AreYouSure #Remove").data(item, currTag.data(item)); 
-		});
-
-		$("#AreYouSure").modal("show");
-	};
-
 	var	AreYouSureRemoveHandler = function() {
 		var		affectedID = $("#AreYouSure #Remove").data("id");
 		var		affectedAction = $("#AreYouSure #Remove").data("action");
@@ -323,68 +192,19 @@ edit_group = (function()
 			.done(function(data) {
 				if(data.result === "success")
 				{
+					// --- pass
 				}
 				else
 				{
-					console.debug("AreYouSureRemoveHandler: ERROR: " + data.description);
+					console.debug("ERROR: " + data.description);
 				}
 			});
 
 		// --- update GUI has to be inside getJSON->done->if(success).
 		// --- To improve User Experience (react on user actions immediately, in spite to potential server error's) 
-		if(affectedAction == "AJAX_removeCompanyFounder")
+		if(affectedAction == "AJAX_deleteGroup")
 		{
-			var		removeItemIndex = -1;
-
-			groupProfile.founders.forEach(function(item, i, arr)
-			{
-				if(item.id == affectedID) removeItemIndex = i;
-			});
-
-			if(removeItemIndex >= 0) groupProfile.founders.splice(removeItemIndex, 1);
-			RenderCompanyFounders();
-		}
-		if(affectedAction == "AJAX_removeCompanyOwner")
-		{
-			var		removeItemIndex = -1;
-
-			groupProfile.owners.forEach(function(item, i, arr)
-			{
-				if(item.id == affectedID) removeItemIndex = i;
-			});
-
-			if(removeItemIndex >= 0) groupProfile.owners.splice(removeItemIndex, 1);
-			RenderCompanyOwners();
-		}
-		if(affectedAction == "AJAX_removeCompanyIndustry")
-		{
-			var		removeItemIndex = -1;
-
-			groupProfile.industries.forEach(function(item, i, arr)
-			{
-				if(item.group_industry_ref_id == affectedID) removeItemIndex = i;
-			});
-
-			if(removeItemIndex >= 0) groupProfile.industries.splice(removeItemIndex, 1);
-			RenderCompanyIndustries();
-		}
-		if(affectedAction == "AJAX_removeOpenVacancy")
-		{
-			var		removeItemIndex = -1;
-
-			groupProfile.open_vacancies.forEach(function(item, i, arr)
-			{
-				if(item.id == affectedID) removeItemIndex = i;
-			});
-
-			if(removeItemIndex >= 0) groupProfile.open_vacancies.splice(removeItemIndex, 1);
-			RenderGroupOpenVacancies();
-		}
-		if(affectedAction == "AJAX_rejectCandidate")
-		{
-			var		removeItemIndex = -1;
-
-			$("#rowAppliedCandidate" + affectedID).remove();
+			window.location.replace("/groups_i_own_list?rand=" + Math.random()*98765432123456);
 		}
 	};
 
@@ -624,14 +444,14 @@ edit_group = (function()
 		editableFuncReplaceToParagraphRenderHTML(currentTag, currentTag.attr("initValue"));
 	};
 
-	var	editableFuncReplaceParagraphToTextarea = function (e) 
+	var	editableFuncReplaceParagraphToTextarea = function () 
 	{
 		var	ButtonAcceptHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphAccept($("#" + associatedTextareaID));
 		};
 
-		var	ButtonRejectHandler = function(e) {
+		var	ButtonRejectHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphReject($("#" + associatedTextareaID));
 		};
@@ -692,7 +512,7 @@ edit_group = (function()
 	};
 
 
-	var UpdateGroupFoundationDatePickerOnChangeHandler = function(event) {
+	var UpdateGroupFoundationDatePickerOnChangeHandler = function() {
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
 		var		ajaxValue = $(this).val();
@@ -736,14 +556,14 @@ edit_group = (function()
 			class: $(this).attr("class")
 		});
 
-		system_calls.groupTypes.forEach(function(item, i , arr)
+		system_calls.groupTypes.forEach(function(item)
 		{
 			$(tag).append($("<option>").append(item));
 		});
 
 		$(tag).val(currentValue); 
 
-		var	selectChangeHandler = function(event) 
+		var	selectChangeHandler = function() 
 		{
 			editableFuncReplaceSelectToSpan($(this), editableFuncReplaceSpanToSelectGroupType);
 		};
@@ -777,6 +597,7 @@ edit_group = (function()
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
+			// --- pass
 		}
 	};
 
@@ -831,12 +652,20 @@ edit_group = (function()
 					}
 					else
 					{
-						console.debug("editableFuncReplaceSelectToSpan: ERROR in ajax [action = " + ajaxAction + ", id = " + actionID + ", ajaxValue = " + ajaxValue + "] " + ajaxResult.description);
+						console.debug("editableFuncReplaceSelectToSpan: ERROR in ajax [action = " + ajaxAction + ", id = " + ajaxActionID + ", ajaxValue = " + ajaxValue + "] " + ajaxResult.description);
 					}
 
 				});
 		} // --- if currValue == initValue
 	}; // --- function
+
+	var GroupDelete_ClickHandler = function()
+	{
+		$("#AreYouSure").modal("show");
+		$("#AreYouSure #Remove").data("id", groupProfile.id);
+		$("#AreYouSure #Remove").data("action", "AJAX_deleteGroup");
+		$("#AreYouSure #Remove").data("script", "group.cgi");
+	};
 
 	var RenderGroupLogo = function()
 	{
