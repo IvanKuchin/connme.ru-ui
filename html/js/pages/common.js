@@ -1340,10 +1340,26 @@ system_calls = (function()
 		divRow 		.append(divColLogo)
 					.append(divInfo);
 		divColLogo	.append(tagA3);
-		tagA3		.append(tagImg3);
-		tagA3		.append(tagCanvas3);
-		divInfo		.append(spanSMButton);
-		divInfo		.append(tagA5);
+
+		if(item.isBlocked == "Y")
+		{
+			var		fa_stack_lock = $("<span>")	.addClass("fa-stack fa-lg")
+												.append($("<i>").addClass("fa fa-circle-o fa-stack-2x fa-inverse"))
+												.append($("<i>").addClass("fa fa-lock fa-stack-1x fa-inverse"));
+
+			tagA3.append(
+				$("<div>")	.addClass("blockedevent") 
+							.append(tagCanvas3)
+							.append($("<div>").append(fa_stack_lock))
+			);
+		}
+		else
+		{
+			tagA3.append(tagCanvas3);
+		}
+
+		divInfo		.append(spanSMButton)
+					.append(tagA5);
 		tagA5		.append("<span><h4>" + item.title + "</h4></span>");
 
 		RenderCompanyLogo(tagCanvas3[0].getContext("2d"), (item.logo_filename.length ? "/images/groups/" + item.logo_folder + "/" + item.logo_filename : ""), item.title, "");
