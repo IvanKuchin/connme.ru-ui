@@ -1314,7 +1314,7 @@ system_calls = (function()
 	//			callbackFunc - function called on click event
 	var	BuildGroupSingleBlock = function(item, i, arr, callbackFunc)
 	{
-		var 	divContainer, divRow, divColLogo, tagA3, tagImg3, divInfo, tagA5, spanSMButton, tagCanvas3;
+		var 	divContainer, divRow, divColLogo, tagA3, divInfo, tagA5, spanSMButton, tagCanvas3;
 		var		divRowXSButtons, divColXSButtons;
 
 		divContainer= $("<div/>").addClass("container");
