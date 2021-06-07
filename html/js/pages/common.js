@@ -1348,7 +1348,7 @@ system_calls = (function()
 												.append($("<i>").addClass("fa fa-lock fa-stack-1x fa-inverse"));
 
 			tagA3.append(
-				$("<div>")	.addClass("blocked_event") 
+				$("<div>")	.addClass("blockedevent") 
 							.append(tagCanvas3)
 							.append($("<div>").append(fa_stack_lock))
 			);
