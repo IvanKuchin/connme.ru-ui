@@ -87,6 +87,14 @@
 			</div>
 		</div> <!-- /container -->
 
+		<div class="container single_block box-shadow--6dp" id="group_delete" data-id="<<vars:groupid>>">
+			<div class="row">
+				<div class="col-xs-12 __button_placement text_align_center">
+					<button class="btn btn-link color_red">Удалить группу</button>
+				</div>
+			</div>
+		</div>
+
 		<!-- Dialog modal for error alerting in avatar uploading (powered by bootstrap) -->
 		<div class="modal fade" id="UploadAvatarErrorBS" tabindex="-1" role="dialog">
 			<div class="modal-dialog modal-sm" role="document">
