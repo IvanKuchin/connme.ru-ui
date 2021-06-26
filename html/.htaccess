@@ -33,11 +33,6 @@ RewriteRule ^privacy_policy(.*)$ /cgi-bin/index.cgi?action=privacy_policy_wrappe
 RewriteRule ^cookie_policy(.*)$ /cgi-bin/index.cgi?action=cookie_policy_wrapper_template&$1 [QSA]
 
 #
-# not tested
-#
-# RewriteRule ^homescreen$ /cgi-bin/index.cgi?action=add_to_home_screen
-
-#
 # Initial actions
 #
 RewriteRule ^helpdesk_dashboard$ /cgi-bin/helpdesk.cgi?action=helpdesk_dashboard_template [QSA]
