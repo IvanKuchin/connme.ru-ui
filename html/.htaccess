@@ -60,6 +60,9 @@ RewriteRule ^company/(.*)$	/cgi-bin/company.cgi?action=getCompanyWall&link=$1 [Q
 #
 # redirect images/videos to unencrypted site to reduce https load
 #
-RewriteRule ^images/(.*)$						https://devimages.connme.ru/images/$1 [L,R=301,NC]
-RewriteRule ^video/(.*)$						https://devimages.connme.ru/video/$1 [L,R=301,NC]
-RewriteRule ^helpdesk_ticket_attaches/(.*)$		https://devimages.connme.ru/helpdesk_ticket_attaches/$1       [L,R=301,NC]
+RewriteRule ^images/(.*)$				/media/images/$1 [L,R=301,NC]
+RewriteRule ^video/(.*)$				/media/video/$1 [L,R=301,NC]
+RewriteRule ^helpdesk_ticket_attaches/(.*)$		/media/helpdesk_ticket_attaches/$1       [L,R=301,NC]
+#RewriteRule ^images/(.*)$						https://devimages.connme.ru/images/$1 [L,R=301,NC]
+#RewriteRule ^video/(.*)$						https://devimages.connme.ru/video/$1 [L,R=301,NC]
+#RewriteRule ^helpdesk_ticket_attaches/(.*)$		https://devimages.connme.ru/helpdesk_ticket_attaches/$1       [L,R=301,NC]
