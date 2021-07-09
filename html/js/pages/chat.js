@@ -242,7 +242,7 @@ chat = (function()
 	{
 		try 
 		{
-			ws = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+			ws = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "text-message-protocol");
 
 			ws.onopen = function() {
 				wsStatus = "connecting";
