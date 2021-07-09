@@ -4,8 +4,15 @@
 
 var common_connme = (function()
 {
-	return {
+	var GetWebSockerPort = function()
+	{
+		return 7681;
 	};
+
+	return {
+		GetWebSockerPort: GetWebSockerPort,
+	};
+
 })();
 
 var PreviewImageControl = function ()

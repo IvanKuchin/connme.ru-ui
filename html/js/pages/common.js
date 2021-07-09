@@ -1849,6 +1849,11 @@ system_calls = (function()
 		return result;
 	};
 
+	var GetWebSocketProtocol = function()
+	{
+		return window.location.protocol == "https:" ? "wss:" : "ws:";
+	};
+
 	var	isTagFullyVisibleInWindowByHeight = function(tag)
 	{
 		var		windowTop		= $(window).scrollTop();
@@ -1933,6 +1938,10 @@ system_calls = (function()
 		GetAvatarsList: GetAvatarsList,
 		GetRibbon_DOM: GetRibbon_DOM,
 
+		isTagFullyVisibleInWindowByHeight: isTagFullyVisibleInWindowByHeight,
+
+		GetWebSocketProtocol: GetWebSocketProtocol,
+
 		PopoverError: PopoverError,
 		PopoverInfo: PopoverInfo,
 		AlertError: AlertError,
@@ -1946,7 +1955,6 @@ system_calls = (function()
 		ArrayRightIntersection:ArrayRightIntersection,
 		ArrayOuterIntersection:ArrayOuterIntersection,
 		ArrayInnerIntersection:ArrayInnerIntersection,
-		isTagFullyVisibleInWindowByHeight: isTagFullyVisibleInWindowByHeight,
 
 		copyToClipboard: copyToClipboard,
 

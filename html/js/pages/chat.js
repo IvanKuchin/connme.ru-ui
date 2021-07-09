@@ -1,4 +1,4 @@
-/* global DrawUserAvatar */
+/* global DrawUserAvatar, common_connme */
 
 // --- change it in (chat.js, common.js, localy.h)
 var FREQUENCY_ECHO_REQUEST = 60;
@@ -242,7 +242,7 @@ chat = (function()
 	{
 		try 
 		{
-			ws = new WebSocket("wss://" + window.location.hostname + ":7681", "text-message-protocol");
+			ws = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "text-message-protocol");
 
 			ws.onopen = function() {
 				wsStatus = "connecting";

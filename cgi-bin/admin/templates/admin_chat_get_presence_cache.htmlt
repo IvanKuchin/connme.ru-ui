@@ -76,7 +76,7 @@
                                   .fadeToggle(250);
       });
 
-    socket_stat = new WebSocket("wss://<<template:templates/domain.htmlt>>:7681", "status-protocol");
+    socket_stat = new WebSocket(system_calls.GetWebSocketProtocol() + "//<<template:templates/domain.htmlt>>:" + common_connme.GetWebSockerPort(), "status-protocol");
 
     socket_stat.onopen = function(event)
     {
