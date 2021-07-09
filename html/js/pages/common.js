@@ -1852,7 +1852,7 @@ system_calls = (function()
 	var GetWebSocketProtocol = function()
 	{
 		return window.location.protocol == "https:" ? "wss:" : "ws:";
-	}
+	};
 
 	var	isTagFullyVisibleInWindowByHeight = function(tag)
 	{

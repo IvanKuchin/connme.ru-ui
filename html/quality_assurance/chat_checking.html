@@ -58,7 +58,7 @@
     // {
       var   ws;
 
-      ws = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "text-message-protocol");
+      ws = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "text-message-protocol");
 
       ws.onopen = function() {
         ws.send("{ \"RequestType\":\"OpenSession\", \"RequestID\":\"" + Math.floor(Math.random() * 1000000000) + "\", \"sessid\":\"" + testUser1SessionID + "\" }");
@@ -186,8 +186,8 @@
     // ChatProtocolMessageTest2 = function()
     // {
 
-      ws1 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "text-message-protocol");
-      ws2 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "text-message-protocol");
+      ws1 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "text-message-protocol");
+      ws2 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "text-message-protocol");
 
       ws1.onopen = ws1OnOpen;
       ws1.onmessage = ws1OnMessage;
@@ -331,8 +331,8 @@
     // {
 
       setTimeout(function(){
-        ws1 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "text-message-protocol");
-        ws2 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "text-message-protocol");
+        ws1 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "text-message-protocol");
+        ws2 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "text-message-protocol");
 
         ws1.onopen = ws1OnOpen;
         ws1.onmessage = ws1OnMessage;
@@ -394,7 +394,7 @@
     // ChatProtocolMessageTest4 = function()
     // {
 
-      ws1 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":7681", "status-protocol");
+      ws1 = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "status-protocol");
 
       ws1.onopen = ws1OnOpen;
       ws1.onmessage = ws1OnMessage;
