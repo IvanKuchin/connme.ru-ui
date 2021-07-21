@@ -383,6 +383,10 @@ var news_feed = (function()
 		console.debug("imageuploader: add handler: number of uploading images is " + globalUploadImageCounter);
 	};
 
+    // --- progress bar weird behavior:
+    // --- if two videos uploaded: small size and big size
+    // --- progress bar will be showing progress of small video
+    // --- after small video is completed, no progress bar assigned to big sized video
 	var	 BlueimpImageUploader_Progressall = function (e, data) 
 	{
 		var	modal_tag			= $(e.target).closest(".modal");
