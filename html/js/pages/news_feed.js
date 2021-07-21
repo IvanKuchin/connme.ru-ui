@@ -290,8 +290,7 @@ var news_feed = (function()
 				console.debug("imageuploader: always handler: number of uploading images is " + globalUploadImageCounter);
 				if(!globalUploadImageCounter)
 				{
-					// modal_tag.find("__submit").button('reset');
-					modal_tag.find("__submit").text("Написать");
+					modal_tag.find(".__submit").button('reset');
 				}
 
 				// --- reset progress bar
@@ -326,8 +325,6 @@ var news_feed = (function()
 				}
 			}
 		);
-
-		modal_tag.find(".__submit").button("reset");
 	};
 
 	var	BlueimpImageUploader_Done = function (e, data) 
