@@ -251,7 +251,7 @@ var carousel_tools = (function()
 {
 	var	CAROUSEL_DELAY						= 3000; // --- must be greater than action_delay_after_slide
 	var	DELAY_AFTER_VIDEO_PLAYBACK			= 1000;
-	var	ACTION_DELAY_AFTER_SLIDE			= 500;
+	var	ACTION_DELAY_AFTER_SLIDE			= 600;
 	var	active_carousels_global 			= [];
 	var	main_cycle_timeout_handlers_global 	= []; // --- use it with caution , if not sure, create separate handler tracker
 	var	video_playing_global				= [];
@@ -482,7 +482,12 @@ var carousel_tools = (function()
 					if(active_idx < (number_of_items - 1))
 					{
 						carousel_tag.carousel(next_idx);
-						main_cycle_timeout_handlers_global[carousel_id] = setTimeout(AfterSlideAction, ACTION_DELAY_AFTER_SLIDE, carousel_id);
+						// --- one - is not a mistake. Handler must be called once after the event
+						carousel_tag.one("slid.bs.carousel", function(e)
+															{
+																return AfterSlideAction(carousel_id);
+															}
+										);
 					}
 					else
 					{
