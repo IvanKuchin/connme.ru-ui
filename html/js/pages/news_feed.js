@@ -386,7 +386,7 @@ var news_feed = (function()
 	var	 BlueimpImageUploader_Progressall = function (e, data) 
 	{
 		var	modal_tag			= $(e.target).closest(".modal");
-		var progress = parseInt(data.loaded / data.total * 100, 10);
+		var progress			= parseInt(data.loaded / data.total * 100, 10);
 
 		modal_tag.find(".progress-bar").css("width", progress + "%");
 		if(progress > 97) 
