@@ -290,8 +290,7 @@ var news_feed = (function()
 				console.debug("imageuploader: always handler: number of uploading images is " + globalUploadImageCounter);
 				if(!globalUploadImageCounter)
 				{
-					// modal_tag.find("__submit").button('reset');
-					modal_tag.find("__submit").text("Написать");
+					modal_tag.find(".__submit").button('reset');
 				}
 
 				// --- reset progress bar
@@ -326,8 +325,6 @@ var news_feed = (function()
 				}
 			}
 		);
-
-		modal_tag.find(".__submit").button("reset");
 	};
 
 	var	BlueimpImageUploader_Done = function (e, data) 
@@ -386,10 +383,14 @@ var news_feed = (function()
 		console.debug("imageuploader: add handler: number of uploading images is " + globalUploadImageCounter);
 	};
 
+    // --- progress bar weird behavior:
+    // --- if two videos uploaded: small size and big size
+    // --- progress bar will be showing progress of small video
+    // --- after small video is completed, no progress bar assigned to big sized video
 	var	 BlueimpImageUploader_Progressall = function (e, data) 
 	{
 		var	modal_tag			= $(e.target).closest(".modal");
-		var progress = parseInt(data.loaded / data.total * 100, 10);
+		var progress			= parseInt(data.loaded / data.total * 100, 10);
 
 		modal_tag.find(".progress-bar").css("width", progress + "%");
 		if(progress > 97) 
