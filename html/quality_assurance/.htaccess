@@ -1,4 +1,4 @@
 AuthType Basic
 AuthName "By invitation only"
-AuthUserFile /home/httpd/dev.connme.ru/html/quality_assurance/.htpasswd
+AuthUserFile htpasswd/.htpasswd
 Require valid-user
