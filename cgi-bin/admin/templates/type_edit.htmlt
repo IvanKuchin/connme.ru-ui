@@ -62,7 +62,7 @@ function initEditor() {
 <body  onload="initEditor();" leftmargin=0 topmargin=0 bottommargin=0 rightmargin=0>
 <table width="100%" height="100%" border="0" cellspacing="1" bgcolor=#5a6163>
   <tr> 
-    <td colspan="2"  bgcolor="#FE8738" height=72><img align=absmiddle src="/images/co_logo.gif"> <strong><font color=white>Domain administration <<template:templates/domain.htmlt>>
+    <td colspan="2"  bgcolor="#FE8738" height=72><img align=absmiddle src="/images/co_logo.gif"> <strong><font color=white>
     (Редактирование  улицы)</font></strong></td>
   </tr>
   <tr valign=top bgcolor="#d2e9fc"> 
