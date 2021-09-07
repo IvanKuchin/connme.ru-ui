@@ -7,7 +7,7 @@
 <body>
 <table width="100%" height="255" border="0" cellspacing="5">
   <tr> 
-    <td colspan="2" bgcolor="#FE8738"><div align="center"><strong><font color=white>Domain administration <<template:templates/domain.htmlt>><br>(Presence dump)</font></strong></div></td>
+    <td colspan="2" bgcolor="#FE8738"><div align="center"><strong><font color=white><br>(Presence dump)</font></strong></div></td>
   </tr>
   <tr valign=top  bgcolor="EFF8FF"> 
     <<template:templates/admin_menu.htmlt>>
@@ -76,7 +76,7 @@
                                   .fadeToggle(250);
       });
 
-    socket_stat = new WebSocket(system_calls.GetWebSocketProtocol() + "//<<template:templates/domain.htmlt>>:" + common_connme.GetWebSockerPort(), "status-protocol");
+    socket_stat = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), "status-protocol");
 
     socket_stat.onopen = function(event)
     {
