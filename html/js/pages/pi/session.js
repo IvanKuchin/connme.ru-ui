@@ -28,7 +28,7 @@ session_pi = (function()
 			// ---            if user will close page after local Storage, server will not mark old session for deletion (stuck session)
 			// --- option #2) put it after "if"
 			// ---            if user will close page after if, server will mark old session for deletion, but client will continue using it
-			// ---            this case will log error smth like "session has been deleted, but client still wants to use it"
+			// ---            this case will log error something like "session has been deleted, but client still wants to use it"
 			// --- option #3) inside "if"
 			// ---            don't move it inside "if"
 			// ---            same as "option #2", but with higher prob, due to local Storage will wait longer for server-reply
