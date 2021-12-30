@@ -4,13 +4,13 @@
 
 var common_connme = (function()
 {
-	var GetWebSockerPort = function()
+	var GetWebSocketPort = function()
 	{
 		return 7681;
 	};
 
 	return {
-		GetWebSockerPort: GetWebSockerPort,
+		GetWebSocketPort: GetWebSocketPort,
 	};
 
 })();
