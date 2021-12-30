@@ -46,7 +46,7 @@ system_calls = (function()
 		// --- Friends href
 		$("#navbar-my_network").on("click", function() 
 			{
-				window.location.href = "/my_network?rand=" + Math.random()*98765432123456;
+				window.location.href = "/find_friends?rand=" + Math.random()*98765432123456;
 			} );
 
 		// --- Сhat href
