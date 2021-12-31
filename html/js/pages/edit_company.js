@@ -24,7 +24,7 @@ edit_company = (function()
 		companyProfile.id = $("#companyInfo").data("id");
 
 
-		$("#companyURLID").on("click", function() { system_calls.PopoverInfo($(this).attr("id"), "Часть URL с названием компании: dev.connme.ru/company/MYCOMPANY"); });
+		$("#companyURLID").on("click", function() { system_calls.PopoverInfo($(this).attr("id"), "Часть URL с названием компании: /company/MYCOMPANY"); });
 		$("#AreYouSure #Remove").on("click", AreYouSureRemoveHandler);
 
 		$.getJSON("/cgi-bin/company.cgi?action=JSON_getCompanyProfile", {id: companyProfile.id})

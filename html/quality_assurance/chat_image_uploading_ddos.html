@@ -103,7 +103,7 @@
       {
         if(wsDDoSStatus == "closed")
         {
-          wsDDoS = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSockerPort(), testProtocol);
+          wsDDoS = new WebSocket(system_calls.GetWebSocketProtocol() + "//" + window.location.hostname + ":" + common_connme.GetWebSocketPort(), testProtocol);
 
           wsDDoS.onopen = wsDDoSOnOpen;
           wsDDoS.onmessage = wsDDoSOnMessage;
