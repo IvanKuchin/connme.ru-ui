@@ -530,21 +530,8 @@ var news_feed = (function()
 	{
 		var	result = $();
 
-	/*
-		message.messageImageList.sort(function(a, b)
-			{
-				var		orderA = parseInt(a.order);
-				var		orderB = parseInt(b.order);
-				var		result;
+		message.messageImageList.sort((a,b) => parseInt(a.order)-parseInt(b.order));
 
-				if(orderA > orderB) { result = 1; }
-				if(orderA == orderB) { result = 0; }
-				if(orderA < orderB) { result = -1; }
-
-				return result;
-			});
-
-	*/
 		message.messageImageList.forEach(
 			function(item, i)
 			{
