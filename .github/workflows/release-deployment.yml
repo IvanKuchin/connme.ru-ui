@@ -120,7 +120,7 @@ jobs:
             BUILD_REPO=${{ steps.set_variables.outputs.BUILD_REPO }}
             BUILD_RELEASE_NUMBERS=${{ steps.set_variables.outputs.BUILD_RELEASE_NUMBERS }}
             BUILD_BASE_COMMIT_ID=${{ github.sha }}
-          target: ui
+          target: app
           push: true
           tags: |
             ghcr.io/ivankuchin/${{ steps.set_variables.outputs.BUILD_REPO }}:${{ steps.set_variables.outputs.BUILD_RELEASE }}

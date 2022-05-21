@@ -1,4 +1,4 @@
-FROM ubuntu as ui
+FROM ubuntu as app
 
 ARG BUILD_REPO
 ARG ROOTDIR=/home/httpd/www/
