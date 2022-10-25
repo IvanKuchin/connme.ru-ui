@@ -279,3 +279,5 @@ YYY
 javascript
 Microsoft
 blockedevent
+captcha
+getnew
