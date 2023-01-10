@@ -91,8 +91,9 @@ body {
 
 .progress-string {
   color: white;
-  left: 46%;
   position: absolute;
+  width: 100%;
+  text-align: center;
 }
 
 
