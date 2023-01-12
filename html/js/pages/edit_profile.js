@@ -1,7 +1,8 @@
+// import Ribbons from "./pd/ribbons.js"
 
-var	edit_profile = edit_profile || {};
+// var	edit_profile = edit_profile || {};
 
-edit_profile = (function()
+let edit_profile = (function()
 {
 "use strict";
 
@@ -5991,3 +5992,6 @@ var	ajaxReturnSuccess = function(data) {
 	};
 
 })();
+
+
+edit_profile.Init();
