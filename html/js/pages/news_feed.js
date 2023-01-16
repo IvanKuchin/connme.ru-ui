@@ -1,7 +1,7 @@
 /*global PreviewImageControl*/
 /*global carousel_tools*/
 /*global NoSleep*/
-/*global DrawCompanyAvatar, DrawUserAvatar*/
+/*global DrawCompanyAvatar*/
 /*exported news_feed*/
 
 var news_feed = (function()
