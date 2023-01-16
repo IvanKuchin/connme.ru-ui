@@ -1,6 +1,4 @@
-// import Ribbons from "./pd/ribbons.js"
-
-// var	edit_profile = edit_profile || {};
+import Ribbons from "./pd/ribbons.js"
 
 let edit_profile = (function()
 {
@@ -32,6 +30,7 @@ var		addBook = {};
 var		addRecommendation = {};
 var		datepickerDateFormat;
 var		AutocompleteList = [];
+let		ribbons;
 
 var	Init = function()
 {
@@ -63,6 +62,8 @@ var	Init = function()
 				RenderRecommendationPath();
 				RenderVacancyPath();
 
+				ribbons = new Ribbons(userProfile.ribbons)
+				ribbons.draw();
 			}
 			else
 			{
