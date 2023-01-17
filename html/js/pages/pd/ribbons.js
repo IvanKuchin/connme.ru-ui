@@ -30,7 +30,7 @@ export default class Ribbons {
 			sec_back.classList.add("back");
 
 			let img = document.createElement("img");
-			img.setAttribute("src", `/media${user_ribbon.ribbon.image}`);
+			img.setAttribute("src", `${user_ribbon.ribbon.image}`);
 
 			let d1 = new Date(parseInt(user_ribbon.received_timestamp) * 1000);
 			let date = document.createElement("date");
