@@ -92,7 +92,7 @@ var news_feed = (function()
 					disableImageResize: false,
 					imageMaxWidth: 1024,
 					imageMaxHeight: 768,
-					maxChunkSize: 1 * 1024 * 1024,
+					// maxChunkSize: 1 * 1024 * 1024,
 
 					always:			BlueimpImageUploader_Always,
 					done: 			BlueimpImageUploader_Done,
