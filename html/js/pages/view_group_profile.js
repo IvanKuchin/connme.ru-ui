@@ -1,19 +1,18 @@
-var		view_group_profile = view_group_profile || {};
+/* global DrawCompanyAvatar */
+/* exported view_group_profile */
 
-view_group_profile = (function()
+var view_group_profile = (function()
 {
 	"use strict";
 
 	var		groupProfile;
 	var		myUserProfile;
 
-	var		myUserID;
 	var		groupID;
 	var		groupLink;
 
 	var	Init = function()
 	{
-		myUserID = $("#myUserID").data("myuserid");
 		groupID = $("#groupName").data("groupid");
 		groupLink = $("#groupName").data("grouplink");
 
@@ -135,7 +134,7 @@ view_group_profile = (function()
 		$("#groupFollowButton").empty().append(followButton);
 	};
 
-	var	GroupSubscriptionClickHandler = function(e)
+	var	GroupSubscriptionClickHandler = function()
 	{
 		var		currTag = $(this);
 		var		script = typeof(currTag.data("script")) == "string" ? currTag.data("script") : "group.cgi";
@@ -177,21 +176,6 @@ view_group_profile = (function()
 	};
 
 	// --- additional modals
-	var DisplaySpecifiedImageModal_Show = function()
-	{
-		var		currTag = $(this);
-		var		type = currTag.data("type");
-		var		id = currTag.data("id");
-		var		src = currTag.attr("src");
-		var		title = currTag.data("title");
-
-		$("#ImageDisplayModal_Title").empty().append(title);
-		$("#ImageDisplayModal_Img").attr("src", src);
-
-		$("#ImageDisplayModal").modal("show");
-
-	};
-
 	var	AreYouSureRemoveHandler = function() {
 		var		affectedID = $("#AreYouSure #Remove").data("id");
 		var		affectedAction = $("#AreYouSure #Remove").data("action");
@@ -202,26 +186,13 @@ view_group_profile = (function()
 			.done(function(data) {
 				if(data.result === "success")
 				{
+					// --- ok
 				}
 				else
 				{
 					console.debug("AreYouSureRemoveHandler: ERROR: " + data.description);
 				}
 			});
-
-		// --- update GUI has to be inside getJSON->done->if(success).
-		// --- To improve User Experience (react on user actions immediately) 
-		// ---	 I'm updating GUI immediately after click, not waiting server response
-		if(affectedAction == "AJAX_removeRecommendationEntry")
-		{
-			groupProfile.recommendation.forEach(function(item, i, arr) {
-				if(item.recommendationID == affectedID)
-				{
-					groupProfile.recommendation.splice(i, 1);
-				}
-			});
-			RenderRecommendationPath();
-		}
 	};
 
 	// --- Editable function
@@ -276,7 +247,7 @@ view_group_profile = (function()
 							var		resultJSON = JSON.parse(data);
 							if(resultJSON.result === "success")
 							{
-
+								// --- ok
 							}
 							else
 							{
@@ -315,13 +286,13 @@ view_group_profile = (function()
 		$(newTag).mouseleave(editableFuncNormalizeBgcolor);
 	};
 
-	var	editableFuncReplaceToTextarea = function (e) {
+	var	editableFuncReplaceToTextarea = function () {
 		var	ButtonAcceptHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphAccept($("#" + associatedTextareaID));
 		};
 
-		var	ButtonRejectHandler = function(e) {
+		var	ButtonRejectHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphReject($("#" + associatedTextareaID));
 		};

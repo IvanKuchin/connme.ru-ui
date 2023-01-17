@@ -1,5 +1,4 @@
-
-var	companies_i_own_list = companies_i_own_list || {};
+/* exported companies_i_own_list */
 
 var	companies_i_own_list = (function()
 {
@@ -29,7 +28,6 @@ var	companies_i_own_list = (function()
 
 	var CraftPossessionMail = function()
 	{
-		var		currTag = $(this);
 		var		mailDomain;
 		var		link;
 
@@ -140,7 +138,7 @@ var	companies_i_own_list = (function()
 	};
 
 	// --- company button callback function 
-	var	CompanyManagementButtonClickHandler = function(e)
+	var	CompanyManagementButtonClickHandler = function()
 	{
 		var		currTag = $(this);
 		var		currAction = currTag.data("action");
@@ -189,7 +187,7 @@ var	companies_i_own_list = (function()
 						if(data.status == "success")
 						{
 							JSON_MyCompaniesList = [];
-							data.companies.forEach(function(item, i, arr)
+							data.companies.forEach(function(item)
 								{
 									// JSON_MyCompaniesList.push({id:item.id, login:item.login, name:item.name, nameLast:item.nameLast, currentEmployment:item.currentEmployment, currentCity:item.currentCity, avatar: item.avatar});
 									JSON_MyCompaniesList.push(item);
@@ -220,7 +218,7 @@ var	companies_i_own_list = (function()
 						if(data.status == "success")
 						{
 							JSON_MyCompaniesList = [];
-							data.companies.forEach(function(item, i, arr)
+							data.companies.forEach(function(item)
 								{
 									// JSON_MyCompaniesList.push({id:item.id, login:item.login, name:item.name, nameLast:item.nameLast, currentEmployment:item.currentEmployment, currentCity:item.currentCity, avatar: item.avatar});
 									JSON_MyCompaniesList.push(item);
@@ -253,7 +251,7 @@ var	companies_i_own_list = (function()
 						{
 
 							JSON_FindCompaniesList_Autocomplete = [];
-							data.companies.forEach(function(item, i, arr)
+							data.companies.forEach(function(item)
 								{
 									var	autocompleteLabel;
 									var	obj;
@@ -277,10 +275,10 @@ var	companies_i_own_list = (function()
 								delay : 300,
 								source: JSON_FindCompaniesList_Autocomplete,
 								select: AJAX_getFindCompanyByID,
-								change: function (event, ui) { 
+								change: function () { 
 									console.debug ("FindCompaniesOnInputHandler autocomplete.change: change event handler"); 
 								},
-								close: function (event, ui) 
+								close: function () 
 								{ 
 									console.debug ("FindCompaniesOnInputHandler autocomplete.close: close event handler"); 
 								},
@@ -290,7 +288,7 @@ var	companies_i_own_list = (function()
 								_renderMenu: function (ul, items)  // --- requires plugin only
 								{
 									var	that = this;
-									currentCategory = "";
+									let currentCategory = "";
 									$.each( items, function( index, item ) {
 										var li;
 										if ( item.category != currentCategory ) {

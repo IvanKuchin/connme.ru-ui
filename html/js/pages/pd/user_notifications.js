@@ -1,5 +1,5 @@
 /* exported  user_notifications */
-/* global DrawUserAvatar, DrawCompanyAvatar, navMenu_userNotification */
+/* global DrawCompanyAvatar, navMenu_userNotification */
 
 var	user_notifications = (function()
 {

@@ -1,10 +1,7 @@
-
-var	my_network = my_network || {};
+/* exported my_network */
 
 var	my_network = (function()
 {
-
-	var JSON_MyNetworkList_Autocomplete;
 	var JSON_MyNetworkList;
 	var	current_action = "";
 
