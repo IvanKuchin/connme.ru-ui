@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
+/* -------------- Ribbon*/
+
+#RibbonPath {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+}
+
+.scene {
+    perspective: 500px;
+}
+
+.ribbon {
+    text-align: center;
+    transform-style: preserve-3d;
+    height: 100px;
+}
+
+.ribbon .front,
+.ribbon .back {
+    backface-visibility: hidden;
+}
+
+.ribbon .front {
+    transform: translateZ(50px);
+}
+
+.ribbon .back {
+    transform: rotateX(-90deg) translateZ(-50px);
+    height: 100px;
+
+    /* spread text evenly on the back of the card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    /* outline */
+    border: solid 1px lightgrey;
+    box-shadow: 0 5px 20px lightgrey, 0 0 8px 5px lightgrey inset;
+
+    /* makes back equal in size to the image and wrap description text to multiple lines */
+    /*position: absolute;*/
+    max-width: 200px;
+
+    text-shadow: 1px 1px 0px lightgrey;
+}
+
+.ribbon .back .description {
+    font-family: 'Oswald', sans-serif;
+}
+
+.ribbon img {
+    height: 100px;
+}
+
+.ribbon .description {
+    padding: 0 1rem;
+}
+
+@media (hover:hover) {
+    .scene:hover .ribbon {
+        transform: rotateX(90deg);
+    }
+    .ribbon {
+        transition: transform 350ms ease-in-out;
+    }
+}
+

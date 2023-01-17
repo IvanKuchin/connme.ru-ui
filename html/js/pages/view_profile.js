@@ -1,8 +1,8 @@
-/* global DrawUserAvatar, userCache */
+/* global userCache */
 
-var		view_profile = view_profile || {};
+import Ribbons from "./pd/ribbons.js"
 
-view_profile = (function()
+let view_profile = (function()
 {
 	"use strict";
 
@@ -11,6 +11,7 @@ view_profile = (function()
 
 	var		myUserID;
 	var		friendUserID;
+	let		ribbons;
 
 	var	Init = function()
 	{
@@ -67,6 +68,9 @@ view_profile = (function()
 						RenderControlButtons();
 						RenderSubscriptionCompanies();
 						RenderSubscriptionGroups();
+
+						ribbons = new Ribbons(userProfile.ribbons)
+						ribbons.draw();
 
 						if(system_calls.GetParamFromURL("scrollto").length) system_calls.ScrollWindowToElementID("#" + system_calls.GetParamFromURL("scrollto"));
 					}
@@ -1835,3 +1839,5 @@ view_profile = (function()
 		};
 })(); // --- view_profile object
 
+
+view_profile.Init();

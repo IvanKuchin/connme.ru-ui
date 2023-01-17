@@ -1,7 +1,7 @@
 /*global PreviewImageControl*/
 /*global carousel_tools*/
 /*global NoSleep*/
-/*global DrawCompanyAvatar, DrawUserAvatar*/
+/*global DrawCompanyAvatar*/
 /*exported news_feed*/
 
 var news_feed = (function()
@@ -92,6 +92,7 @@ var news_feed = (function()
 					disableImageResize: false,
 					imageMaxWidth: 1024,
 					imageMaxHeight: 768,
+					maxChunkSize: 1 * 1024 * 1024,
 
 					always:			BlueimpImageUploader_Always,
 					done: 			BlueimpImageUploader_Done,
