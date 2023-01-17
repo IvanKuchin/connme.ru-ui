@@ -1,4 +1,4 @@
-/* global DrawUserAvatar, userCache */
+/* global userCache */
 
 import Ribbons from "./pd/ribbons.js"
 

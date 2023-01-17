@@ -1,3 +1,5 @@
+/*global userCache*/
+
 import Ribbons from "./pd/ribbons.js"
 
 let edit_profile = (function()
@@ -16,7 +18,6 @@ var		JSON_university = [];
 var		JSON_school = [];
 var		JSON_language = [];
 var		JSON_skill = [];
-var		JSON_book = [];
 var		JSON_dataForProfile = {};
 var		userProfile;
 var		addCarrierCompany = {};
@@ -27,7 +28,6 @@ var		addUniversity = {};
 var		addLanguage = {};
 var		addSkill = {};
 var		addBook = {};
-var		addRecommendation = {};
 var		datepickerDateFormat;
 var		AutocompleteList = [];
 let		ribbons;
@@ -78,7 +78,7 @@ var	Init = function()
 			// --- AJAX jobTitle download 
 			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getJobTitles", {param1: ""})
 					.done(function(data) {
-						data.forEach(function(item, i, arr)
+						data.forEach(function(item)
 						{
 							JSON_jobTitleID.push(system_calls.ConvertHTMLToText(item));
 						});
@@ -91,7 +91,7 @@ var	Init = function()
 			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getCompanyName", {param1: ""})
 					.done(function(data) {
 						// console.debug("$(document).ready(): ajax getCompanyName");
-						data.forEach(function(item, i, arr)
+						data.forEach(function(item)
 						{
 							JSON_CompanyNameID.push(system_calls.ConvertHTMLToText(item));
 							JSON_certificationVendors.push(system_calls.ConvertHTMLToText(item));
@@ -104,7 +104,7 @@ var	Init = function()
 			// --- AJAX jobTitle download 
 			$.getJSON("/cgi-bin/index.cgi?action=AJAX_getCertificationTracks", {param1: ""})
 					.done(function(data) {
-						data.forEach(function(item, i, arr)
+						data.forEach(function(item)
 						{
 							JSON_certificationTracks.push(system_calls.ConvertHTMLToText(item));
 						});
@@ -309,7 +309,7 @@ var	Init = function()
 		DeletePreviewAvatar($("#DeletedAvatarID_InBSForm").val());
 	});
 
-	$("#canvasForAvatar").on("click", function(e) { $("#fileupload").click(); });
+	$("#canvasForAvatar").on("click", function() { $("#fileupload").click(); });
 
 	// --- Image uploader
 	$(function () {
@@ -378,18 +378,6 @@ var	AddYearsToSelectBoxes = function(host_tags)
 			host_tag.append($("<option>").append(year));
 		}
 	});
-};
-
-var	getDate = function ( elem ) 
-{
-  var date;
-  try {
-	date = $.datepicker.parseDate( datepickerDateFormat, elem.value );
-  } catch( error ) {
-	date = null;
-  }
-
-  return date;
 };
 
 var AddCarrierPathCollapsibleZeroize = function()
@@ -1168,7 +1156,7 @@ var AddUniversityUpdateRadioSelect = function()
 
 	if(radioButtonUniversityArray.length)
 	{
-		radioButtonUniversityArray.forEach(function(item, i, arr)
+		radioButtonUniversityArray.forEach(function(item, i)
 			{
 				var	regionName = GetRegionNameByID(item.geo_region_id);
 				var	divTag = $("<div>").addClass("radio");
@@ -2318,7 +2306,7 @@ var AddSkillAddButtonClickHandler = function()
 	}
 };
 
-var	AddBookComplainSubmitClickHandler = function(e)
+var	AddBookComplainSubmitClickHandler = function()
 {
 	var		complainBookAuthor = $("#AddBookAuthor").val();
 	var		complainBookTitle = $("#AddBookTitle").val();
@@ -2372,7 +2360,6 @@ var ComplainSpecifiedImageModal_SubmitClickHandler = function()
 	var		currTag = $(this);
 	var		type = currTag.data("type");
 	var		id = currTag.data("id");
-	var		src = currTag.attr("src");
 
 	$("#ImageComplainModal_Submit").removeData()
 								.data("type", type)
@@ -2403,7 +2390,7 @@ var ComplainSpecifiedImageModal_SubmitClickHandler = function()
 };
 
 
-var	AddBookComplainButtonClickHandler = function(e)
+var	AddBookComplainButtonClickHandler = function()
 {
 	var		currTag = $(this);
 	var		isClearToComplain = true;
@@ -2503,7 +2490,7 @@ var AddBookAddButtonClickHandler = function()
 			}
 
 		})
-		.fail(function(data) 
+		.fail(function() 
 		{
 			ErrorModal("Ошибка ответа сервера");
 			console.debug("AddBookAddButtonClickHandler: ERROR: fail to get response");
@@ -2515,18 +2502,17 @@ var AddBookAddButtonClickHandler = function()
 	}
 };
 
-var	AutocompleteWithBookAuthors = function(e)
+var	AutocompleteWithBookAuthors = function()
 {
-		var	AutocompleteSelectHandler = function(event, ui)
+		var	AutocompleteSelectHandler = function()
 		{
-			var	selectedID = ui.item.id;
-			var selectedLabel = ui.item.label;
+			// var	selectedID = ui.item.id;
+			// var selectedLabel = ui.item.label;
 
 			console.debug("AutocompleteWithBookAuthors::AutocompleteSelectHandler: add selected value to input field");
 		};
 
 		var		currentTag = $(this);
-		var		currentAction = currentTag.data("action");
 		var		inputValue = $(this).val();
 
 		if(inputValue.length == 3)
@@ -2536,10 +2522,9 @@ var	AutocompleteWithBookAuthors = function(e)
 				{action:"JSON_getBookAuthorListAutocomplete", lookForKey:inputValue})
 				.done(function(data) {
 						AutocompleteList = [];
-						data.items.forEach(function(item, i, arr)
+						data.items.forEach(function(item)
 							{
 								var	autocompleteLabel;
-								var	obj;
 
 								autocompleteLabel = "";
 
@@ -2596,18 +2581,17 @@ var	AutocompleteWithBookAuthors = function(e)
 		} // --- if(inputValue.length >= 2)
 };
 
-var	AutocompleteWithBookTitles = function(e)
+var	AutocompleteWithBookTitles = function()
 {
-		var	AutocompleteSelectHandler = function(event, ui)
+		var	AutocompleteSelectHandler = function()
 		{
 			// var	selectedID = ui.item.id;
-			var selectedLabel = ui.item.label;
+			// var selectedLabel = ui.item.label;
 
 			console.debug("AutocompleteWithBookTitle::AutocompleteSelectHandler: add selected value to input field");
 		};
 
 		var		currentTag = $(this);
-		var		currentAction = currentTag.data("action");
 		var		inputValue = $(this).val();
 
 		if(inputValue.length == 3)
@@ -2617,10 +2601,9 @@ var	AutocompleteWithBookTitles = function(e)
 				{action:"JSON_getBookTitleListAutocomplete", lookForKey:inputValue})
 				.done(function(data) {
 						AutocompleteList = [];
-						data.items.forEach(function(item, i, arr)
+						data.items.forEach(function(item)
 							{
 								var	autocompleteLabel;
-								var	obj;
 
 								autocompleteLabel = "";
 
@@ -2681,12 +2664,6 @@ var	AutocompleteWithBookTitles = function(e)
 		} // --- if(inputValue.length >= 2)
 };
 
-
-var	AddCarrierPathCollapsibleCancel = function()
-{
-	$("div#AddCarrierCompany").empty();
-};
-
 var AddCarrierPathCollapsibleCurrentEmploymentClickHandler = function()
 {
 	addCarrierCompany.currentEmployment ^= 1;
@@ -2710,7 +2687,7 @@ var ChangeCurrentStatusClickHandler = function()
 {
 	var	changeCompanyStatusID = $(this).data("id");
 
-	userProfile.companies.forEach(function(item, i, arr) {
+	userProfile.companies.forEach(function(item) {
 		if(item.companyID == changeCompanyStatusID)
 		{
 			if(item.currentCompany == "0")
@@ -2726,6 +2703,7 @@ var ChangeCurrentStatusClickHandler = function()
 				.done(function(data) {
 					if(data.result === "success")
 					{
+						// --- ok
 					}
 					else
 					{
@@ -2759,6 +2737,7 @@ var	UpdateUserSex = function(userSex)
 		.done(function(data) {
 			if(data.result === "success")
 			{
+				// --- ok
 			}
 			else
 			{
@@ -2769,8 +2748,6 @@ var	UpdateUserSex = function(userSex)
 
 var	RenderUserSex = function()
 {
-	var		result = $();
-	var		currentEmploymentText = "";
 	var		elementID;
 
 	if(typeof(userProfile) == "undefined")
@@ -2790,9 +2767,6 @@ var	RenderUserSex = function()
 
 var	RenderUserBirthday = function()
 {
-	var		result = $();
-	var		currentEmploymentText = "";
-	var		elementID;
 	var		spanTimestamp = $("<span>").addClass("birthdayTimestamp editableSpan formatDate")
 										.data("id", "not used")
 										.data("action", "AJAX_changeUserBirthday")
@@ -2814,7 +2788,7 @@ var	RenderUserBirthday = function()
 
 var	RenderCarrierPath = function()
 {
-	var		result = $();
+	let		result = $();
 	var		currentEmploymentText = "";
 
 	if(typeof(userProfile) == "undefined")
@@ -2825,10 +2799,10 @@ var	RenderCarrierPath = function()
 	$("div#CarrierPath").empty();
 	userProfile.companies.sort(function(a, b)
 		{
-			var		arrA = a.occupationStart.split(/\-/);
-			var		arrB = b.occupationStart.split(/\-/);
+			var		arrA = a.occupationStart.split(/-/);
+			var		arrB = b.occupationStart.split(/-/);
 			var 	timeA, timeB;
-			var		result = 0;
+			let		result = 0;
 
 			timeA = new Date(parseInt(arrA[0]), parseInt(arrA[1]) - 1, parseInt(arrA[2]));
 			timeB = new Date(parseInt(arrB[0]), parseInt(arrB[1]) - 1, parseInt(arrB[2]));
@@ -2839,7 +2813,7 @@ var	RenderCarrierPath = function()
 
 			return result;
 		});
-	userProfile.companies.forEach( function(item, i, arr) {
+	userProfile.companies.forEach( function(item) {
 		var		divRowTitle = $("<div>").addClass("row")
 											.attr("id", "companyTitle" + item.companyID);
 		var		divEmployment = $("<div>").addClass("col-xs-12 col-sm-7 col-sm-push-1");
@@ -2983,7 +2957,7 @@ var	RenderCertificationPath = function()
 
 			return result;
 		});
-	userProfile.certifications.forEach( function(item, i, arr) {
+	userProfile.certifications.forEach( function(item) {
 		var		divRowCertification = $("<div>").addClass("row")
 											.attr("id", "certification" + item.certificationID);
 
@@ -3070,7 +3044,7 @@ var	RenderSchoolPath = function()
 
 			return result;
 		});
-	userProfile.school.forEach( function(item, i, arr) {
+	userProfile.school.forEach( function(item) {
 		var		divRowSchool = $("<div>").addClass("row")
 										.attr("id", "school" + item.schoolID);
 
@@ -3166,7 +3140,7 @@ var	RenderUniversityPath = function()
 
 			return result;
 		});
-	userProfile.university.forEach( function(item, i, arr) {
+	userProfile.university.forEach( function(item) {
 		var		divRowUniversity = $("<div>").addClass("row")
 										.attr("id", "university" + item.universityID);
 
@@ -3272,7 +3246,7 @@ var	RenderCoursePath = function()
 
 			return result;
 		});
-	userProfile.courses.forEach( function(item, i, arr)
+	userProfile.courses.forEach( function(item)
 	{
 		var		usersCoursesID = item.courseID;
 		var		courseID = item.courseInternalID;
@@ -3305,12 +3279,11 @@ var	RenderCoursePath = function()
 
 		var		ratingCallback = function(rating)
 								{
-									var		id = $(this).data("id");
-
 									$.getJSON("/cgi-bin/index.cgi?action=AJAX_setCourseRating", {id: usersCoursesID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 									.done(function(data) {
 										if(data.result == "success")
 										{	
+											// --- ok
 										}
 										else
 										{
@@ -3318,7 +3291,7 @@ var	RenderCoursePath = function()
 										}
 									});
 									
-									userProfile.courses.forEach(function(item, i, arr)
+									userProfile.courses.forEach(function(item, i)
 									{
 										if((typeof(item.courseInternalID) != "undefined") && (item.courseInternalID == courseID))
 											userProfile.courses[i].courseRating = rating;
@@ -3386,7 +3359,7 @@ var	RenderLanguagePath = function()
 
 			return result;
 		});
-	userProfile.languages.forEach( function(item, i, arr) {
+	userProfile.languages.forEach( function(item) {
 		var		divRowLanguage = $("<div>").addClass("row")
 											.attr("id", "language" + item.languageID);
 
@@ -3470,7 +3443,7 @@ var	RenderSkillPath = function()
 
 			return result;
 		});
-	userProfile.skills.forEach( function(item, i, arr) {
+	userProfile.skills.forEach( function(item) {
 		var		divRowSkill = $("<div>").addClass("row")
 											.attr("id", "skill" + item.skillID);
 
@@ -3528,7 +3501,7 @@ var	RenderBookPath = function()
 
 			return result;
 		});
-	userProfile.books.forEach( function(item, i, arr) {
+	userProfile.books.forEach( function(item) {
 		var		bookID = item.bookID;
 		var		usersBooksID = item.id;
 
@@ -3567,12 +3540,11 @@ var	RenderBookPath = function()
 
 		var		ratingCallback = function(rating)
 								{
-									var		id = $(this).data("id");
-
 									$.getJSON("/cgi-bin/book.cgi?action=AJAX_setBookRating", {id: usersBooksID, rating: rating, rand: Math.round(Math.random() * 100000000)})
 									.done(function(data) {
 										if(data.result == "success")
 										{	
+											// --- ok
 										}
 										else
 										{
@@ -3580,7 +3552,7 @@ var	RenderBookPath = function()
 										}
 									});
 									
-									userProfile.books.forEach(function(item, i, arr)
+									userProfile.books.forEach(function(item, i)
 									{
 										if((typeof(item.bookID) != "undefined") && (item.bookID == bookID))
 											userProfile.books[i].bookRating = rating;
@@ -3661,13 +3633,10 @@ var	RenderVacancyPath = function()
 			return result;
 		});
 
-	userProfile.vacancyApplied.forEach( function(item, i, arr) 
+	userProfile.vacancyApplied.forEach( function(item) 
 	{
 		if(($("#switcherLabelAppliedVacancies").data("state") == "all") || (item.status == "applied"))
 		{
-
-			var		applicationID = item.id;
-
 			var		divRowApplication = $("<div>").addClass("row margin_top_10")
 												.attr("id", "CompanyCandidate" + item.id);
 
@@ -3759,7 +3728,7 @@ function DataURItoBlob(dataURI) {
 	return new Blob([ia], {type:mimeString});
 }
 
-var	AddCoverUploadClickHandler = function(e)
+var	AddCoverUploadClickHandler = function()
 {
 	var		currTag = $(this);
 
@@ -3778,7 +3747,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 	var		uploadCoverType	= $("#AddGeneralCoverButton").data("uploadCoverType");
 	var		uploadTagID		= $("#AddGeneralCoverButton").data("uploadTagID");
 
-	imgOriginal.onload = function(e)
+	imgOriginal.onload = function()
 	{
 		var		tmpCanvasCtx;
 		var		currTag = $(this);
@@ -3832,13 +3801,13 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverCourseID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.certifications.length; i++)
+						for(let i = 0; i < userProfile.certifications.length; i++)
 							if(userProfile.certifications[i].certificationInternalID == uploadCoverID)
 							{
 								userProfile.certifications[i].certificationPhotoFolder = jsonObj[0].logo_folder;
 								userProfile.certifications[i].certificationPhotoFilename = jsonObj[0].logo_filename;
 							}
-						for(var i = 0; i < userProfile.courses.length; i++)
+						for(let i = 0; i < userProfile.courses.length; i++)
 							if(userProfile.courses[i].courseInternalID == uploadCoverID)
 							{
 								userProfile.courses[i].coursePhotoFolder = jsonObj[0].logo_folder;
@@ -3852,13 +3821,13 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverCourseID" + uploadCoverID).attr("src", "/images/certifications/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.certifications.length; i++)
+						for(let i = 0; i < userProfile.certifications.length; i++)
 							if(userProfile.certifications[i].certificationInternalID == uploadCoverID)
 							{
 								userProfile.certifications[i].certificationPhotoFolder = jsonObj[0].logo_folder;
 								userProfile.certifications[i].certificationPhotoFilename = jsonObj[0].logo_filename;
 							}
-						for(var i = 0; i < userProfile.courses.length; i++)
+						for(let i = 0; i < userProfile.courses.length; i++)
 							if(userProfile.courses[i].courseInternalID == uploadCoverID)
 							{
 								userProfile.courses[i].coursePhotoFolder = jsonObj[0].logo_folder;
@@ -3871,7 +3840,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverUniversityID" + uploadCoverID).attr("src", "/images/universities/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.university.length; i++)
+						for(let i = 0; i < userProfile.university.length; i++)
 							if(userProfile.university[i].universityInternalID == uploadCoverID)
 							{
 								userProfile.university[i].universityPhotoFolder = jsonObj[0].logo_folder;
@@ -3884,7 +3853,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverSchoolID" + uploadCoverID).attr("src", "/images/schools/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.school.length; i++)
+						for(let i = 0; i < userProfile.school.length; i++)
 							if(userProfile.school[i].schoolInternalID == uploadCoverID)
 							{
 								userProfile.school[i].schoolPhotoFolder = jsonObj[0].logo_folder;
@@ -3897,7 +3866,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverLanguageID" + uploadCoverID).attr("src", "/images/flags/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.languages.length; i++)
+						for(let i = 0; i < userProfile.languages.length; i++)
 							if(userProfile.languages[i].languageInternalID == uploadCoverID)
 							{
 								userProfile.languages[i].languagePhotoFolder = jsonObj[0].logo_folder;
@@ -3910,7 +3879,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverBookID" + uploadCoverID).attr("src", "/images/books/" + jsonObj[0].coverPhotoFolder + "/" + jsonObj[0].coverPhotoFilename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.books.length; i++)
+						for(let i = 0; i < userProfile.books.length; i++)
 							if(userProfile.books[i].bookID == uploadCoverID)
 							{
 								userProfile.books[i].bookCoverPhotoFolder = jsonObj[0].coverPhotoFolder;
@@ -3923,7 +3892,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverCompanyID" + uploadCoverID).attr("src", "/images/companies/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.companies.length; i++)
+						for(let i = 0; i < userProfile.companies.length; i++)
 							if(userProfile.companies[i].companyInternalID == uploadCoverID)
 							{
 								userProfile.companies[i].companyPhotoFolder = jsonObj[0].logo_folder;
@@ -3936,7 +3905,7 @@ var	AddGeneralCoverUploadChangeHandler = function(e)
 						$("img#editProfileCoverGiftID" + uploadCoverID).attr("src", "/images/gifts/" + jsonObj[0].logo_folder + "/" + jsonObj[0].logo_filename);
 
 						// --- update userProfile structure w/ new image
-						for(var i = 0; i < userProfile.gifts.length; i++)
+						for(let i = 0; i < userProfile.gifts.length; i++)
 							if(userProfile.gifts[i].id == uploadCoverID)
 							{
 								userProfile.gifts[i].logo_folder = jsonObj[0].logo_folder;
@@ -4000,7 +3969,7 @@ var RenderGUIAppliedVacancies = function()
 		$("#switcherAppliedVacanciesDescription").empty().append("Вакансии в ожидании");
 };
 
-var BirthdayAccessButtonClickHeader = function(e)
+var BirthdayAccessButtonClickHeader = function()
 {
 	var   currentTag = $(this);
 	var   state = currentTag.data("state");
@@ -4015,20 +3984,21 @@ var BirthdayAccessButtonClickHeader = function(e)
 	.done(function(data) {
 		if(data.result == "success")
 		{	
+			// --- ok
 		}
 		else
 		{
 				console.debug("BirthdayAccessButtonClickHeader: ERROR: " + data.description);
 		}
 	})
-	.fail(function(data){
+	.fail(function(){
 				console.debug("BirthdayAccessButtonClickHeader: ERROR: fail parse server response");
 	});
 
 	RenderGUIBirthdayAccessLabel();
 };
 
-var AppliedVacanciesButtonClickHeader = function(e)
+var AppliedVacanciesButtonClickHeader = function()
 {
 	var   currentTag = $(this);
 	var   state = currentTag.data("state");
@@ -4043,13 +4013,14 @@ var AppliedVacanciesButtonClickHeader = function(e)
 	.done(function(data) {
 		if(data.result == "success")
 		{	
+			// --- ok
 		}
 		else
 		{
 				console.debug("AppliedVacanciesButtonClickHeader: ERROR: " + data.description);
 		}
 	})
-	.fail(function(data){
+	.fail(function(){
 				console.debug("AppliedVacanciesButtonClickHeader: ERROR: fail parse server response");
 	});
 
@@ -4057,7 +4028,7 @@ var AppliedVacanciesButtonClickHeader = function(e)
 	RenderVacancyPath();
 };
 
-var AdverseCleanButtonClickHeader = function(e)
+var AdverseCleanButtonClickHeader = function()
 {
 	var   currentTag = $(this);
 	var   triggeredAction = currentTag.data("action");
@@ -4067,6 +4038,7 @@ var AdverseCleanButtonClickHeader = function(e)
 	.done(function(data) {
 		if(data.result == "success")
 		{	
+			// --- ok
 		}
 		else
 		{
@@ -4074,7 +4046,7 @@ var AdverseCleanButtonClickHeader = function(e)
 		}
 	});
 
-	userProfile.recommendation.forEach(function(item, i, arr)
+	userProfile.recommendation.forEach(function(item)
 	{
 		if(item.recommendationID == triggeredID)
 		{
@@ -4120,14 +4092,14 @@ var	RenderRecommendationPath = function()
 
 			return result;
 		});
-	userProfile.recommendation.forEach( function(item, i, arr) {
+	userProfile.recommendation.forEach( function(item) {
 
 		var		isMine = true;
 		var		divRowTitle = $("<div>").addClass("row")
 										.attr("id", "titleRecommendation" + item.recommendationID);
 		var		divFriendTitle = $("<div>").addClass("col-xs-6 col-sm-8");
 		var		divFriendTimestamp = $("<div>").addClass("col-xs-4 col-sm-2")
-													 .append($("<h6>").append($("<small>").append(system_calls.GetLocalizedDateFromSeconds(item.recommendationTimestamp))));
+										.append($("<h6>").append($("<small>").append(system_calls.GetLocalizedDateFromSeconds(item.recommendationTimestamp))));
 		var		divFriendClose = $("<div>").addClass("col-xs-2");
 		var		spanClose = $("<span>").attr("data-id", item.recommendationID)
 										.attr("aria-hidden", "true")
@@ -4161,9 +4133,10 @@ var	RenderRecommendationPath = function()
 
 			divFriendTitle.append($("<span>").append(href1.append(canvas)))
 								.append(" ")
-								.append($("<span>").addClass("vertical_align_top")
-											 .append(href2.append(user.name + " " + user.nameLast).addClass("vertical_align_top"))
-											 .append(system_calls.GetGenderedPhrase(user, " написал(а):", " написал:", " написала:")));
+								.append($("<span>")
+								.addClass("vertical_align_top")
+								.append(href2.append(user.name + " " + user.nameLast).addClass("vertical_align_top"))
+								.append(system_calls.GetGenderedPhrase(user, " написал(а):", " написал:", " написала:")));
 		}
 		else
 		{
@@ -4420,9 +4393,7 @@ var DrawAllAvatars = function()
 
 			i = 0;
 			ShowPreviewAvatar("canvasForAvatarPreview" + i++, "");
-			JSON_AvatarList.forEach
-				(function (entry)
-					{
+			JSON_AvatarList.forEach(function (entry)	{
 						ShowPreviewAvatar("canvasForAvatarPreview" + i++, "/images/avatars/avatars" + entry.folder + "/" + entry.filename, entry.isActive, entry.avatarID);
 					}
 				);
@@ -4446,7 +4417,7 @@ var DrawAllAvatars = function()
 		});
 };
 
-var	ajaxReturnSuccess = function(data) {
+var	ajaxReturnSuccess = function() {
 	console.debug("ajaxReturnSuccess: enter");
 
 	console.debug("ajaxReturnSuccess: exit");
@@ -4479,7 +4450,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 		$(tag).val(currentValue); 
 
-		var	selectChangeHandler = function(event) 
+		var	selectChangeHandler = function() 
 		{
 			editableFuncReplaceSelectToSpan($(this), editableFuncReplaceSpanToSelectCentury);
 		};
@@ -4527,6 +4498,7 @@ var	ajaxReturnSuccess = function(data) {
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
+			// --- ok
 		}
 	};
 
@@ -4547,7 +4519,7 @@ var	ajaxReturnSuccess = function(data) {
 
 		$(tag).val(currentValue); 
 
-		var	selectChangeHandler = function(event) 
+		var	selectChangeHandler = function() 
 		{
 			editableFuncReplaceSelectToSpan($(this), editableFuncReplaceSpanToSelectUniversityDegree);
 		};
@@ -4595,6 +4567,7 @@ var	ajaxReturnSuccess = function(data) {
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
+			// --- ok
 		}
 	};
 
@@ -4612,7 +4585,7 @@ var	ajaxReturnSuccess = function(data) {
 
 		$(tag).val(currentValue); 
 
-		var	selectChangeHandler = function(event) 
+		var	selectChangeHandler = function() 
 		{
 			editableFuncReplaceSelectToSpan($(this), editableFuncReplaceSpanToSelectLanguageLevel);
 		};
@@ -4660,12 +4633,11 @@ var	ajaxReturnSuccess = function(data) {
 
 		if($(tag).data("action") == "XXXXXXXXXX") 
 		{
+			// --- ok
 		}
 	};
 
 	var	editableFuncReplaceToInput = function () {
-		var	curr_year = system_calls.GetTodaysYear();
-
 		var	tag = $("<input>", {
 			val: $(this).text(),
 			type: "text",
@@ -4797,7 +4769,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 		if($(tag).data("action") == "AJAX_changeUserBirthday") 
 		{
-			var tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
+			let tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
 			tagValue = tagValue.replace(/ /g, "/"); // --- convert from "2 05 2017" -> "2/05/2017"
 
 			$(tag).attr("initValue", tagValue);
@@ -4818,7 +4790,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 		if($(tag).data("action") == "updateBookReadTimestamp") 
 		{
-			var tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
+			let tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
 
 			tagValue = tagValue.replace(/ /g, "/"); // --- convert from "2 05 2017" -> "2/05/2017"
 			$(tag).val(tagValue);
@@ -4838,7 +4810,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 		if($(tag).data("action") == "update_occupation_start") 
 		{
-			var tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
+			let tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
 
 			$(tag).val(tagValue);
 			$(tag).on("change", UpdateOccupationStartDatePickerOnChangeHandler);
@@ -4858,7 +4830,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 		if($(tag).data("action") == "update_occupation_finish") 
 		{
-			var tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
+			let tagValue = system_calls.ConvertMonthNameToNumber($(this).text());
 
 			$(tag).val(tagValue);
 			$(tag).on("change", UpdateOccupationFinishDatePickerOnChangeHandler);
@@ -5243,13 +5215,13 @@ var	ajaxReturnSuccess = function(data) {
 		editableFuncReplaceToParagraphRenderHTML(currentTag, currentTag.attr("initValue"));
 	};
 
-	var	editableFuncReplaceToTextarea = function (e) {
+	var	editableFuncReplaceToTextarea = function () {
 		var	ButtonAcceptHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphAccept($("#" + associatedTextareaID));
 		};
 
-		var	ButtonRejectHandler = function(e) {
+		var	ButtonRejectHandler = function() {
 			var		associatedTextareaID = $(this).data("associatedTagID");
 			editableFuncReplaceToParagraphReject($("#" + associatedTextareaID));
 		};
@@ -5309,7 +5281,7 @@ var	ajaxReturnSuccess = function(data) {
 		$(tag).select();
 	};
 
-	var UpdateUserBirthdayDatePickerOnChangeHandler = function(event) {
+	var UpdateUserBirthdayDatePickerOnChangeHandler = function() {
 		var		ajaxScript = $(this).data("script");
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
@@ -5317,23 +5289,16 @@ var	ajaxReturnSuccess = function(data) {
 
 		var		re = /(\d+)\/(\d+)\/(\d+)/;
 		var		found = ajaxValue.match(re);
-		var		dateReadBook;
 
 		if(found.length >= 4)
 		{
-			var dateDay = found[1];
-			var dateMonth = found[2] - 1;
-			var dateYear = found[3];
-
-			dateReadBook = new Date(dateYear, dateMonth, dateDay);
-
 			/* Act on the event */
 			$.ajax({
 				url:"/cgi-bin/" + ajaxScript,
 				data: {action:ajaxAction, id:ajaxActionID, value:ajaxValue}
-			}).done(function (data) 
+			}).done(function (_data) 
 				{
-					var		data = JSON.parse(data);
+					var		data = JSON.parse(_data);
 
 					if(data.result == "success")
 					{
@@ -5341,7 +5306,7 @@ var	ajaxReturnSuccess = function(data) {
 					}
 					else
 					{
-						console.debug("UpdateUserBirthdayDatePickerOnChangeHandler(" + data + "):ERROR: " + data.description);
+						console.debug("UpdateUserBirthdayDatePickerOnChangeHandler(" + _data + "):ERROR: " + data.description);
 					}
 				})
 			.fail(function() {
@@ -5354,7 +5319,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 	};
 
-	var UpdateBookReadDatePickerOnChangeHandler = function(event) {
+	var UpdateBookReadDatePickerOnChangeHandler = function() {
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
 		var		ajaxValue = $(this).val();
@@ -5378,10 +5343,9 @@ var	ajaxReturnSuccess = function(data) {
 				data: {action:ajaxAction, id:ajaxActionID, value:dateReadBook.getTime()/1000}
 			}).done(function (data) 
 				{
-					var		ajaxResult = JSON.parse(data);
 					console.debug("UpdateBookReadDatePickerOnChangeHandler(" + data + "): enter");
 
-					userProfile.companies.forEach(function(item, i, arr)
+					userProfile.companies.forEach(function(item)
 					{
 						if(item.companyID == ajaxActionID)
 						{
@@ -5396,7 +5360,7 @@ var	ajaxReturnSuccess = function(data) {
 		}
 	};
 
-	var UpdateOccupationStartDatePickerOnChangeHandler = function(event) {
+	var UpdateOccupationStartDatePickerOnChangeHandler = function() {
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
 		var		ajaxValue = $(this).val();
@@ -5409,10 +5373,9 @@ var	ajaxReturnSuccess = function(data) {
 			data: {action:ajaxAction, id:ajaxActionID, value:ajaxValue}
 		}).done(function (data) 
 			{
-				var		ajaxResult = JSON.parse(data);
 				console.debug("UpdateOccupationStartDatePickerOnChangeHandler(" + data + "): enter");
 
-				userProfile.companies.forEach(function(item, i, arr)
+				userProfile.companies.forEach(function(item)
 				{
 					if(item.companyID == ajaxActionID)
 					{
@@ -5424,7 +5387,7 @@ var	ajaxReturnSuccess = function(data) {
 			});
 	};
 
-	var UpdateOccupationFinishDatePickerOnChangeHandler = function(event) {
+	var UpdateOccupationFinishDatePickerOnChangeHandler = function() {
 		var		ajaxAction = $(this).data("action");
 		var		ajaxActionID = $(this).data("id");
 		var		ajaxValue = $(this).val();
@@ -5439,7 +5402,7 @@ var	ajaxReturnSuccess = function(data) {
 			{
 				console.debug("UpdateOccupationFinishDatePickerOnChangeHandler(" + data + "): enter");
 
-				userProfile.companies.forEach(function(item, i, arr)
+				userProfile.companies.forEach(function(item)
 				{
 					if(item.companyID == ajaxActionID)
 					{
@@ -5790,17 +5753,7 @@ var	ajaxReturnSuccess = function(data) {
 			});
 	};
 
-	var	UpdateFirstName = function () 
-	{
-		editableFuncReplaceInputToSpan();
-	};
-
-	var UpdateLastName = function ()
-	{
-		editableFuncReplaceInputToSpan();
-	};
-
-	var editableFuncHighlightBgcolor = function () {
+  var editableFuncHighlightBgcolor = function () {
 		$(this).addClass("editable_highlighted_class", 400);
 	};
 
