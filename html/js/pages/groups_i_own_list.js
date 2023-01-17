@@ -1,5 +1,4 @@
-
-var	groups_i_own_list = groups_i_own_list || {};
+/* exported groups_i_own_list */
 
 var	groups_i_own_list = (function()
 {
@@ -27,7 +26,7 @@ var	groups_i_own_list = (function()
 	};
 
 	// --- group button callback function 
-	var	GroupManagementButtonClickHandler = function(e)
+	var	GroupManagementButtonClickHandler = function()
 	{
 		var		currTag = $(this);
 		var		currAction = currTag.data("action");
@@ -100,7 +99,7 @@ var	groups_i_own_list = (function()
 						if(data.status == "success")
 						{
 							JSON_MyGroupsList = [];
-							data.groups.forEach(function(item, i, arr)
+							data.groups.forEach(function(item)
 								{
 									// JSON_MyGroupsList.push({id:item.id, login:item.login, name:item.name, nameLast:item.nameLast, currentEmployment:item.currentEmployment, currentCity:item.currentCity, avatar: item.avatar});
 									JSON_MyGroupsList.push(item);
@@ -131,7 +130,7 @@ var	groups_i_own_list = (function()
 						if(data.status == "success")
 						{
 							JSON_MyGroupsList = [];
-							data.groups.forEach(function(item, i, arr)
+							data.groups.forEach(function(item)
 								{
 									// JSON_MyGroupsList.push({id:item.id, login:item.login, name:item.name, nameLast:item.nameLast, currentEmployment:item.currentEmployment, currentCity:item.currentCity, avatar: item.avatar});
 									JSON_MyGroupsList.push(item);
@@ -163,7 +162,7 @@ var	groups_i_own_list = (function()
 						{
 
 							JSON_FindGroupsList_Autocomplete = [];
-							data.groups.forEach(function(item, i, arr)
+							data.groups.forEach(function(item)
 								{
 									var	autocompleteLabel;
 									var	obj;
@@ -188,10 +187,10 @@ var	groups_i_own_list = (function()
 								source: JSON_FindGroupsList_Autocomplete,
 								select: AJAX_getFindGroupByID,
 								minLength: 3,
-								change: function (event, ui) { 
+								change: function () { 
 									console.debug ("FindGroupsOnInputHandler autocomplete.change: change event handler"); 
 								},
-								close: function (event, ui) 
+								close: function () 
 								{ 
 									console.debug ("FindGroupsOnInputHandler autocomplete.close: close event handler"); 
 								},
@@ -201,7 +200,7 @@ var	groups_i_own_list = (function()
 								_renderMenu: function (ul, items)  // --- requires plugin only
 								{
 									var	that = this;
-									currentCategory = "";
+									var currentCategory = "";
 									$.each( items, function( index, item ) {
 										var li;
 										if ( item.category != currentCategory ) {

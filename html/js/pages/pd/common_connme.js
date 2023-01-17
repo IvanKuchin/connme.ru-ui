@@ -1,6 +1,7 @@
 /* exported common_connme */
 /* exported PreviewImageControl */
 /* exported carousel_tools */
+/* global common_connme:off */
 
 var common_connme = (function()
 {
@@ -483,7 +484,7 @@ var carousel_tools = (function()
 					{
 						carousel_tag.carousel(next_idx);
 						// --- one - is not a mistake. Handler must be called once after the event
-						carousel_tag.one("slid.bs.carousel", function(e)
+						carousel_tag.one("slid.bs.carousel", function()
 															{
 																return AfterSlideAction(carousel_id);
 															}

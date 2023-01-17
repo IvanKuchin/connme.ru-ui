@@ -1,5 +1,3 @@
-/* global DrawUserAvatar, common_connme */
-
 // --- change it in (chat.js, common.js, localy.h)
 var FREQUENCY_ECHO_REQUEST = 60;
 var WS_RECONNECT_TIMEOUT = 60 * 1000;
