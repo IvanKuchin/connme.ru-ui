@@ -92,7 +92,7 @@ var news_feed = (function()
 					disableImageResize: false,
 					imageMaxWidth: 1024,
 					imageMaxHeight: 768,
-					// maxChunkSize: 1 * 1024 * 1024,
+					maxChunkSize: 1 * 1024 * 1024,
 
 					always:			BlueimpImageUploader_Always,
 					done: 			BlueimpImageUploader_Done,
@@ -301,7 +301,7 @@ var news_feed = (function()
 
 
 				if(typeof(data.result) != "undefined")
-				{							
+				{
 					if(data.result[i].result == "success")
 					{							
 						rowPreview.addClass(" alert alert-success");
@@ -310,11 +310,17 @@ var news_feed = (function()
 
 						globalPostMessageImageList.push(data.result[i]);
 					}
-					else
+					else if(data.result[i].result == "error")
 					{
 						rowPreview.addClass(" alert alert-danger");
 						$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
 						$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append(data.result[0].fileName + " " + data.result[0].textStatus);
+					}
+					else
+					{
+						rowPreview.addClass(" alert alert-danger");
+						$("<div>").addClass("col-lg-2 col-md-3 col-sm-3 col-xs-5").appendTo(rowPreview);
+						$("<div>").addClass("col-lg-9 col-md-8 col-sm-8 col-xs-6").appendTo(rowPreview).append("неизвестный код ошибки (" + data.result[0].result + "): " + data.result[0].textStatus);
 					}
 				}
 				else
@@ -332,15 +338,18 @@ var news_feed = (function()
 	{
 		var	value = data.result;
 			{
-				if(value[0].result == "error")
-				{
-					console.error("imageuploader: done handler:ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
-				}
-
 				if(value[0].result == "success")
 				{
 					console.debug("imageuploader: done handler: uploading success [" + value[0].fileName + "]");
 					// DrawAllAvatars();
+				}
+				else if(value[0].result == "error")
+				{
+					console.error("imageuploader: done handler:ERROR uploading file [" + value.fileName + "] error code [" + value.textStatus + "]");
+				}
+				else
+				{
+					console.error("imageuploader: done handler:ERROR unknown result type: " + value[0].description);
 				}
 			}
 
