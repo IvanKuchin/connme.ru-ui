@@ -72,6 +72,9 @@ system_calls = (function()
 		// --- Check availability / sign-in
 		window.setTimeout(system_calls.SendEchoRequest, 1000);
 
+		// --- Update domain name
+		window.setTimeout(system_calls.PingDomainName, 1100);
+
 /*
 		// --- Check system notifications
 		window.setTimeout(system_calls.GetUserRequestNotifications, 1200);
@@ -984,6 +987,12 @@ system_calls = (function()
 		// console.debug('system_calls.GetUserRequestNotifications: end');
 	};
 
+	async function PingDomainName() {
+		return fetch("/api/v1/domain", {
+			method: "POST"
+		})
+	}
+
 	var	UpdateInputFieldOnServer = function(e)
 	{
 		var		__Revert_To_Prev_Value = function()
@@ -1888,6 +1897,8 @@ system_calls = (function()
 		isUserSignedin: isUserSignedin,
 		SendEchoRequest: SendEchoRequest,
 		GetUserRequestNotifications: GetUserRequestNotifications,
+		PingDomainName: PingDomainName,
+
 		isTouchBasedUA: isTouchBasedUA,
 		CutLongMessages: CutLongMessages,
 		RemoveSpaces: RemoveSpaces,
