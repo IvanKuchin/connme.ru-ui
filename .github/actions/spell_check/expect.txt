@@ -4,6 +4,7 @@ allowfullscreen
 amd
 angryface
 anyrole
+api
 astonishedface
 atob
 attr
