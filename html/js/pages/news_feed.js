@@ -3177,6 +3177,21 @@ var news_feed = (function()
 									.attr("data-placement", "top")
 									.attr("title", system_calls.GetLocalizedDateFromDelta(parseFloat(jsonMessage.eventTimestampDelta)))
 									.append(system_calls.GetLocalizedDateInHumanFormatMsecSinceEvent(parseFloat(jsonMessage.eventTimestampDelta) * 1000));
+		
+		// location part
+		var geoLocation = geo_location.GetFromMedia(item.messageImageList);
+		var geoLocationURLGoogle = geo_location.GetGoogleMapsURL(geoLocation);
+		var href_location = $("<a>")
+									.attr("href", geoLocationURLGoogle)
+									.attr("target", "_blanket")
+									.append('<i class="fa fa-map-marker" aria-hidden="true"></i>');
+		var spanGeoLocation = $("<div>").addClass("news_feed_geo_location")
+										.append(href_location);
+        if(!geo_location.isValid(geoLocation))
+		{
+			spanGeoLocation[0].style.visibility = "hidden";
+		} 
+
 
 		divContainer.append(divRow); 
 		divRow	.append(divPhoto)
@@ -3185,7 +3200,8 @@ var news_feed = (function()
 		hrefSrcObj.append(tagImg3);
 		hrefSrcObj.append(canvasSrcObj);
 		tagDivMsgInfo.append(hrefUsername)
-					.append(spanTimestamp);
+					.append(spanTimestamp)
+					.append(spanGeoLocation)
 		tagDivMsgInfo.append(" " + system_calls.GetGenderedActionCategoryTitle(jsonMessage) + "<br>");
 
 		// --- Draw the text avatar initials after adding Context to DOM model
@@ -3887,3 +3903,56 @@ var news_feed = (function()
 			};
 
 })();
+
+var geo_location = (function () {
+	var ConvertToNumber = function(str) 
+	{
+		str = str.replaceAll(",", ".");
+		let number = parseFloat(str);
+		if(isNaN(number)) {
+			number = 0;
+		}
+
+		return number;
+	}
+
+	var GetFromMedia = function(media_files) 
+	{
+		let location = {altitude: 0, latitude: 0, longitude: 0}
+
+		if (media_files) {
+			const locations = media_files.map((x) => {
+														return { latitude: ConvertToNumber(x.exifGPSLatitude), longitude: ConvertToNumber(x.exifGPSLongitude)}
+													})
+			for(let i = 0; i < locations.length; ++i) {
+				let x = locations[i];
+
+				if(isValid(x)) {
+					location = x;
+					break;
+				}
+			}
+		}
+
+		return location;
+	}
+
+	var isValid = function(location)
+	{
+		return ((location.latitude == 0) && (location.longitude == 0)) ? false : true;
+	}
+
+	var GetGoogleMapsURL = function(location)
+	{
+		if(isValid(location))
+			return "https://www.google.com/maps/search/?api=1&query=" + location.latitude + "," + location.longitude;
+		else
+			return "";
+	}
+
+	return {
+		GetFromMedia, 
+		isValid,
+		GetGoogleMapsURL,
+	}
+})()
