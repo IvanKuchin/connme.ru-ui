@@ -19,7 +19,7 @@ var news_feed = (function()
 	var	globalMyCompanies = [];
 	var	modalScrollPosition; // --- Modal issues on IOS (see end of Init)
 	var	NoSleep_global;
-	const uploadFileRegexImageVideo_global = /(\.|\/)(gif|jpe?g|png|mov|avi|mp4|webm)$/i;
+	const uploadFileRegexImageVideo_global = /(\.|\/)(gif|jpe?g|png|mov|avi|mp4|webm|heic|heif)$/i;
 
 	var Init = function() 
 	{
