@@ -7,12 +7,6 @@ ARG BUILD_BASE_COMMIT_ID="not found"
 LABEL maintainer="ivan.kuchin@gmail.com"
 LABEL org.opencontainers.image.source="https://github.com/IvanKuchin/${BUILD_REPO}"
 
-####################
-# copy from repo   #
-####################
-COPY ./html/ ${ROOTDIR}html/
-COPY ./supplemental/apache2/ /etc/apache2/
-
 WORKDIR ${ROOTDIR}html/
 
 ###################
@@ -21,6 +15,11 @@ WORKDIR ${ROOTDIR}html/
 RUN apt update \
     && apt-get install --no-install-recommends --no-install-suggests -y apache2 \
     && rm -rf /var/lib/apt/lists/*
+
+####################
+# copy from repo   #
+####################
+COPY ./supplemental/apache2/ /etc/apache2/
 
 #####################
 # configure apache2 #
@@ -35,6 +34,11 @@ RUN a2enmod rewrite \
  && a2dismod cgi \
  && a2dissite `ls /etc/apache2/sites-enabled/` \
  && a2ensite *www
+
+ ####################
+# copy from repo   #
+####################
+COPY ./html/ ${ROOTDIR}html/
 
 ##################
 # save commit id #
