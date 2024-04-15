@@ -17,6 +17,11 @@ body {
   float: right;
 }
 
+.news_feed_geo_location {
+  float: right;
+  margin-right: 0.5em;
+}
+
 .news_feed_view_message_timestamp {
   float: right;
   padding-right: 10px;
