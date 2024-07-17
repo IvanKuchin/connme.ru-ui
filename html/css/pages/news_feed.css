@@ -107,6 +107,9 @@ body {
   margin-top: 15px;
 }
 
+.better_look {
+  filter: contrast(1.1) brightness(1.1);
+}
 
 /*--- Video container ---*/
 .videoPlacement
