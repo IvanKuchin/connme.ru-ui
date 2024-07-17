@@ -2197,7 +2197,7 @@ var news_feed = (function()
 			imageArr.forEach(
 				function(item, i)
 				{
-					var	tagDivItem		= $("<div/>").addClass("item");
+					var	tagDivItem		= $("<div/>").addClass("item better_look");
 					// var	tagMediaItem	= $("<img/>").attr((i  ? "data-lazyload" : "src"), "/images/feed/" + item.folder + "/" + item.filename);
 
 					if(i === 0) tagDivItem.addClass("active");
